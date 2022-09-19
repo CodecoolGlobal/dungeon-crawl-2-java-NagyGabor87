@@ -23,7 +23,7 @@ public class Main extends Application {
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
 
-    public static void main(String[] args) {
+    public static void  main(String[] args) {
         launch(args);
     }
 

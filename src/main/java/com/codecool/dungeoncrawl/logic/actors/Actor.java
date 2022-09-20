@@ -5,7 +5,7 @@ import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Drawable;
 
 public abstract class Actor implements Drawable {
-    private Cell cell;
+    protected Cell cell;
     private int health = 10;
 
     public Actor(Cell cell) {
@@ -20,10 +20,9 @@ public abstract class Actor implements Drawable {
         if (nextCell == null) {
             return;
         }
+        // Prevent collision to wall or other actors
+        if ((nextCell.getType() == CellType.WALL) || nextCell.getActor() instanceof Actor) return;
 
-        if (this instanceof Player){
-            if ((nextCell.getType() == CellType.WALL) || nextCell.getActor() instanceof Monster) return;
-        }
         cell.setActor(null);
         nextCell.setActor(this);
         cell = nextCell;

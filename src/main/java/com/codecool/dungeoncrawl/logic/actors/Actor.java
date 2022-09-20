@@ -15,6 +15,12 @@ public abstract class Actor implements Drawable {
 
     public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
+
+        // Prevent actor to leave map
+        if (nextCell == null) {
+            return;
+        }
+
         if (this instanceof Player){
             if ((nextCell.getType() == CellType.WALL) || nextCell.getActor() instanceof Monster) return;
         }

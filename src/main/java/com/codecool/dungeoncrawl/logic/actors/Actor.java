@@ -25,6 +25,7 @@ public abstract class Actor implements Drawable {
             }
             if (nextCell.getActor() instanceof Monster) {
                 attack(nextCell);
+                return;
             }
         } else {
             if ((nextCell.getType() == CellType.WALL) || nextCell.getActor() instanceof Actor) return;

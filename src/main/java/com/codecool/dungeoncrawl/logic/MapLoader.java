@@ -35,6 +35,12 @@ public class MapLoader {
                         case '.':
                             cell.setType(CellType.FLOOR);
                             break;
+                        case 'c':
+                            cell.setType(CellType.CLOSED_DOOR);
+                            break;
+                        case 'd':
+                            cell.setType(CellType.OPEN_DOOR);
+                            break;
                         case 's':
                             cell.setType(CellType.FLOOR);
                             map.setMonster(new Skeleton(cell));

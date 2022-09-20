@@ -7,7 +7,8 @@ public class Ghost extends Monster {
 
     public Ghost(Cell cell) {
         super(cell);
-        this.health = 20;
+        this.health = 15;
+        this.damage = 3;
     }
 
     @Override
@@ -41,22 +42,12 @@ public class Ghost extends Monster {
         if (nextCell == null) {
             return;
         }
-        // Prevent collision to other actors
-        if ( nextCell.getActor() instanceof Actor) return;
+        // Prevent collision to other actors, can go through walls
+        if (nextCell.getActor() != null) return;
 
         cell.setActor(null);
         nextCell.setActor(this);
         cell = nextCell;
-    }
-
-    @Override
-    public void setHealth(int health) {
-        this.health = health;
-    }
-
-    @Override
-    public int getHealth() {
-        return health;
     }
 
     private int moveTowardsPlayer(int difference){

@@ -1,23 +1,27 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.CellType;
 
 public abstract class Monster extends Actor {
-    private static int damage = 2;
-    protected int health;
-
-    @Override
-    public int getHealth() {
-        return health;
-    }
-
-    public static int getDamage() {
-        return damage;
-    }
-
 
     public Monster(Cell cell) {
         super(cell);
+    }
+
+    @Override
+    public void move(int dx, int dy) {
+        Cell nextCell = cell.getNeighbor(dx, dy);
+        // Prevent actor to leave map
+        if (nextCell == null) {
+            return;
+        }
+
+        if ((nextCell.getType() == CellType.WALL) || (nextCell.getType() == CellType.CLOSED_DOOR) || nextCell.getActor() != null) return;
+
+        cell.setActor(null);
+        nextCell.setActor(this);
+        cell = nextCell;
     }
 
     public abstract int generateNextStepX();

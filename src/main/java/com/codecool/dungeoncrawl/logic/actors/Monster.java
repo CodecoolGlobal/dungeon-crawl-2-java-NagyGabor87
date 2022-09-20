@@ -11,5 +11,6 @@ public abstract class Monster extends Actor{
         super(cell);
     }
 
-    public abstract int generateNextStep();
+    public abstract int generateNextStepX();
+    public abstract int generateNextStepY();
 }

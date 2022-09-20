@@ -95,8 +95,8 @@ public class Main extends Application {
                 Cell cell = map.getCell(x, y);
                 if (cell.getActor() instanceof Monster) {
                     if (cell.getActor() instanceof Monster) {
-                    int newX = ((Monster) cell.getActor()).generateNextStep();
-                    int newY = ((Monster) cell.getActor()).generateNextStep();
+                    int newX = ((Monster) cell.getActor()).generateNextStepX();
+                    int newY = ((Monster) cell.getActor()).generateNextStepY();
                     cell.getActor().move(newX, newY);
                     }
                 }

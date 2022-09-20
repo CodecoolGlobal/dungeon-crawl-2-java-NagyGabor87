@@ -39,7 +39,9 @@ public class Player extends Actor {
     }
 
     public void addInventory(Item item) {
-        inventory.add(item);
+        if (item != null){
+            inventory.add(item);
+        }
     }
 
     public String inventoryToString(){

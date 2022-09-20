@@ -7,10 +7,9 @@ import java.util.ArrayList;
 
 public class Player extends Actor {
 
+    private ArrayList<Item> inventory = new ArrayList<>();;
     private int health;
     private static int damage = 5;
-
-    private ArrayList<Item> inventory;
 
     public static int getDamage() {
         return damage;
@@ -18,7 +17,6 @@ public class Player extends Actor {
 
     public Player(Cell cell) {
         super(cell);
-        this.inventory = new ArrayList<>();
         health = 10;
     }
 
@@ -38,6 +36,18 @@ public class Player extends Actor {
 
     public void setItem(Item item) {
         inventory.add(item);
+    }
+
+    public void addInventory(Item item) {
+        inventory.add(item);
+    }
+
+    public String inventoryToString(){
+        StringBuilder sb = new StringBuilder("| ");
+        for (Item item: inventory) {
+            sb.append(item.getTileName()).append(" |");
+        }
+        return sb.toString();
     }
 
 }

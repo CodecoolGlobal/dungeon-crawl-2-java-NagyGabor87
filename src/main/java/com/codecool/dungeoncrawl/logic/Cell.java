@@ -62,4 +62,11 @@ public class Cell implements Drawable {
     public void removeItem() {
         this.item = null;
     }
+
+    public GameMap getGameMap() {
+        return gameMap;
+    }
+    public void removeActor() {
+        this.actor = null;
+    }
 }

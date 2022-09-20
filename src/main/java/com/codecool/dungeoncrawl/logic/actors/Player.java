@@ -8,9 +8,26 @@ import java.util.ArrayList;
 public class Player extends Actor {
 
     private ArrayList<Item> inventory = new ArrayList<>();;
+    private int health;
+    private static int damage = 5;
+
+    public static int getDamage() {
+        return damage;
+    }
 
     public Player(Cell cell) {
         super(cell);
+        health = 10;
+    }
+
+    @Override
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    @Override
+    public int getHealth() {
+        return health;
     }
 
     public String getTileName() {

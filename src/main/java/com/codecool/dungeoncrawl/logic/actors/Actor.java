@@ -19,7 +19,6 @@ public abstract class Actor implements Drawable {
         if (nextCell == null) {
             return;
         }
-
         if (this instanceof Player) {
             if ((nextCell.getType() == CellType.WALL)) {
                 return;
@@ -34,18 +33,18 @@ public abstract class Actor implements Drawable {
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
-
     }
 
     public abstract void setHealth(int health);
 
     private void attack(Cell nextCell) {
         if (this instanceof Player) {
-            System.out.println("BANZAI!");
             if (nextCell.getActor() instanceof Monster) {
                 this.setHealth(getHealth() - Monster.getDamage());
-                System.out.println("hit");
                 nextCell.getActor().setHealth(nextCell.getActor().getHealth() - Player.getDamage());
+                if (nextCell.getActor().getHealth() == 0) {
+                    nextCell.removeActor();
+                }
             }
         }
         }

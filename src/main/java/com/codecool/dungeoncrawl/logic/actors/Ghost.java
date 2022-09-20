@@ -20,7 +20,6 @@ public class Ghost extends Monster {
         int ghostX = this.getX();
         int playerX = cell.getGameMap().getPlayer().getX();
         int differenceX = playerX - ghostX;
-        System.out.println(differenceX);
 
         return moveTowardsPlayer(differenceX);
     }
@@ -52,7 +51,7 @@ public class Ghost extends Monster {
 
     @Override
     public void setHealth(int health) {
-
+        this.health = health;
     }
 
     @Override

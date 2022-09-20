@@ -21,7 +21,7 @@ public class Skeleton extends Monster {
 
     @Override
     public int getHealth() {
-        return health;
+        return Math.max(health, 0);
     }
 
 

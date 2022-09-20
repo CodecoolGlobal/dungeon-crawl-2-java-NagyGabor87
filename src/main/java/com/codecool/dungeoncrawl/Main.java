@@ -3,6 +3,7 @@ package com.codecool.dungeoncrawl;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.actors.Monster;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -75,6 +76,7 @@ public class Main extends Application {
     }
 
     private void refresh() {
+        moveMonsters();
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for (int x = 0; x < map.getWidth(); x++) {
@@ -89,5 +91,20 @@ public class Main extends Application {
         }
         healthLabel.setText("" + map.getPlayer().getHealth());
         monsterHealthLabel.setText("" + map.getMonster().getHealth());
+    }
+
+    private void moveMonsters() {
+        for (int x = 0; x < map.getWidth(); x++) {
+            for (int y = 0; y < map.getHeight(); y++) {
+                Cell cell = map.getCell(x, y);
+                if (cell.getActor() instanceof Monster) {
+                    if (cell.getActor() instanceof Monster) {
+                    int newX = ((Monster) cell.getActor()).generateNextStepX();
+                    int newY = ((Monster) cell.getActor()).generateNextStepY();
+                    cell.getActor().move(newX, newY);
+                    }
+                }
+            }
+        }
     }
 }

@@ -5,8 +5,8 @@ import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Drawable;
 
 public abstract class Actor implements Drawable {
-    private Cell cell;
-    private static int health;
+    protected Cell cell;
+    private int health;
 
     public Actor(Cell cell) {
         this.cell = cell;
@@ -19,6 +19,7 @@ public abstract class Actor implements Drawable {
         if (nextCell == null) {
             return;
         }
+
         if (this instanceof Player) {
             if ((nextCell.getType() == CellType.WALL)) {
                 return;
@@ -33,6 +34,7 @@ public abstract class Actor implements Drawable {
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
+
     }
 
     public abstract void setHealth(int health);

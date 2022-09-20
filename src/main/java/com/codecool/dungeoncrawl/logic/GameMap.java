@@ -21,7 +21,13 @@ public class GameMap {
     }
 
     public Cell getCell(int x, int y) {
-        return cells[x][y];
+        Cell cell = null;
+        try {
+            return cells[x][y];
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Actor can't leave the map!");
+        }
+        return cell;
     }
 
     public void setPlayer(Player player) {

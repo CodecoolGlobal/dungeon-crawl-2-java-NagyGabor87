@@ -7,6 +7,7 @@ public class Ghost extends Monster {
 
     public Ghost(Cell cell) {
         super(cell);
+        this.health = 20;
     }
 
     @Override
@@ -47,6 +48,16 @@ public class Ghost extends Monster {
         cell.setActor(null);
         nextCell.setActor(this);
         cell = nextCell;
+    }
+
+    @Override
+    public void setHealth(int health) {
+
+    }
+
+    @Override
+    public int getHealth() {
+        return health;
     }
 
     private int moveTowardsPlayer(int difference){

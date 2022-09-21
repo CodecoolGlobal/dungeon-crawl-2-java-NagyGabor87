@@ -7,7 +7,8 @@ public enum Sound {
     MOVE("//home//g-sarkadi//Desktop//move.wav"),
     PICK_UP_ITEM("//home//g-sarkadi//Desktop//pickup.wav"),
     SKELETON_SOUND("//home//g-sarkadi//Desktop//skeleton.wav"),
-    DEATH("//home//g-sarkadi//Desktop//death.wav");
+    DEATH("//home//g-sarkadi//Desktop//death.wav"),
+    MUSIC("//home//g-sarkadi//Desktop//music.wav");
 
     private final String filePath;
 

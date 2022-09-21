@@ -4,6 +4,7 @@ import com.codecool.dungeoncrawl.logic.Cell;
 
 public class Ghost extends Monster {
 
+    private int waitBeforeMove = 2;
 
     public Ghost(Cell cell) {
         super(cell);
@@ -36,18 +37,23 @@ public class Ghost extends Monster {
 
     @Override
     public void move(int dx, int dy) {
-        Cell nextCell = cell.getNeighbor(dx, dy);
+        if (waitBeforeMove == 0) {
+            Cell nextCell = cell.getNeighbor(dx, dy);
 
-        // Prevent actor to leave map
-        if (nextCell == null) {
-            return;
+            // Prevent actor to leave map
+            if (nextCell == null) {
+                return;
+            }
+            // Prevent collision to other actors, can go through walls
+            if (nextCell.getActor() != null) return;
+
+            cell.setActor(null);
+            nextCell.setActor(this);
+            cell = nextCell;
+            waitBeforeMove = 2;
+        } else {
+            waitBeforeMove--;
         }
-        // Prevent collision to other actors, can go through walls
-        if (nextCell.getActor() != null) return;
-
-        cell.setActor(null);
-        nextCell.setActor(this);
-        cell = nextCell;
     }
 
     private int moveTowardsPlayer(int difference){

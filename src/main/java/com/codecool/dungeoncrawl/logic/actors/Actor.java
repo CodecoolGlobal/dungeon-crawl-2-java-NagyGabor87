@@ -2,6 +2,10 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.Drawable;
+import com.codecool.dungeoncrawl.logic.Sound;
+
+import javax.sound.sampled.*;
+import java.io.File;
 
 public abstract class Actor implements Drawable {
     protected Cell cell;
@@ -27,12 +31,34 @@ public abstract class Actor implements Drawable {
     public void attack(Cell nextCell) {
         if (this instanceof Player) {
             if (nextCell.getActor() instanceof Monster) {
+                makeSound(Sound.ATTACK.getFilePath());
                 this.setHealth(getHealth() - nextCell.getActor().getDamage());
                 nextCell.getActor().setHealth(nextCell.getActor().getHealth() - this.getDamage());
                 if (nextCell.getActor().getHealth() <= 0) {
                     nextCell.removeActor();
                 }
             }
+        }
+    }
+
+    public void makeSound(String filepath) {
+        try{
+            final Clip clip = (Clip)AudioSystem.getLine(new Line.Info(Clip.class));
+
+            clip.addLineListener(new LineListener() {
+                @Override
+                public void update(LineEvent event)
+                {
+                    if (event.getType() == LineEvent.Type.STOP)
+                        clip.close();
+                }
+            });
+
+            clip.open(AudioSystem.getAudioInputStream(new File(filepath)));
+            clip.start();
+        }
+        catch (Exception exc) {
+            exc.printStackTrace(System.out);
         }
     }
 

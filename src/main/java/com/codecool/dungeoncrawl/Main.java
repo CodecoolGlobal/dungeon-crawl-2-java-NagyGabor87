@@ -1,12 +1,15 @@
 package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.logic.*;
+import com.codecool.dungeoncrawl.logic.actors.Actor;
+import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Monster;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
@@ -18,7 +21,7 @@ import javax.sound.sampled.*;
 import java.io.File;
 
 public class Main extends Application {
-    GameMap map = MapLoader.loadMap();
+    GameMap map = MapLoader.loadMap(LEVEL.START.getMapLevel());
     GridPane ui = new GridPane();
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
@@ -110,6 +113,15 @@ public class Main extends Application {
             }
         }
         healthLabel.setText("" + map.getPlayer().getHealth());
+        if (!map.getPlayer().isAlive()) {
+            alertUser("You've lost","Sorry but you killed by a monster.", Alert.AlertType.WARNING).showAndWait();
+            map = MapLoader.loadMap(LEVEL.END.getMapLevel());
+        }
+        if(map.getPlayer().getCell().getType() == CellType.QUIT) System.exit(1);
+        else if (map.getPlayer().getCell().getType() == CellType.REPEAT) {
+            map = MapLoader.loadMap(LEVEL.START.getMapLevel());
+            refresh();
+        }
     }
 
     private void moveMonsters() {
@@ -146,5 +158,12 @@ public class Main extends Application {
         catch (Exception exc) {
             exc.printStackTrace(System.out);
         }
+    }
+
+    public Alert alertUser(String title, String message, Alert.AlertType alertType){
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        return alert;
     }
 }

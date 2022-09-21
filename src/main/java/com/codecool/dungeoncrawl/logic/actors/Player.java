@@ -12,6 +12,7 @@ public class Player extends Actor {
     private final ArrayList<Item> inventory = new ArrayList<>();
     private int armor;
     private String tileName;
+    private boolean isAlive = true;
 
     public Player(Cell cell) {
         super(cell);
@@ -135,4 +136,13 @@ public class Player extends Actor {
         return sb.toString();
     }
 
+    public boolean isAlive(){
+        return this.isAlive;
+    }
+
+    @Override
+    public void setHealth(int health) {
+        super.setHealth(health);
+        if (this.health <= 0) this.isAlive=false;
+    }
 }

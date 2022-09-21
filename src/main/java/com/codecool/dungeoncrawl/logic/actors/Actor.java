@@ -25,7 +25,8 @@ public abstract class Actor implements Drawable {
     public abstract void move(int dx, int dy);
 
     protected void setHealth(int health) {
-        this.health = health;
+        if (health < 0) this.health = 0;
+        else this.health = health;
     }
 
     public void attack(Cell nextCell) {

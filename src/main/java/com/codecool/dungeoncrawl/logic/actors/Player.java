@@ -2,8 +2,8 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
-import com.codecool.dungeoncrawl.logic.items.Item;
-import com.codecool.dungeoncrawl.logic.items.Key;
+import com.codecool.dungeoncrawl.logic.Sound;
+import com.codecool.dungeoncrawl.logic.items.*;
 
 import java.util.ArrayList;
 
@@ -37,6 +37,7 @@ public class Player extends Actor {
             if (key != null) {
                 nextCell.setType(CellType.OPEN_DOOR);
                 removeItem(key);
+                makeSound(Sound.DOOR.getFilePath());
             }
             return;
         }
@@ -47,6 +48,7 @@ public class Player extends Actor {
         cell.setActor(null);
         nextCell.setActor(this);
         cell = nextCell;
+        makeSound(Sound.MOVE.getFilePath());
     }
 
     public String getTileName() {
@@ -79,8 +81,20 @@ public class Player extends Actor {
     public void addInventory(Item item) {
         if (item != null){
             inventory.add(item);
+            makeSound(Sound.PICK_UP_ITEM.getFilePath());
         }
         changePlayerGraphics();
+        changePlayerStats(item);
+    }
+
+    private void changePlayerStats(Item item) {
+        if (item instanceof DefensiveWeapon) {
+            DefensiveWeapon defensiveWeapon = (DefensiveWeapon) item;
+            this.armor += defensiveWeapon.getArmor();
+        } else if (item instanceof AttackWeapon) {
+            AttackWeapon attackWeapon = (AttackWeapon) item;
+            this.damage += attackWeapon.getDamage();
+        }
     }
 
     private void changePlayerGraphics() {
@@ -98,6 +112,15 @@ public class Player extends Actor {
     private boolean hasItem(String itemName) {
         for (Item item: inventory) {
             if (item.getTileName().equals(itemName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasAdvancedWeapon() {
+        for (Item item: inventory) {
+            if (item instanceof AttackWeapon) {
                 return true;
             }
         }

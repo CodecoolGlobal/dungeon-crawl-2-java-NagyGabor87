@@ -57,6 +57,11 @@ public class Ghost extends Monster {
         }
     }
 
+    @Override
+    protected void makeNoise() {
+        // Doesn't make noise
+    }
+
     private int moveTowardsPlayer(int difference){
         if (difference > 0) {
             return 1;

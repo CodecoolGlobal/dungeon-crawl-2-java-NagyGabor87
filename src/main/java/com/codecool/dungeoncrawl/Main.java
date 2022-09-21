@@ -17,8 +17,12 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main extends Application {
-    GameMap map = MapLoader.loadMap();
+    String mapName = "map";
+    GameMap map = MapLoader.loadMap(mapName);
     GridPane ui = new GridPane();
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
@@ -69,6 +73,10 @@ public class Main extends Application {
             case D:
                 map.getPlayer().move(1,0);
                 refresh();
+                if (map.getPlayer().getCell().getType().equals(CellType.OPEN_DOOR)){
+                    mapName = "map2";
+                    map = MapLoader.loadMap(mapName);
+                }
                 break;
             case SPACE:
                 Cell currentTile = map.getPlayer().getCell();

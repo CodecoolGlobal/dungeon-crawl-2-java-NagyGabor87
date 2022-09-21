@@ -3,19 +3,20 @@ package com.codecool.dungeoncrawl.logic.actors;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Sound;
+import com.codecool.dungeoncrawl.logic.util.RandomGenerator;
 
 import java.util.Random;
 
 
 public class Skeleton extends Monster {
     
-    private final int soundChancePercent;
+    private final int percentOfChanceToMakeSound;
 
     public Skeleton(Cell cell) {
         super(cell);
         this.health = 20;
-        this.damage = 4;
-        this.soundChancePercent = 2;
+        this.damage = 6;
+        this.percentOfChanceToMakeSound = 2;
     }
 
     @Override
@@ -45,9 +46,7 @@ public class Skeleton extends Monster {
 
     @Override
     protected void makeNoise() {
-        Random random = new Random();
-        int chance = random.nextInt((100) + 1);
-        if (chance <= soundChancePercent) {
+        if (RandomGenerator.generateNumberBetween100And1() <= percentOfChanceToMakeSound) {
             makeSound(Sound.SKELETON_SOUND.getFilePath());
         }
     }

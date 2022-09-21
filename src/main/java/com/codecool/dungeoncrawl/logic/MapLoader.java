@@ -44,7 +44,7 @@ public class MapLoader {
                             break;
                         case 's':
                             cell.setType(CellType.FLOOR);
-                            map.setMonster(new Skeleton(cell));
+                            new Skeleton(cell);
                             break;
                         case 'K':
                             cell.setType(CellType.SWORD);

@@ -38,6 +38,8 @@ public class Tiles {
         tileMap.put("key", new Tile(16, 23));
         tileMap.put("ghost", new Tile(26, 6));
         tileMap.put("bat", new Tile(26, 8));
+        tileMap.put("quit", new Tile(22,31));
+        tileMap.put("repeat", new Tile(23,31));
     }
 
     public static void drawTile(GraphicsContext context, Drawable d, int x, int y) {

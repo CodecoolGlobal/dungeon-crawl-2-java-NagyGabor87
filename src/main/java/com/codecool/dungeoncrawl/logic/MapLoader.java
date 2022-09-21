@@ -12,8 +12,8 @@ import java.io.InputStream;
 import java.util.Scanner;
 
 public class MapLoader {
-    public static GameMap loadMap() {
-        InputStream is = MapLoader.class.getResourceAsStream("/map.txt");
+    public static GameMap loadMap(String level) {
+        InputStream is = MapLoader.class.getResourceAsStream(level);
         Scanner scanner = new Scanner(is);
         int width = scanner.nextInt();
         int height = scanner.nextInt();
@@ -69,6 +69,12 @@ public class MapLoader {
                         case 'b':
                             cell.setType(CellType.FLOOR);
                             new Bat(cell);
+                            break;
+                        case 'Q':
+                            cell.setType(CellType.QUIT);
+                            break;
+                        case 'R':
+                            cell.setType(CellType.REPEAT);
                             break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");

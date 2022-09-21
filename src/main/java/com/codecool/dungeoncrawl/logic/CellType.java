@@ -16,7 +16,8 @@ public enum CellType {
     PLAYER_HELMET("player_helmet"),
     PLAYER_SWORD("player_sword"),
     PLAYER_SWORD_AND_HELMET("player_helmet_and_sword"),
-    ;
+    QUIT("quit"),
+    REPEAT("repeat");
 
     private final String tileName;
 

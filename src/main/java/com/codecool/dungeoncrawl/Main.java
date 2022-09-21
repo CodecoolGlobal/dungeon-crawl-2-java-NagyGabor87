@@ -1,9 +1,6 @@
 package com.codecool.dungeoncrawl;
 
-import com.codecool.dungeoncrawl.logic.Cell;
-import com.codecool.dungeoncrawl.logic.CellType;
-import com.codecool.dungeoncrawl.logic.GameMap;
-import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Monster;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -16,6 +13,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import javax.sound.sampled.*;
+import java.io.File;
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap();
@@ -50,6 +50,7 @@ public class Main extends Application {
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
+        makeMusic(Sound.MUSIC.getFilePath());
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
@@ -123,6 +124,27 @@ public class Main extends Application {
                     }
                 }
             }
+        }
+    }
+
+    private void makeMusic(String filepath) {
+        try{
+            final Clip clip = (Clip) AudioSystem.getLine(new Line.Info(Clip.class));
+
+            clip.addLineListener(new LineListener() {
+                @Override
+                public void update(LineEvent event)
+                {
+                    if (event.getType() == LineEvent.Type.STOP)
+                        clip.start();
+                }
+            });
+
+            clip.open(AudioSystem.getAudioInputStream(new File(filepath)));
+            clip.start();
+        }
+        catch (Exception exc) {
+            exc.printStackTrace(System.out);
         }
     }
 }

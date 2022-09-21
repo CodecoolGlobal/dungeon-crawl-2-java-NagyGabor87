@@ -22,7 +22,10 @@ public abstract class Monster extends Actor {
         cell.setActor(null);
         nextCell.setActor(this);
         cell = nextCell;
+        makeNoise();
     }
+
+    protected abstract void makeNoise();
 
     public abstract int generateNextStepX();
     public abstract int generateNextStepY();

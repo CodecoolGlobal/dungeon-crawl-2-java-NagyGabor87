@@ -117,6 +117,15 @@ public class Player extends Actor {
         return false;
     }
 
+    public boolean hasAdvancedWeapon() {
+        for (Item item: inventory) {
+            if (item instanceof AttackWeapon) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public String inventoryToString(){
         StringBuilder sb = new StringBuilder("");

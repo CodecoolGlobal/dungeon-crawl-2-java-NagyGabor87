@@ -31,11 +31,18 @@ public abstract class Actor implements Drawable {
     public void attack(Cell nextCell) {
         if (this instanceof Player) {
             if (nextCell.getActor() instanceof Monster) {
-                makeSound(Sound.ATTACK.getFilePath());
+                Player player = (Player) this;
+                if (player.hasAdvancedWeapon()) {
+                    makeSound(Sound.ADVANCED_ATTACK.getFilePath());
+                } else {
+                    makeSound(Sound.BASIC_ATTACK.getFilePath());
+                }
+
                 this.setHealth(getHealth() - nextCell.getActor().getDamage());
-                nextCell.getActor().setHealth(nextCell.getActor().getHealth() - this.getDamage());
+                nextCell.getActor().setHealth(nextCell.getActor().getHealth() - player.getDamage());
                 if (nextCell.getActor().getHealth() <= 0) {
                     nextCell.removeActor();
+                    makeSound(Sound.DEATH.getFilePath());
                 }
             }
         }

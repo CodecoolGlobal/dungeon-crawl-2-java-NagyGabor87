@@ -13,6 +13,11 @@ public class Bat extends Monster {
     }
 
     @Override
+    protected void makeNoise() {
+        // Doesn't make noise
+    }
+
+    @Override
     public String getTileName() {
         return CellType.BAT.getTileName();
     }

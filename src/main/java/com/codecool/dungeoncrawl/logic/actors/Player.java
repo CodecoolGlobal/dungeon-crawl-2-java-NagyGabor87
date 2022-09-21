@@ -2,8 +2,7 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
-import com.codecool.dungeoncrawl.logic.items.Item;
-import com.codecool.dungeoncrawl.logic.items.Key;
+import com.codecool.dungeoncrawl.logic.items.*;
 
 import java.util.ArrayList;
 
@@ -80,6 +79,17 @@ public class Player extends Actor {
             inventory.add(item);
         }
         changePlayerGraphics();
+        changePlayerStats(item);
+    }
+
+    private void changePlayerStats(Item item) {
+        if (item instanceof DefensiveWeapon) {
+            DefensiveWeapon defensiveWeapon = (DefensiveWeapon) item;
+            this.armor += defensiveWeapon.getArmor();
+        } else if (item instanceof AttackWeapon) {
+            AttackWeapon attackWeapon = (AttackWeapon) item;
+            this.damage += attackWeapon.getDamage();
+        }
     }
 
     private void changePlayerGraphics() {

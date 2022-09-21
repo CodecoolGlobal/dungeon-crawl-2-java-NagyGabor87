@@ -29,7 +29,7 @@ public abstract class Actor implements Drawable {
             if (nextCell.getActor() instanceof Monster) {
                 this.setHealth(getHealth() - nextCell.getActor().getDamage());
                 nextCell.getActor().setHealth(nextCell.getActor().getHealth() - this.getDamage());
-                if (nextCell.getActor().getHealth() == 0) {
+                if (nextCell.getActor().getHealth() <= 0) {
                     nextCell.removeActor();
                 }
             }

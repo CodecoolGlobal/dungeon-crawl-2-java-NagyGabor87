@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.CellType;
 
 public class Bat extends Monster {
 
@@ -13,7 +14,7 @@ public class Bat extends Monster {
 
     @Override
     public String getTileName() {
-        return "bat";
+        return CellType.BAT.getTileName();
     }
 
     // Bat is stationary

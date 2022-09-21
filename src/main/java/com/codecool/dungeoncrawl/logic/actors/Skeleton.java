@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.CellType;
 
 import java.util.Random;
 
@@ -18,7 +19,7 @@ public class Skeleton extends Monster {
         if (getHealth() <= 0) {
             return "floor";
         }
-        return "skeleton";
+        return CellType.SKELETON.getTileName();
     }
 
     @Override

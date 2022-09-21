@@ -10,11 +10,15 @@ import java.util.ArrayList;
 public class Player extends Actor {
 
     private final ArrayList<Item> inventory = new ArrayList<>();
+    private int armor;
+    private String tileName;
 
     public Player(Cell cell) {
         super(cell);
         this.health = 50;
         this.damage = 5;
+        this.armor = 5;
+        this.tileName = CellType.PLAYER.getTileName();
     }
 
     @Override
@@ -45,7 +49,11 @@ public class Player extends Actor {
     }
 
     public String getTileName() {
-        return "player";
+        return tileName;
+    }
+
+    private void setTileName(String tileName) {
+        this.tileName = tileName;
     }
 
     public Key returnKey(){
@@ -71,7 +79,30 @@ public class Player extends Actor {
         if (item != null){
             inventory.add(item);
         }
+        changePlayerGraphics();
     }
+
+    private void changePlayerGraphics() {
+        boolean hasHelmet = hasItem(CellType.HELMET.getTileName());
+        boolean hasSword = hasItem(CellType.SWORD.getTileName());
+        if (hasHelmet && !hasSword) {
+            setTileName(CellType.PLAYER_HELMET.getTileName());
+        } else if (!hasHelmet && hasSword){
+            setTileName(CellType.PLAYER_SWORD.getTileName());
+        } else if (hasHelmet && hasSword) {
+            setTileName(CellType.PLAYER_SWORD_AND_HELMET.getTileName());
+        }
+    }
+
+    private boolean hasItem(String itemName) {
+        for (Item item: inventory) {
+            if (item.getTileName().equals(itemName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public String inventoryToString(){
         StringBuilder sb = new StringBuilder("");

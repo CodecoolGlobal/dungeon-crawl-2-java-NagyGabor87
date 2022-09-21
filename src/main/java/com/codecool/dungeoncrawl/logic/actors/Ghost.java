@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.CellType;
 
 public class Ghost extends Monster {
 
@@ -14,7 +15,7 @@ public class Ghost extends Monster {
 
     @Override
     public String getTileName() {
-        return "ghost";
+        return CellType.GHOST.getTileName();
     }
 
     @Override

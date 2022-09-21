@@ -9,7 +9,7 @@ public class Bat extends Monster {
     public Bat(Cell cell) {
         super(cell);
         this.health = 10;
-        this.damage = 2;
+        this.damage = 5;
     }
 
     @Override

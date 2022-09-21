@@ -6,16 +6,18 @@ import com.codecool.dungeoncrawl.logic.Sound;
 import com.codecool.dungeoncrawl.logic.items.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Player extends Actor {
 
-    private final ArrayList<Item> inventory = new ArrayList<>();
+    private final List<Item> inventory;
     private int armor;
     private String tileName;
     private boolean isAlive = true;
 
     public Player(Cell cell) {
         super(cell);
+        this.inventory = new ArrayList<>();
         this.health = 50;
         this.damage = 5;
         this.armor = 5;
@@ -33,8 +35,8 @@ public class Player extends Actor {
             return;
         }
         else if ((nextCell.getType() == CellType.CLOSED_DOOR)) {
-            Key key = returnKey();
-            if (key != null) {
+            if (findKey()) {
+                Key key = returnKey();
                 nextCell.setType(CellType.OPEN_DOOR);
                 removeItem(key);
                 makeSound(Sound.DOOR.getFilePath());
@@ -59,13 +61,23 @@ public class Player extends Actor {
         this.tileName = tileName;
     }
 
-    public Key returnKey(){
+    private boolean findKey() {
         for (Item item: inventory) {
-            if (item instanceof Key){
-                return (Key) item;
+            if (item instanceof Key) {
+                return true;
             }
         }
-        return null;
+        return false;
+    }
+
+    public Key returnKey(){
+        Key key = null;
+        for (Item item: inventory) {
+            if (item instanceof Key){
+                key = (Key) item;
+            }
+        }
+        return key;
     }
 
     public void removeItem(Item item) {
@@ -74,17 +86,31 @@ public class Player extends Actor {
         }
     }
 
-    public void setItem(Item item) {
-        inventory.add(item);
-    }
-
-    public void addInventory(Item item) {
+    public void addItemToInventory(Item item) {
         if (item != null){
             inventory.add(item);
             makeSound(Sound.PICK_UP_ITEM.getFilePath());
+            changePlayerGraphics();
+            changePlayerStats(item);
         }
-        changePlayerGraphics();
-        changePlayerStats(item);
+    }
+
+    private void attack(Cell nextCell) {
+        if (hasAdvancedWeapon()) {
+            makeSound(Sound.ADVANCED_ATTACK.getFilePath());
+        } else {
+            makeSound(Sound.BASIC_ATTACK.getFilePath());
+        }
+
+        // monster's attack is decreased by the players armor but 3 attack is guaranteed
+        int monsterAttack = Math.max(nextCell.getActor().getDamage() - armor, 3);
+
+        setHealth(getHealth() - monsterAttack);
+        nextCell.getActor().setHealth(nextCell.getActor().getHealth() - getDamage());
+        if (nextCell.getActor().getHealth() <= 0) {
+            nextCell.removeActor();
+            makeSound(Sound.DEATH.getFilePath());
+        }
     }
 
     private void changePlayerStats(Item item) {
@@ -100,12 +126,12 @@ public class Player extends Actor {
     private void changePlayerGraphics() {
         boolean hasHelmet = hasItem(CellType.HELMET.getTileName());
         boolean hasSword = hasItem(CellType.SWORD.getTileName());
-        if (hasHelmet && !hasSword) {
-            setTileName(CellType.PLAYER_HELMET.getTileName());
-        } else if (!hasHelmet && hasSword){
-            setTileName(CellType.PLAYER_SWORD.getTileName());
-        } else if (hasHelmet && hasSword) {
+        if (hasHelmet && hasSword) {
             setTileName(CellType.PLAYER_SWORD_AND_HELMET.getTileName());
+        } else if (hasHelmet) {
+            setTileName(CellType.PLAYER_HELMET.getTileName());
+        } else if (hasSword) {
+            setTileName(CellType.PLAYER_SWORD.getTileName());
         }
     }
 
@@ -129,7 +155,7 @@ public class Player extends Actor {
 
 
     public String inventoryToString(){
-        StringBuilder sb = new StringBuilder("");
+        StringBuilder sb = new StringBuilder();
         for (Item item: inventory) {
             sb.append("- ").append(item.getTileName()).append("\n");
         }

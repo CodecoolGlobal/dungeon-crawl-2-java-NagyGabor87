@@ -5,12 +5,12 @@ import com.codecool.dungeoncrawl.logic.CellType;
 
 public class Ghost extends Monster {
 
-    private int waitBeforeMove = 2;
+    private int waitThisManyRoundsBeforeMove = 2;
 
     public Ghost(Cell cell) {
         super(cell);
         this.health = 15;
-        this.damage = 3;
+        this.damage = 6;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class Ghost extends Monster {
 
     @Override
     public void move(int dx, int dy) {
-        if (waitBeforeMove == 0) {
+        if (waitThisManyRoundsBeforeMove == 0) {
             Cell nextCell = cell.getNeighbor(dx, dy);
 
             // Prevent actor to leave map
@@ -50,10 +50,10 @@ public class Ghost extends Monster {
 
             cell.setActor(null);
             nextCell.setActor(this);
-            cell = nextCell;
-            waitBeforeMove = 2;
+            this.cell = nextCell;
+            waitThisManyRoundsBeforeMove = 2;
         } else {
-            waitBeforeMove--;
+            waitThisManyRoundsBeforeMove--;
         }
     }
 

@@ -1,8 +1,6 @@
 package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.logic.*;
-import com.codecool.dungeoncrawl.logic.actors.Actor;
-import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Monster;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -10,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
@@ -75,27 +72,31 @@ public class Main extends Application {
                 refresh();
                 break;
             case SPACE:
-                Cell currentTile = map.getPlayer().getCell();
-                map.getPlayer().addInventory(currentTile.getItem());
-                currentTile.setType(CellType.FLOOR);
-                currentTile.setItem(null);
+                map.addInventory();
                 refresh();
                 break;
             case I:
-                ui.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == 0 && GridPane.getRowIndex(node) == 1);
-                ui.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == 0 && GridPane.getRowIndex(node) == 2);
-                String inventory = map.getPlayer().inventoryToString();
-                ui.add(new Label("Inventory:"),0,1);
-                ui.add(new Label(inventory),0,2);
+                clearInventoryText();
+                printOutInventoryContents();
                 refresh();
                 break;
             case ESCAPE:
-                ui.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == 0 && GridPane.getRowIndex(node) == 1);
-                ui.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == 0 && GridPane.getRowIndex(node) == 2);
+                clearInventoryText();
                 refresh();
                 break;
 
         }
+    }
+
+    private void printOutInventoryContents() {
+        String inventory = map.getPlayer().inventoryToString();
+        ui.add(new Label("Inventory:"),0,1);
+        ui.add(new Label(inventory),0,2);
+    }
+
+    private void clearInventoryText() {
+        ui.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == 0 && GridPane.getRowIndex(node) == 1);
+        ui.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == 0 && GridPane.getRowIndex(node) == 2);
     }
 
     private void refresh() {
@@ -143,13 +144,9 @@ public class Main extends Application {
         try{
             final Clip clip = (Clip) AudioSystem.getLine(new Line.Info(Clip.class));
 
-            clip.addLineListener(new LineListener() {
-                @Override
-                public void update(LineEvent event)
-                {
-                    if (event.getType() == LineEvent.Type.STOP)
-                        clip.start();
-                }
+            clip.addLineListener(event -> {
+                if (event.getType() == LineEvent.Type.STOP)
+                    clip.start();
             });
 
             clip.open(AudioSystem.getAudioInputStream(new File(filepath)));

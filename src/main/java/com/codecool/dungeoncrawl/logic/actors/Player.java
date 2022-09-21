@@ -74,9 +74,9 @@ public class Player extends Actor {
     }
 
     public String inventoryToString(){
-        StringBuilder sb = new StringBuilder("| ");
+        StringBuilder sb = new StringBuilder("");
         for (Item item: inventory) {
-            sb.append(item.getTileName()).append(" |");
+            sb.append("- ").append(item.getTileName()).append("\n");
         }
         return sb.toString();
     }

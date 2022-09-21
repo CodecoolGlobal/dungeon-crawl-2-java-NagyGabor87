@@ -78,14 +78,16 @@ public class Main extends Application {
                 refresh();
                 break;
             case I:
+                ui.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == 0 && GridPane.getRowIndex(node) == 1);
+                ui.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == 0 && GridPane.getRowIndex(node) == 2);
                 String inventory = map.getPlayer().inventoryToString();
                 ui.add(new Label("Inventory:"),0,1);
-                ui.add(new Label(inventory),1,1);
+                ui.add(new Label(inventory),0,2);
                 refresh();
                 break;
             case ESCAPE:
                 ui.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == 0 && GridPane.getRowIndex(node) == 1);
-                ui.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == 1 && GridPane.getRowIndex(node) == 1);
+                ui.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == 0 && GridPane.getRowIndex(node) == 2);
                 refresh();
                 break;
 

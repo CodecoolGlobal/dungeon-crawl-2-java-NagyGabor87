@@ -78,15 +78,34 @@ public class Main extends Application {
             case I:
                 clearInventoryText();
                 printOutInventoryContents();
+                String inventory = map.getPlayer().inventoryToString();
+                ui.add(new Label("Inventory:"), 0, 1);
+                ui.add(new Label(inventory), 1, 1);
                 refresh();
                 break;
             case ESCAPE:
                 clearInventoryText();
+                ui.getChildren().removeIf(node -> GridPane.getColumnIndex(node) == 0 && GridPane.getRowIndex(node) == 1);
+                ui.getChildren().removeIf(node -> GridPane.getColumnIndex(node) == 1 && GridPane.getRowIndex(node) == 1);
                 refresh();
                 break;
 
         }
     }
+
+    private void unlockKey() {
+        if (map.getSkeletonCount() <= 0) {
+            for (int x = 0; x < map.getWidth(); x++) {
+                for (int y = 0; y < map.getHeight(); y++) {
+                    Cell cell = map.getCell(x, y);
+                    if (cell.getType().equals(CellType.KEY)) {
+                        cell.getNeighbor(1, 0).setType(CellType.FLOOR);
+                    }
+                }
+            }
+        }
+    }
+
 
     private void printOutInventoryContents() {
         String inventory = map.getPlayer().inventoryToString();
@@ -101,6 +120,7 @@ public class Main extends Application {
 
     private void refresh() {
         moveMonsters();
+        unlockKey();
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for (int x = 0; x < map.getWidth(); x++) {

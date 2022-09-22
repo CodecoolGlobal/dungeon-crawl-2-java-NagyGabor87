@@ -18,7 +18,7 @@ import javax.sound.sampled.*;
 import java.io.File;
 
 public class Main extends Application {
-    LEVEL level = LEVEL.MAP_3;
+    LEVEL level = LEVEL.START;
     GameMap map = MapLoader.loadMap(level.getMapLevel());
     GridPane ui = new GridPane();
     Canvas canvas = new Canvas(

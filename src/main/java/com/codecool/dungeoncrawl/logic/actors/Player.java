@@ -31,7 +31,7 @@ public class Player extends Actor {
         if (nextCell == null) {
             return;
         }
-        if (nextCell.getType() == CellType.WALL || nextCell.getType() == CellType.DISAPPEARING_WALL) {
+        if (isNoCollision(nextCell)) {
             return;
         }
         else if ((nextCell.getType() == CellType.CLOSED_DOOR)) {
@@ -49,10 +49,16 @@ public class Player extends Actor {
         }
         if (nextCell.getActor() instanceof PotionSeller) {
             ((PotionSeller) nextCell.getActor()).givePotion();
+            return;
         }
         cell.setActor(null);
         nextCell.setActor(this);
         cell = nextCell;
+    }
+
+    private static boolean isNoCollision(Cell nextCell) {
+        return nextCell.getType() == CellType.WALL ||
+                nextCell.getType() == CellType.DISAPPEARING_WALL;
     }
 
     public String getTileName() {

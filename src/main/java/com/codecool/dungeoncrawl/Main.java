@@ -71,9 +71,7 @@ public class Main extends Application {
             case D:
                 map.getPlayer().move(1,0);
                 refresh();
-                if (map.getPlayer().getCell().getType().equals(CellType.OPEN_DOOR)){
-                    map = MapLoader.loadMap(level.nextLevel().getMapLevel());
-                }
+                checkNextRoom();
                 break;
             case SPACE:
                 map.addInventory();
@@ -94,8 +92,26 @@ public class Main extends Application {
         }
     }
 
+    private void checkNextRoom() {
+        if (map.getPlayer().getCell().getType().equals(CellType.OPEN_DOOR)){
+            if (getLevel().equals(LEVEL.MAP_4)) {
+                winGame();
+            } else {
+                map = MapLoader.loadMap(level.nextLevel().getMapLevel());
+            }
+        }
+    }
+
+    private void winGame() {
+        alertUser("You've win!","Congratulation, you've win the game!", Alert.AlertType.WARNING).showAndWait();
+        map = MapLoader.loadMap(LEVEL.END.getMapLevel());
+    }
+
+    public LEVEL getLevel() {
+        return level;
+    }
+
     private void removeDisappearingWall() {
-        System.out.println(map.getSkeletonCount());
         if (map.getSkeletonCount() <= 0) {
             for (Cell[] mapRow: map.getCells()){
                 for (Cell cell: mapRow) {

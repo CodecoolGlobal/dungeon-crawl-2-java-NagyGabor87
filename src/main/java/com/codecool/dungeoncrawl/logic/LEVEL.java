@@ -22,6 +22,7 @@ public enum LEVEL {
             case START: return MAP_2;
             case MAP_2: return MAP_3;
             case MAP_3: return MAP_4;
+            case MAP_4: return END;
 
             default: return START;
         }

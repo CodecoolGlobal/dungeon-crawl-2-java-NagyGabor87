@@ -98,6 +98,7 @@ public class Main extends Application {
                 winGame();
             } else {
                 map = MapLoader.loadMap(level.nextLevel().getMapLevel());
+                level = level.nextLevel();
             }
         }
     }

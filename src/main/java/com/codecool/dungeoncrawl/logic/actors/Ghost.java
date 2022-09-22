@@ -2,6 +2,7 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
+import com.codecool.dungeoncrawl.logic.util.RandomGenerator;
 
 public class Ghost extends Monster {
 
@@ -9,8 +10,8 @@ public class Ghost extends Monster {
 
     public Ghost(Cell cell) {
         super(cell);
-        this.health = 15;
-        this.damage = 6;
+        this.health = 15 + RandomGenerator.generateRandomHealthModifier();
+        this.damage = 6 + RandomGenerator.generateRandomDamageModifier();
     }
 
     @Override

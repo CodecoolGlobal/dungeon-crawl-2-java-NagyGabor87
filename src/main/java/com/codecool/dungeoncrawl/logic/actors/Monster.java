@@ -30,6 +30,7 @@ public abstract class Monster extends Actor {
         return (nextCell.getType() == CellType.WALL) ||
                 nextCell.getType() == CellType.DISAPPEARING_WALL ||
                 nextCell.getType() == CellType.CLOSED_DOOR ||
+                nextCell.getType() == CellType.POTION_SELLER ||
                 nextCell.getActor() != null;
     }
 

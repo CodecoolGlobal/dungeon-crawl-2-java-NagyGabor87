@@ -41,6 +41,9 @@ public class Tiles {
         tileMap.put("bat", new Tile(26, 8));
         tileMap.put("quit", new Tile(22,31));
         tileMap.put("repeat", new Tile(23,31));
+        tileMap.put("potion", new Tile(25,23));
+        tileMap.put("strongest_potion", new Tile(26,23));
+        tileMap.put("potion_seller", new Tile(29,3));
         tileMap.put("spiderweb", new Tile(2,15));
         tileMap.put("torch", new Tile(3,15));
     }

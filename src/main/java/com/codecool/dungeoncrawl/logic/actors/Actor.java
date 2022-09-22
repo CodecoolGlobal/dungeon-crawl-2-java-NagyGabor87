@@ -9,6 +9,7 @@ import java.io.File;
 public abstract class Actor implements Drawable {
     protected Cell cell;
     protected int health;
+
     protected int damage;
 
     public Actor(Cell cell) {

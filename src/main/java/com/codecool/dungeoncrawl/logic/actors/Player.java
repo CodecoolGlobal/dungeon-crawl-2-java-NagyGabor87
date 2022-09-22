@@ -50,7 +50,6 @@ public class Player extends Actor {
         cell.setActor(null);
         nextCell.setActor(this);
         cell = nextCell;
-        makeSound(Sound.MOVE.getFilePath());
     }
 
     public String getTileName() {
@@ -109,6 +108,7 @@ public class Player extends Actor {
         nextCell.getActor().setHealth(nextCell.getActor().getHealth() - getDamage());
         if (nextCell.getActor().getHealth() <= 0) {
             nextCell.removeActor();
+            nextCell.getGameMap().setSkeletonCount(-1);
             makeSound(Sound.DEATH.getFilePath());
         }
     }

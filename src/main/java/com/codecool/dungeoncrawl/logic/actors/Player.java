@@ -108,7 +108,9 @@ public class Player extends Actor {
         nextCell.getActor().setHealth(nextCell.getActor().getHealth() - getDamage());
         if (nextCell.getActor().getHealth() <= 0) {
             nextCell.removeActor();
-            nextCell.getGameMap().setSkeletonCount(-1);
+            if(nextCell.getActor() instanceof Skeleton){
+                nextCell.getGameMap().setSkeletonCount(-1);
+            }
             makeSound(Sound.DEATH.getFilePath());
         }
     }

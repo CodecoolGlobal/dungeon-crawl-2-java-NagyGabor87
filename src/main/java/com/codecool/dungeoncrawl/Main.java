@@ -94,13 +94,13 @@ public class Main extends Application {
         }
     }
 
-    private void unlockKey() {
+    private void removeDisappearingWall() {
+        System.out.println(map.getSkeletonCount());
         if (map.getSkeletonCount() <= 0) {
-            for (int x = 0; x < map.getWidth(); x++) {
-                for (int y = 0; y < map.getHeight(); y++) {
-                    Cell cell = map.getCell(x, y);
-                    if (cell.getType().equals(CellType.KEY)) {
-                        cell.getNeighbor(1, 0).setType(CellType.FLOOR);
+            for (Cell[] mapRow: map.getCells()){
+                for (Cell cell: mapRow) {
+                    if (cell.getType().equals(CellType.DISAPPEARING_WALL)){
+                        cell.setType(CellType.FLOOR);
                     }
                 }
             }
@@ -114,7 +114,7 @@ public class Main extends Application {
 
     private void refresh() {
         moveMonsters();
-        unlockKey();
+        removeDisappearingWall();
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for (int x = 0; x < map.getWidth(); x++) {

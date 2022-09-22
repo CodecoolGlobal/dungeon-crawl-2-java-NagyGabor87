@@ -18,7 +18,7 @@ import javax.sound.sampled.*;
 import java.io.File;
 
 public class Main extends Application {
-    LEVEL level = LEVEL.START;
+    LEVEL level = LEVEL.MAP_3;
     GameMap map = MapLoader.loadMap(level.getMapLevel());
     GridPane ui = new GridPane();
     Canvas canvas = new Canvas(
@@ -81,7 +81,6 @@ public class Main extends Application {
                 break;
             case I:
                 clearInventoryText();
-                printOutInventoryContents();
                 String inventory = map.getPlayer().inventoryToString();
                 ui.add(new Label("Inventory:"), 0, 1);
                 ui.add(new Label(inventory), 1, 1);
@@ -89,8 +88,6 @@ public class Main extends Application {
                 break;
             case ESCAPE:
                 clearInventoryText();
-                ui.getChildren().removeIf(node -> GridPane.getColumnIndex(node) == 0 && GridPane.getRowIndex(node) == 1);
-                ui.getChildren().removeIf(node -> GridPane.getColumnIndex(node) == 1 && GridPane.getRowIndex(node) == 1);
                 refresh();
                 break;
 
@@ -110,16 +107,9 @@ public class Main extends Application {
         }
     }
 
-
-    private void printOutInventoryContents() {
-        String inventory = map.getPlayer().inventoryToString();
-        ui.add(new Label("Inventory:"),0,1);
-        ui.add(new Label(inventory),0,2);
-    }
-
     private void clearInventoryText() {
         ui.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == 0 && GridPane.getRowIndex(node) == 1);
-        ui.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == 0 && GridPane.getRowIndex(node) == 2);
+        ui.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == 1 && GridPane.getRowIndex(node) == 1);
     }
 
     private void refresh() {

@@ -147,6 +147,13 @@ public class Main extends Application {
             map = MapLoader.loadMap(level.getMapLevel());
             refresh();
         } else if (map.getPlayer().getCell().getType() == CellType.OPEN_DOOR) {
+            if (map.getLevel().equals(LEVEL.MAP_4.getMapLevel())) {
+                ButtonType button = alertUser("You've won","Congratulations! You've won the game!.", Alert.AlertType.INFORMATION).orElse(ButtonType.CANCEL);
+                if (button == ButtonType.OK){
+                    map = MapLoader.loadMap(LEVEL.END.getMapLevel());
+                    refresh();
+                }
+            }
             map = MapLoader.loadMap(level.nextLevel().getMapLevel());
             level = level.nextLevel();
         }

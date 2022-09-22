@@ -28,6 +28,9 @@ public class MapLoader {
                         case '#':
                             cell.setType(CellType.WALL);
                             break;
+                        case '|':
+                            cell.setType(CellType.DISAPPEARING_WALL);
+                            break;
                         case '.':
                             cell.setType(CellType.FLOOR);
                             break;
@@ -40,7 +43,7 @@ public class MapLoader {
                         case 's':
                             cell.setType(CellType.FLOOR);
                             new Skeleton(cell);
-                            map.setSkeletonCount(1);
+                            map.setSkeletonCount(map.getSkeletonCount() + 1);
                             break;
                         case 'K':
                             cell.setType(CellType.SWORD);
@@ -79,6 +82,11 @@ public class MapLoader {
                         case 'P':
                             cell.setType(CellType.POTION_SELLER);
                             new PotionSeller(cell);
+                        case 'w':
+                            cell.setType(CellType.SPIDERWEB);
+                            break;
+                        case 't':
+                            cell.setType(CellType.TORCH);
                             break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");

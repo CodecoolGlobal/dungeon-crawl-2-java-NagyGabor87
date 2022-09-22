@@ -31,7 +31,7 @@ public class Player extends Actor {
         if (nextCell == null) {
             return;
         }
-        if ((nextCell.getType() == CellType.WALL)) {
+        if (nextCell.getType() == CellType.WALL || nextCell.getType() == CellType.DISAPPEARING_WALL) {
             return;
         }
         else if ((nextCell.getType() == CellType.CLOSED_DOOR)) {
@@ -114,10 +114,11 @@ public class Player extends Actor {
         setHealth(getHealth() - monsterAttack);
         nextCell.getActor().setHealth(nextCell.getActor().getHealth() - getDamage());
         if (nextCell.getActor().getHealth() <= 0) {
-            nextCell.removeActor();
             if(nextCell.getActor() instanceof Skeleton){
-                nextCell.getGameMap().setSkeletonCount(-1);
+                int skeletonCount = nextCell.getGameMap().getSkeletonCount() - 1;
+                nextCell.getGameMap().setSkeletonCount(skeletonCount);
             }
+            nextCell.removeActor();
             makeSound(Sound.DEATH.getFilePath());
         }
     }

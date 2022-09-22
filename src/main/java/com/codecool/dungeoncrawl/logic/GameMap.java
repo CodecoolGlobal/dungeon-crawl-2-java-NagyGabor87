@@ -16,8 +16,8 @@ public class GameMap {
         return skeletonCount;
     }
 
-    public void setSkeletonCount(int monsterCount) {
-        this.skeletonCount += monsterCount;
+    public void setSkeletonCount(int newCount) {
+        this.skeletonCount = newCount;
     }
 
     public GameMap(int width, int height, CellType defaultCellType, String level) {
@@ -46,6 +46,10 @@ public class GameMap {
         return cell;
     }
 
+    public Cell[][] getCells(){
+        return cells;
+    }
+
     public void setPlayer(Player player) {
         this.player = player;
     }
@@ -64,8 +68,10 @@ public class GameMap {
 
     public void addInventory() {
         Cell currentTile = getPlayer().getCell();
-        getPlayer().addItemToInventory(currentTile.getItem());
-        currentTile.setType(CellType.FLOOR);
-        currentTile.setItem(null);
+        if (currentTile.getItem() != null) {
+            getPlayer().addItemToInventory(currentTile.getItem());
+            currentTile.setType(CellType.FLOOR);
+            currentTile.setItem(null);
+        }
     }
 }

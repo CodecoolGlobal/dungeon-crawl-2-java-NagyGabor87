@@ -51,7 +51,7 @@ public class Main extends Application {
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
-        makeMusic(Sound.MUSIC.getFilePath());
+        makeBackgroundMusic(Sound.MUSIC.getFilePath());
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
@@ -71,9 +71,7 @@ public class Main extends Application {
             case D:
                 map.getPlayer().move(1,0);
                 refresh();
-                if (map.getPlayer().getCell().getType().equals(CellType.OPEN_DOOR)){
-                    map = MapLoader.loadMap(level.nextLevel().getMapLevel());
-                }
+                checkNextRoom();
                 break;
             case SPACE:
                 map.addInventory();
@@ -81,7 +79,6 @@ public class Main extends Application {
                 break;
             case I:
                 clearInventoryText();
-                printOutInventoryContents();
                 String inventory = map.getPlayer().inventoryToString();
                 ui.add(new Label("Inventory:"), 0, 1);
                 ui.add(new Label(inventory), 1, 1);
@@ -89,42 +86,52 @@ public class Main extends Application {
                 break;
             case ESCAPE:
                 clearInventoryText();
-                ui.getChildren().removeIf(node -> GridPane.getColumnIndex(node) == 0 && GridPane.getRowIndex(node) == 1);
-                ui.getChildren().removeIf(node -> GridPane.getColumnIndex(node) == 1 && GridPane.getRowIndex(node) == 1);
                 refresh();
                 break;
 
         }
     }
 
-    private void unlockKey() {
+    private void checkNextRoom() {
+        if (map.getPlayer().getCell().getType().equals(CellType.OPEN_DOOR)){
+            if (getLevel().equals(LEVEL.MAP_4)) {
+                winGame();
+            } else {
+                map = MapLoader.loadMap(level.nextLevel().getMapLevel());
+                level = level.nextLevel();
+            }
+        }
+    }
+
+    private void winGame() {
+        alertUser("You've win!","Congratulation, you've win the game!", Alert.AlertType.WARNING).showAndWait();
+        map = MapLoader.loadMap(LEVEL.END.getMapLevel());
+    }
+
+    public LEVEL getLevel() {
+        return level;
+    }
+
+    private void removeDisappearingWall() {
         if (map.getSkeletonCount() <= 0) {
-            for (int x = 0; x < map.getWidth(); x++) {
-                for (int y = 0; y < map.getHeight(); y++) {
-                    Cell cell = map.getCell(x, y);
-                    if (cell.getType().equals(CellType.KEY)) {
-                        cell.getNeighbor(1, 0).setType(CellType.FLOOR);
+            for (Cell[] mapRow: map.getCells()){
+                for (Cell cell: mapRow) {
+                    if (cell.getType().equals(CellType.DISAPPEARING_WALL)){
+                        cell.setType(CellType.FLOOR);
                     }
                 }
             }
         }
     }
 
-
-    private void printOutInventoryContents() {
-        String inventory = map.getPlayer().inventoryToString();
-        ui.add(new Label("Inventory:"),0,1);
-        ui.add(new Label(inventory),0,2);
-    }
-
     private void clearInventoryText() {
         ui.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == 0 && GridPane.getRowIndex(node) == 1);
-        ui.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == 0 && GridPane.getRowIndex(node) == 2);
+        ui.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == 1 && GridPane.getRowIndex(node) == 1);
     }
 
     private void refresh() {
         moveMonsters();
-        unlockKey();
+        removeDisappearingWall();
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for (int x = 0; x < map.getWidth(); x++) {
@@ -164,16 +171,18 @@ public class Main extends Application {
         }
     }
 
-    private void makeMusic(String filepath) {
+    private void makeBackgroundMusic(String filepath) {
         try{
             final Clip clip = (Clip) AudioSystem.getLine(new Line.Info(Clip.class));
 
             clip.addLineListener(event -> {
                 if (event.getType() == LineEvent.Type.STOP)
-                    makeMusic(filepath);
+                    makeBackgroundMusic(filepath);
             });
-
             clip.open(AudioSystem.getAudioInputStream(new File(filepath)));
+            // Reduce volume by 3 decibels.
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(-3.0f);
             clip.start();
         }
         catch (Exception exc) {

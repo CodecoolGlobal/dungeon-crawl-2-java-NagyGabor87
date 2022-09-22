@@ -14,8 +14,8 @@ public class Skeleton extends Monster {
 
     public Skeleton(Cell cell) {
         super(cell);
-        this.health = 20;
-        this.damage = 6;
+        this.health = 20 + RandomGenerator.generateRandomHealthModifier();
+        this.damage = 6 + RandomGenerator.generateRandomDamageModifier();
         this.percentOfChanceToMakeSound = 2;
     }
 

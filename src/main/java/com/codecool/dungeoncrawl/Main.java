@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
@@ -16,6 +17,7 @@ import javafx.stage.Stage;
 
 import javax.sound.sampled.*;
 import java.io.File;
+import java.util.Optional;
 
 public class Main extends Application {
     LEVEL level = LEVEL.START;
@@ -71,7 +73,6 @@ public class Main extends Application {
             case D:
                 map.getPlayer().move(1,0);
                 refresh();
-                checkNextRoom();
                 break;
             case SPACE:
                 map.addInventory();
@@ -90,26 +91,6 @@ public class Main extends Application {
                 break;
 
         }
-    }
-
-    private void checkNextRoom() {
-        if (map.getPlayer().getCell().getType().equals(CellType.OPEN_DOOR)){
-            if (getLevel().equals(LEVEL.MAP_4)) {
-                winGame();
-            } else {
-                map = MapLoader.loadMap(level.nextLevel().getMapLevel());
-                level = level.nextLevel();
-            }
-        }
-    }
-
-    private void winGame() {
-        alertUser("You've win!","Congratulation, you've win the game!", Alert.AlertType.WARNING).showAndWait();
-        map = MapLoader.loadMap(LEVEL.END.getMapLevel());
-    }
-
-    public LEVEL getLevel() {
-        return level;
     }
 
     private void removeDisappearingWall() {
@@ -132,6 +113,11 @@ public class Main extends Application {
     private void refresh() {
         moveMonsters();
         removeDisappearingWall();
+        drawMap();
+        stepNextLevel();
+    }
+
+    private void drawMap() {
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for (int x = 0; x < map.getWidth(); x++) {
@@ -145,14 +131,24 @@ public class Main extends Application {
             }
         }
         healthLabel.setText("" + map.getPlayer().getHealth());
+    }
+
+    private void stepNextLevel() {
         if (!map.getPlayer().isAlive()) {
-            alertUser("You've lost","Sorry but you killed by a monster.", Alert.AlertType.WARNING).showAndWait();
-            map = MapLoader.loadMap(LEVEL.END.getMapLevel());
+            ButtonType button = alertUser("You've lost","Sorry but you were killed by a monster.", Alert.AlertType.WARNING).orElse(ButtonType.CANCEL);
+            if (button == ButtonType.OK){
+                map = MapLoader.loadMap(LEVEL.END.getMapLevel());
+                refresh();
+            }
         }
         if(map.getPlayer().getCell().getType() == CellType.QUIT) System.exit(1);
         else if (map.getPlayer().getCell().getType() == CellType.REPEAT) {
-            map = MapLoader.loadMap(LEVEL.START.getMapLevel());
+            level = LEVEL.START;
+            map = MapLoader.loadMap(level.getMapLevel());
             refresh();
+        } else if (map.getPlayer().getCell().getType() == CellType.OPEN_DOOR) {
+            map = MapLoader.loadMap(level.nextLevel().getMapLevel());
+            level = level.nextLevel();
         }
     }
 
@@ -190,10 +186,10 @@ public class Main extends Application {
         }
     }
 
-    public Alert alertUser(String title, String message, Alert.AlertType alertType){
+    public Optional<ButtonType> alertUser(String title, String message, Alert.AlertType alertType){
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setContentText(message);
-        return alert;
+        return alert.showAndWait();
     }
 }

@@ -1,17 +1,13 @@
 package com.codecool.dungeoncrawl.logic;
 
-import com.codecool.dungeoncrawl.logic.actors.Monster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 
-import java.util.List;
-
 public class GameMap {
-    private int width;
-    private int height;
-    private Cell[][] cells;
+    private final int width;
+    private final int height;
+    private final Cell[][] cells;
 
     private Player player;
-    private Monster monster;
 
     public GameMap(int width, int height, CellType defaultCellType) {
         this.width = width;
@@ -38,14 +34,6 @@ public class GameMap {
         this.player = player;
     }
 
-    public Monster getMonster() {
-        return monster;
-    }
-
-    public void setMonster(Monster monster) {
-        this.monster = monster;
-    }
-
     public Player getPlayer() {
         return player;
     }
@@ -56,5 +44,12 @@ public class GameMap {
 
     public int getHeight() {
         return height;
+    }
+
+    public void addInventory() {
+        Cell currentTile = getPlayer().getCell();
+        getPlayer().addItemToInventory(currentTile.getItem());
+        currentTile.setType(CellType.FLOOR);
+        currentTile.setItem(null);
     }
 }

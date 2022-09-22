@@ -4,6 +4,7 @@ import com.codecool.dungeoncrawl.logic.actors.Bat;
 import com.codecool.dungeoncrawl.logic.actors.Ghost;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
+import com.codecool.dungeoncrawl.logic.items.Helmet;
 import com.codecool.dungeoncrawl.logic.items.Key;
 import com.codecool.dungeoncrawl.logic.items.Sword;
 
@@ -11,8 +12,8 @@ import java.io.InputStream;
 import java.util.Scanner;
 
 public class MapLoader {
-    public static GameMap loadMap(String mapName) {
-        InputStream is = MapLoader.class.getResourceAsStream(String.format("/%s.txt", mapName));
+    public static GameMap loadMap(String level) {
+        InputStream is = MapLoader.class.getResourceAsStream(level);
         Scanner scanner = new Scanner(is);
         int width = scanner.nextInt();
         int height = scanner.nextInt();
@@ -43,11 +44,15 @@ public class MapLoader {
                             break;
                         case 's':
                             cell.setType(CellType.FLOOR);
-                            map.setMonster(new Skeleton(cell));
+                            new Skeleton(cell);
                             break;
                         case 'K':
                             cell.setType(CellType.SWORD);
                             new Sword(cell);
+                            break;
+                        case 'h':
+                            cell.setType(CellType.HELMET);
+                            new Helmet(cell);
                             break;
                         case 'Y':
                             cell.setType(CellType.KEY);
@@ -64,6 +69,12 @@ public class MapLoader {
                         case 'b':
                             cell.setType(CellType.FLOOR);
                             new Bat(cell);
+                            break;
+                        case 'Q':
+                            cell.setType(CellType.QUIT);
+                            break;
+                        case 'R':
+                            cell.setType(CellType.REPEAT);
                             break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");

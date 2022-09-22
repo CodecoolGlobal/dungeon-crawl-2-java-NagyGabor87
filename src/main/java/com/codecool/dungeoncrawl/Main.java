@@ -1,28 +1,24 @@
 package com.codecool.dungeoncrawl;
 
-import com.codecool.dungeoncrawl.logic.Cell;
-import com.codecool.dungeoncrawl.logic.CellType;
-import com.codecool.dungeoncrawl.logic.GameMap;
-import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Monster;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.sound.sampled.*;
+import java.io.File;
 
 public class Main extends Application {
-    String mapName = "map";
-    GameMap map = MapLoader.loadMap(mapName);
+    GameMap map = MapLoader.loadMap(LEVEL.START.getMapLevel());
     GridPane ui = new GridPane();
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
@@ -54,6 +50,7 @@ public class Main extends Application {
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
+        makeMusic(Sound.MUSIC.getFilePath());
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
@@ -79,25 +76,31 @@ public class Main extends Application {
                 }
                 break;
             case SPACE:
-                Cell currentTile = map.getPlayer().getCell();
-                map.getPlayer().addInventory(currentTile.getItem());
-                currentTile.setType(CellType.FLOOR);
-                currentTile.setItem(null);
+                map.addInventory();
                 refresh();
                 break;
             case I:
-                String inventory = map.getPlayer().inventoryToString();
-                ui.add(new Label("Inventory:"),0,1);
-                ui.add(new Label(inventory),1,1);
+                clearInventoryText();
+                printOutInventoryContents();
                 refresh();
                 break;
             case ESCAPE:
-                ui.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == 0 && GridPane.getRowIndex(node) == 1);
-                ui.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == 1 && GridPane.getRowIndex(node) == 1);
+                clearInventoryText();
                 refresh();
                 break;
 
         }
+    }
+
+    private void printOutInventoryContents() {
+        String inventory = map.getPlayer().inventoryToString();
+        ui.add(new Label("Inventory:"),0,1);
+        ui.add(new Label(inventory),0,2);
+    }
+
+    private void clearInventoryText() {
+        ui.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == 0 && GridPane.getRowIndex(node) == 1);
+        ui.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == 0 && GridPane.getRowIndex(node) == 2);
     }
 
     private void refresh() {
@@ -115,6 +118,15 @@ public class Main extends Application {
             }
         }
         healthLabel.setText("" + map.getPlayer().getHealth());
+        if (!map.getPlayer().isAlive()) {
+            alertUser("You've lost","Sorry but you killed by a monster.", Alert.AlertType.WARNING).showAndWait();
+            map = MapLoader.loadMap(LEVEL.END.getMapLevel());
+        }
+        if(map.getPlayer().getCell().getType() == CellType.QUIT) System.exit(1);
+        else if (map.getPlayer().getCell().getType() == CellType.REPEAT) {
+            map = MapLoader.loadMap(LEVEL.START.getMapLevel());
+            refresh();
+        }
     }
 
     private void moveMonsters() {
@@ -130,5 +142,29 @@ public class Main extends Application {
                 }
             }
         }
+    }
+
+    private void makeMusic(String filepath) {
+        try{
+            final Clip clip = (Clip) AudioSystem.getLine(new Line.Info(Clip.class));
+
+            clip.addLineListener(event -> {
+                if (event.getType() == LineEvent.Type.STOP)
+                    makeMusic(filepath);
+            });
+
+            clip.open(AudioSystem.getAudioInputStream(new File(filepath)));
+            clip.start();
+        }
+        catch (Exception exc) {
+            exc.printStackTrace(System.out);
+        }
+    }
+
+    public Alert alertUser(String title, String message, Alert.AlertType alertType){
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        return alert;
     }
 }

@@ -5,9 +5,19 @@ public enum CellType {
     FLOOR("floor"),
     WALL("wall"),
     SWORD("sword"),
+    HELMET("helmet"),
     KEY("key"),
     CLOSED_DOOR("closed_door"),
-    OPEN_DOOR("open_door");
+    OPEN_DOOR("open_door"),
+    GHOST("ghost"),
+    BAT("bat"),
+    SKELETON("skeleton"),
+    PLAYER("player_simple"),
+    PLAYER_HELMET("player_helmet"),
+    PLAYER_SWORD("player_sword"),
+    PLAYER_SWORD_AND_HELMET("player_helmet_and_sword"),
+    QUIT("quit"),
+    REPEAT("repeat");
 
     private final String tileName;
 

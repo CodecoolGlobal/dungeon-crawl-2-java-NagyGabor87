@@ -2,19 +2,26 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
-import com.codecool.dungeoncrawl.logic.items.Item;
-import com.codecool.dungeoncrawl.logic.items.Key;
+import com.codecool.dungeoncrawl.logic.Sound;
+import com.codecool.dungeoncrawl.logic.items.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Player extends Actor {
 
-    private final ArrayList<Item> inventory = new ArrayList<>();
+    private final List<Item> inventory;
+    private int armor;
+    private String tileName;
+    private boolean isAlive = true;
 
     public Player(Cell cell) {
         super(cell);
+        this.inventory = new ArrayList<>();
         this.health = 50;
         this.damage = 5;
+        this.armor = 5;
+        this.tileName = CellType.PLAYER.getTileName();
     }
 
     @Override
@@ -28,10 +35,11 @@ public class Player extends Actor {
             return;
         }
         else if ((nextCell.getType() == CellType.CLOSED_DOOR)) {
-            Key key = returnKey();
-            if (key != null) {
+            if (findKey()) {
+                Key key = returnKey();
                 nextCell.setType(CellType.OPEN_DOOR);
                 removeItem(key);
+                makeSound(Sound.DOOR.getFilePath());
             }
             return;
         }
@@ -42,19 +50,34 @@ public class Player extends Actor {
         cell.setActor(null);
         nextCell.setActor(this);
         cell = nextCell;
+        makeSound(Sound.MOVE.getFilePath());
     }
 
     public String getTileName() {
-        return "player";
+        return tileName;
+    }
+
+    private void setTileName(String tileName) {
+        this.tileName = tileName;
+    }
+
+    private boolean findKey() {
+        for (Item item: inventory) {
+            if (item instanceof Key) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Key returnKey(){
+        Key key = null;
         for (Item item: inventory) {
             if (item instanceof Key){
-                return (Key) item;
+                key = (Key) item;
             }
         }
-        return null;
+        return key;
     }
 
     public void removeItem(Item item) {
@@ -63,22 +86,89 @@ public class Player extends Actor {
         }
     }
 
-    public void setItem(Item item) {
-        inventory.add(item);
-    }
-
-    public void addInventory(Item item) {
+    public void addItemToInventory(Item item) {
         if (item != null){
             inventory.add(item);
+            makeSound(Sound.PICK_UP_ITEM.getFilePath());
+            changePlayerGraphics();
+            changePlayerStats(item);
         }
     }
 
-    public String inventoryToString(){
-        StringBuilder sb = new StringBuilder("| ");
+    private void attack(Cell nextCell) {
+        if (hasAdvancedWeapon()) {
+            makeSound(Sound.ADVANCED_ATTACK.getFilePath());
+        } else {
+            makeSound(Sound.BASIC_ATTACK.getFilePath());
+        }
+
+        // monster's attack is decreased by the players armor but 3 attack is guaranteed
+        int monsterAttack = Math.max(nextCell.getActor().getDamage() - armor, 3);
+
+        setHealth(getHealth() - monsterAttack);
+        nextCell.getActor().setHealth(nextCell.getActor().getHealth() - getDamage());
+        if (nextCell.getActor().getHealth() <= 0) {
+            nextCell.removeActor();
+            makeSound(Sound.DEATH.getFilePath());
+        }
+    }
+
+    private void changePlayerStats(Item item) {
+        if (item instanceof DefensiveWeapon) {
+            DefensiveWeapon defensiveWeapon = (DefensiveWeapon) item;
+            this.armor += defensiveWeapon.getArmor();
+        } else if (item instanceof AttackWeapon) {
+            AttackWeapon attackWeapon = (AttackWeapon) item;
+            this.damage += attackWeapon.getDamage();
+        }
+    }
+
+    private void changePlayerGraphics() {
+        boolean hasHelmet = hasItem(CellType.HELMET.getTileName());
+        boolean hasSword = hasItem(CellType.SWORD.getTileName());
+        if (hasHelmet && hasSword) {
+            setTileName(CellType.PLAYER_SWORD_AND_HELMET.getTileName());
+        } else if (hasHelmet) {
+            setTileName(CellType.PLAYER_HELMET.getTileName());
+        } else if (hasSword) {
+            setTileName(CellType.PLAYER_SWORD.getTileName());
+        }
+    }
+
+    private boolean hasItem(String itemName) {
         for (Item item: inventory) {
-            sb.append(item.getTileName()).append(" |");
+            if (item.getTileName().equals(itemName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasAdvancedWeapon() {
+        for (Item item: inventory) {
+            if (item instanceof AttackWeapon) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public String inventoryToString(){
+        StringBuilder sb = new StringBuilder();
+        for (Item item: inventory) {
+            sb.append("- ").append(item.getTileName()).append("\n");
         }
         return sb.toString();
     }
 
+    public boolean isAlive(){
+        return this.isAlive;
+    }
+
+    @Override
+    public void setHealth(int health) {
+        super.setHealth(health);
+        if (this.health <= 0) this.isAlive=false;
+    }
 }

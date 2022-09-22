@@ -17,12 +17,20 @@ public abstract class Monster extends Actor {
             return;
         }
 
-        if ((nextCell.getType() == CellType.WALL) || (nextCell.getType() == CellType.CLOSED_DOOR) || nextCell.getActor() != null) return;
+        // Prevent actor to collide wall or other actors
+        if (isNextCellOccupied(nextCell)) return;
 
         cell.setActor(null);
         nextCell.setActor(this);
-        cell = nextCell;
+        this.cell = nextCell;
+        makeNoise();
     }
+
+    private static boolean isNextCellOccupied(Cell nextCell) {
+        return (nextCell.getType() == CellType.WALL) || (nextCell.getType() == CellType.CLOSED_DOOR) || nextCell.getActor() != null;
+    }
+
+    protected abstract void makeNoise();
 
     public abstract int generateNextStepX();
     public abstract int generateNextStepY();

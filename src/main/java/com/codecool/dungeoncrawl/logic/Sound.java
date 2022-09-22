@@ -8,7 +8,9 @@ public enum Sound {
     PICK_UP_ITEM(getCurrentFilePath() + "pickup.wav"),
     SKELETON_SOUND(getCurrentFilePath() + "skeleton.wav"),
     DEATH(getCurrentFilePath() + "death.wav"),
-    MUSIC(getCurrentFilePath() + "music.wav");
+    MUSIC(getCurrentFilePath() + "music.wav"),
+
+    POTION(getCurrentFilePath() + "bubble.wav");
 
     private final String filePath;
 

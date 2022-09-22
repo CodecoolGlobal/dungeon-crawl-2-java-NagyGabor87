@@ -51,7 +51,7 @@ public class Main extends Application {
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
-        makeMusic(Sound.MUSIC.getFilePath());
+        makeBackgroundMusic(Sound.MUSIC.getFilePath());
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
@@ -154,16 +154,18 @@ public class Main extends Application {
         }
     }
 
-    private void makeMusic(String filepath) {
+    private void makeBackgroundMusic(String filepath) {
         try{
             final Clip clip = (Clip) AudioSystem.getLine(new Line.Info(Clip.class));
 
             clip.addLineListener(event -> {
                 if (event.getType() == LineEvent.Type.STOP)
-                    makeMusic(filepath);
+                    makeBackgroundMusic(filepath);
             });
-
             clip.open(AudioSystem.getAudioInputStream(new File(filepath)));
+            // Reduce volume by 3 decibels.
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(-3.0f);
             clip.start();
         }
         catch (Exception exc) {

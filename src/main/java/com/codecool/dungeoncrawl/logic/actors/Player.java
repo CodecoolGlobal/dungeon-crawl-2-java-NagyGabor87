@@ -47,6 +47,9 @@ public class Player extends Actor {
             attack(nextCell);
             return;
         }
+        if (nextCell.getActor() instanceof PotionSeller) {
+            ((PotionSeller) nextCell.getActor()).givePotion();
+        }
         cell.setActor(null);
         nextCell.setActor(this);
         cell = nextCell;
@@ -86,7 +89,11 @@ public class Player extends Actor {
     }
 
     public void addItemToInventory(Item item) {
-        if (item != null){
+        if (item instanceof Potion || item instanceof StrongestPotion) {
+            changePlayerStats(item);
+            makeSound(Sound.POTION.getFilePath());
+        }
+        else if (item != null){
             inventory.add(item);
             makeSound(Sound.PICK_UP_ITEM.getFilePath());
             changePlayerGraphics();
@@ -123,6 +130,9 @@ public class Player extends Actor {
         } else if (item instanceof AttackWeapon) {
             AttackWeapon attackWeapon = (AttackWeapon) item;
             this.damage += attackWeapon.getDamage();
+        } else if(item instanceof Potion || item instanceof StrongestPotion) {
+            HealingItems healingItems = (HealingItems) item;
+            this.health += healingItems.getHealing();
         }
     }
 

@@ -24,6 +24,6 @@ public enum Sound {
     }
 
     private static String getCurrentFilePath() {
-        return System.getProperty("user.dir") + "//src//main//resources//";
+        return System.getProperty("user.dir") + "//src//main//resources//sound_files//";
     }
 }

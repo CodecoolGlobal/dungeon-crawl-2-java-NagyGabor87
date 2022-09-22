@@ -1,12 +1,12 @@
 package com.codecool.dungeoncrawl.logic;
 
 public enum LEVEL {
-    START("/map.txt"),
-    MAP_2("/map2.txt"),
-    MAP_3("/map3.txt"),
-    MAP_4("/map4.txt"),
+    START("/map_files/map.txt"),
+    MAP_2("/map_files/map2.txt"),
+    MAP_3("/map_files/map3.txt"),
+    MAP_4("/map_files/map4.txt"),
 
-    END("/exit.txt");
+    END("/map_files/exit.txt");
 
     private final String mapLevel;
     LEVEL(String mapLevel) {

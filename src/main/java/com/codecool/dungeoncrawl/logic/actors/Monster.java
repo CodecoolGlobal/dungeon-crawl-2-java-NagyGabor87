@@ -27,7 +27,10 @@ public abstract class Monster extends Actor {
     }
 
     private static boolean isNextCellOccupied(Cell nextCell) {
-        return (nextCell.getType() == CellType.WALL) || (nextCell.getType() == CellType.CLOSED_DOOR) || nextCell.getActor() != null;
+        return (nextCell.getType() == CellType.WALL) ||
+                nextCell.getType() == CellType.DISAPPEARING_WALL ||
+                nextCell.getType() == CellType.CLOSED_DOOR ||
+                nextCell.getActor() != null;
     }
 
     protected abstract void makeNoise();

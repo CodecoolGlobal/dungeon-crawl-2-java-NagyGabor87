@@ -16,8 +16,8 @@ public class GameMap {
         return skeletonCount;
     }
 
-    public void setSkeletonCount(int monsterCount) {
-        this.skeletonCount += monsterCount;
+    public void setSkeletonCount(int newCount) {
+        this.skeletonCount = newCount;
     }
 
     public GameMap(int width, int height, CellType defaultCellType, String level) {
@@ -44,6 +44,10 @@ public class GameMap {
             System.out.println("Actor can't leave the map!");
         }
         return cell;
+    }
+
+    public Cell[][] getCells(){
+        return cells;
     }
 
     public void setPlayer(Player player) {

@@ -64,8 +64,10 @@ public class GameMap {
 
     public void addInventory() {
         Cell currentTile = getPlayer().getCell();
-        getPlayer().addItemToInventory(currentTile.getItem());
-        currentTile.setType(CellType.FLOOR);
-        currentTile.setItem(null);
+        if (currentTile.getItem() != null) {
+            getPlayer().addItemToInventory(currentTile.getItem());
+            currentTile.setType(CellType.FLOOR);
+            currentTile.setItem(null);
+        }
     }
 }

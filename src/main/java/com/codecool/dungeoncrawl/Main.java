@@ -70,6 +70,10 @@ public class Main extends Application {
             case D:
                 map.getPlayer().move(1,0);
                 refresh();
+                if (map.getPlayer().getCell().getType().equals(CellType.OPEN_DOOR)){
+                    mapName = "map2";
+                    map = MapLoader.loadMap(mapName);
+                }
                 break;
             case SPACE:
                 map.addInventory();

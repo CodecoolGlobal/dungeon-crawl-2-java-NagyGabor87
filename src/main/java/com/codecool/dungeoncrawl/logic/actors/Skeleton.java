@@ -29,19 +29,12 @@ public class Skeleton extends Monster {
 
     @Override
     public int generateNextStepX() {
-        return generateRandomStep();
+        return RandomGenerator.generateRandomStep();
     }
 
     @Override
     public int generateNextStepY() {
-        return generateRandomStep();
-    }
-
-    private int generateRandomStep(){
-        int max = 2;
-        int min = -1;
-        Random random = new Random();
-        return random.nextInt(max - min) + min;
+        return RandomGenerator.generateRandomStep();
     }
 
     @Override

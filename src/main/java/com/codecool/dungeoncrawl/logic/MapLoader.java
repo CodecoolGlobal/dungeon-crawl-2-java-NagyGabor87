@@ -20,7 +20,7 @@ public class MapLoader {
 
         scanner.nextLine(); // empty line
 
-        GameMap map = new GameMap(width, height, CellType.EMPTY);
+        GameMap map = new GameMap(width, height, CellType.EMPTY, level);
         for (int y = 0; y < height; y++) {
             String line = scanner.nextLine();
             for (int x = 0; x < width; x++) {

@@ -18,7 +18,8 @@ import javax.sound.sampled.*;
 import java.io.File;
 
 public class Main extends Application {
-    GameMap map = MapLoader.loadMap(LEVEL.START.getMapLevel());
+    LEVEL level = LEVEL.START;
+    GameMap map = MapLoader.loadMap(level.getMapLevel());
     GridPane ui = new GridPane();
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
@@ -71,8 +72,7 @@ public class Main extends Application {
                 map.getPlayer().move(1,0);
                 refresh();
                 if (map.getPlayer().getCell().getType().equals(CellType.OPEN_DOOR)){
-                    mapName = "map2";
-                    map = MapLoader.loadMap(mapName);
+                    map = MapLoader.loadMap(level.nextLevel().getMapLevel());
                 }
                 break;
             case SPACE:

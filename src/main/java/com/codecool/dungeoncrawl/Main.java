@@ -146,7 +146,7 @@ public class Main extends Application {
 
             clip.addLineListener(event -> {
                 if (event.getType() == LineEvent.Type.STOP)
-                    clip.start();
+                    makeMusic(filepath);
             });
 
             clip.open(AudioSystem.getAudioInputStream(new File(filepath)));

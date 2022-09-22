@@ -77,6 +77,12 @@ public class MapLoader {
                         case 'R':
                             cell.setType(CellType.REPEAT);
                             break;
+                        case 'w':
+                            cell.setType(CellType.SPIDERWEB);
+                            break;
+                        case 't':
+                            cell.setType(CellType.TORCH);
+                            break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
                     }

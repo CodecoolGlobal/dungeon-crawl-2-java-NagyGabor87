@@ -45,7 +45,8 @@ public class Tiles {
         tileMap.put("strongest_potion", new Tile(26,23));
         tileMap.put("potion_seller", new Tile(29,3));
         tileMap.put("spiderweb", new Tile(2,15));
-        tileMap.put("torch", new Tile(3,15));
+        tileMap.put("torch_a", new Tile(3,15));
+        tileMap.put("torch_b", new Tile(4,15));
     }
 
     public static void drawTile(GraphicsContext context, Drawable d, int x, int y) {

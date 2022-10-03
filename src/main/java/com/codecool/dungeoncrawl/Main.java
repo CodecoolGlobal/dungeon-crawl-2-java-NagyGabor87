@@ -16,7 +16,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -26,13 +25,10 @@ import java.util.Optional;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
-import java.sql.SQLException;import javafx.scene.control.Label;
+import java.sql.SQLException;
 
 public class Main extends Application {
     LEVEL level = LEVEL.START;
@@ -56,11 +52,11 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage){
         setupDbManager();
-        GridPane ui = new GridPane();
-        ui.setPrefWidth(200);
-        ui.setPadding(new Insets(10));
+//        GridPane ui = new GridPane();
+//        ui.setPrefWidth(200);
+//        ui.setPadding(new Insets(10));
 
 
         ui.setPrefWidth(200);
@@ -125,18 +121,18 @@ public class Main extends Application {
                 break;
             case SPACE:
                 map.addInventory();
-                refresh();
+//                refresh();
                 break;
             case I:
                 clearInventoryText();
                 String inventory = map.getPlayer().inventoryToString();
                 ui.add(new Label("Inventory:"), 0, 1);
                 ui.add(new Label(inventory), 1, 1);
-                refresh();
+//                refresh();
                 break;
             case ESCAPE:
                 clearInventoryText();
-                refresh();
+//                refresh();
                 break;
             case S:
                 Player player = map.getPlayer();
@@ -167,7 +163,20 @@ public class Main extends Application {
         moveMonsters();
         removeDisappearingWall();
         drawMap();
+        animateTorchFlame();
         stepNextLevel();
+    }
+
+    private void animateTorchFlame() {
+        for (Cell[] cellArray : map.getCells()) {
+            for (Cell cell : cellArray) {
+                if (cell.getType() == CellType.TORCH_A) {
+                    cell.setType(CellType.TORCH_B);
+                } else if (cell.getType() == CellType.TORCH_B) {
+                    cell.setType(CellType.TORCH_A);
+                }
+            }
+        }
     }
 
     private void drawMap() {

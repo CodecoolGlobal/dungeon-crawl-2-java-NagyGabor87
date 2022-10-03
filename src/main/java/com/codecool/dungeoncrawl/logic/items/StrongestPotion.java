@@ -3,7 +3,7 @@ package com.codecool.dungeoncrawl.logic.items;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 
-public class StrongestPotion extends HealingItems {
+public class StrongestPotion extends Potion {
 
     public StrongestPotion(Cell cell) {
         super(cell);

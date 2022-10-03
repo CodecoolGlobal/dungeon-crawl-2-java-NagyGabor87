@@ -195,4 +195,13 @@ public class Player extends Actor {
         // TODO:implement getname
         return "Implement me";
     }
+
+    public void setCell(Cell cell) {
+        this.cell = cell;
+    }
+
+    public void resetAlive() {
+        // reset health after death to be able to move in the menu map.
+        this.isAlive = true;
+    }
 }

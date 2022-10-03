@@ -36,7 +36,7 @@ import java.sql.SQLException;import javafx.scene.control.Label;
 
 public class Main extends Application {
     LEVEL level = LEVEL.START;
-    GameMap map = MapLoader.loadMap(level.getMapLevel());
+    GameMap map = MapLoader.loadMap(level.getMapLevel(), null);
     GridPane ui = new GridPane();
 
 
@@ -223,23 +223,24 @@ public class Main extends Application {
         if (!map.getPlayer().isAlive()) {
             ButtonType button = alertUser("You've lost", "Sorry but you were killed by a monster.", Alert.AlertType.WARNING).orElse(ButtonType.CANCEL);
             if (button == ButtonType.OK) {
-                map = MapLoader.loadMap(LEVEL.END.getMapLevel());
+                map.getPlayer().resetAlive();
+                map = MapLoader.loadMap(LEVEL.END.getMapLevel(), map.getPlayer());
                 return;
             }
         }
         if (map.getPlayer().getCell().getType() == CellType.QUIT) System.exit(1);
         else if (map.getPlayer().getCell().getType() == CellType.REPEAT) {
             level = LEVEL.START;
-            map = MapLoader.loadMap(level.getMapLevel());
+            map = MapLoader.loadMap(level.getMapLevel(), null);
         } else if (map.getPlayer().getCell().getType() == CellType.OPEN_DOOR) {
             if (map.getLevel().equals(LEVEL.MAP_4.getMapLevel())) {
                 ButtonType button = alertUser("You've won", "Congratulations! You've won the game!.", Alert.AlertType.INFORMATION).orElse(ButtonType.CANCEL);
                 if (button == ButtonType.OK) {
-                    map = MapLoader.loadMap(LEVEL.END.getMapLevel());
+                    map = MapLoader.loadMap(LEVEL.END.getMapLevel(), map.getPlayer());
                     return;
                 }
             }
-            map = MapLoader.loadMap(level.nextLevel().getMapLevel());
+            map = MapLoader.loadMap(level.nextLevel().getMapLevel(), map.getPlayer());
             level = level.nextLevel();
         }
     }

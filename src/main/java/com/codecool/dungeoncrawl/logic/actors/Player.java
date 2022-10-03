@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends Actor {
+    private static final int MAX_HEALTH = 150;
 
     private final List<Item> inventory;
     private int armor;
@@ -95,7 +96,7 @@ public class Player extends Actor {
     }
 
     public void addItemToInventory(Item item) {
-        if (item instanceof Potion || item instanceof StrongestPotion) {
+        if (item instanceof Potion) {
             changePlayerStats(item);
             makeSound(Sound.POTION.getFilePath());
         }
@@ -136,9 +137,9 @@ public class Player extends Actor {
         } else if (item instanceof AttackWeapon) {
             AttackWeapon attackWeapon = (AttackWeapon) item;
             this.damage += attackWeapon.getDamage();
-        } else if(item instanceof Potion || item instanceof StrongestPotion) {
+        } else if(item instanceof Potion) {
             Potion potion = (Potion) item;
-            this.health += potion.getHealing();
+            this.health = Math.min(this.health + potion.getHealing(), MAX_HEALTH);
         }
     }
 

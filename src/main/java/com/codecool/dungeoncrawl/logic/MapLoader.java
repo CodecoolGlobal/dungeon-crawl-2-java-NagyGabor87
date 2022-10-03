@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.util.Scanner;
 
 public class MapLoader {
-    public static GameMap loadMap(String level) {
+    public static GameMap loadMap(String level, Player player) {
         InputStream is = MapLoader.class.getResourceAsStream(level);
         Scanner scanner = new Scanner(is);
         int width = scanner.nextInt();
@@ -59,7 +59,12 @@ public class MapLoader {
                             break;
                         case '@':
                             cell.setType(CellType.FLOOR);
-                            map.setPlayer(new Player(cell));
+                            if (player != null) {
+                                player.setCell(cell);
+                                map.setPlayer(player);
+                            } else {
+                                map.setPlayer(new Player(cell));
+                            }
                             break;
                         case 'g':
                             cell.setType(CellType.FLOOR);

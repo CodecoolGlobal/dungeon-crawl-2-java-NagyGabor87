@@ -137,8 +137,8 @@ public class Player extends Actor {
             AttackWeapon attackWeapon = (AttackWeapon) item;
             this.damage += attackWeapon.getDamage();
         } else if(item instanceof Potion || item instanceof StrongestPotion) {
-            HealingItems healingItems = (HealingItems) item;
-            this.health += healingItems.getHealing();
+            Potion potion = (Potion) item;
+            this.health += potion.getHealing();
         }
     }
 

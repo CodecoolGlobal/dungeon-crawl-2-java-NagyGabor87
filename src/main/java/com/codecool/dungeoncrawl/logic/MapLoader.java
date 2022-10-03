@@ -77,14 +77,35 @@ public class MapLoader {
                         case 'Q':
                             cell.setType(CellType.QUIT);
                             break;
+                        case 'U':
+                            cell.setType(CellType.U);
+                            break;
+                        case 'I':
+                            cell.setType(CellType.I);
+                            break;
+                        case 'T':
+                            cell.setType(CellType.T);
+                            break;
                         case 'R':
                             cell.setType(CellType.REPEAT);
+                            break;
+                        case 'E':
+                            cell.setType(CellType.E);
+                            break;
+                        case 'P':
+                            cell.setType(CellType.P);
+                            break;
+                        case 'A':
+                            cell.setType(CellType.A);
+                            break;
+                        case 'a':
+                            cell.setType(CellType.ARROW);
                             break;
                         case 'p':
                             cell.setType(CellType.POTION);
                             new Potion(cell);
                             break;
-                        case 'P':
+                        case 'S':
                             cell.setType(CellType.POTION_SELLER);
                             new PotionSeller(cell);
                         case 'w':

@@ -190,4 +190,9 @@ public class Player extends Actor {
         super.setHealth(health);
         if (this.health <= 0) this.isAlive=false;
     }
+
+    public String getName() {
+        // TODO:implement getname
+        return "Implement me";
+    }
 }

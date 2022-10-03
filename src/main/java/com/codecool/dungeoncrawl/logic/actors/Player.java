@@ -121,8 +121,7 @@ public class Player extends Actor {
         nextCell.getActor().setHealth(nextCell.getActor().getHealth() - getDamage());
         if (nextCell.getActor().getHealth() <= 0) {
             if(nextCell.getActor() instanceof Skeleton){
-                int skeletonCount = nextCell.getGameMap().getSkeletonCount() - 1;
-                nextCell.getGameMap().setSkeletonCount(skeletonCount);
+                nextCell.getGameMap().removeMonsterFromMovableMonsters((Monster) nextCell.getActor());
             }
             nextCell.removeActor();
             makeSound(Sound.DEATH.getFilePath());

@@ -2,13 +2,14 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
+import com.codecool.dungeoncrawl.logic.Move;
 import com.codecool.dungeoncrawl.logic.Sound;
 import com.codecool.dungeoncrawl.logic.items.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player extends Actor {
+public class Player extends Actor implements Move {
 
     private final List<Item> inventory;
     private int armor;
@@ -95,7 +96,7 @@ public class Player extends Actor {
     }
 
     public void addItemToInventory(Item item) {
-        if (item instanceof Potion || item instanceof StrongestPotion) {
+        if (item instanceof Potion) {
             changePlayerStats(item);
             makeSound(Sound.POTION.getFilePath());
         }
@@ -135,7 +136,7 @@ public class Player extends Actor {
         } else if (item instanceof AttackWeapon) {
             AttackWeapon attackWeapon = (AttackWeapon) item;
             this.damage += attackWeapon.getDamage();
-        } else if(item instanceof Potion || item instanceof StrongestPotion) {
+        } else if(item instanceof Potion) {
             Potion potion = (Potion) item;
             this.health += potion.getHealing();
         }

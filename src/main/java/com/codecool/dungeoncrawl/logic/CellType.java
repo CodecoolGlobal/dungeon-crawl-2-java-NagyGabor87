@@ -26,7 +26,14 @@ public enum CellType {
     STRONGEST_POTION("strongest_potion"),
     POTION_SELLER ("potion_seller"),
     QUIT("quit"),
-    REPEAT("repeat");
+    U("letter_U"),
+    I("letter_I"),
+    T("letter_T"),
+    REPEAT("repeat"),
+    E("letter_E"),
+    P("letter_P"),
+    A("letter_A"),
+    ARROW("arrow");
 
 
     private final String tileName;

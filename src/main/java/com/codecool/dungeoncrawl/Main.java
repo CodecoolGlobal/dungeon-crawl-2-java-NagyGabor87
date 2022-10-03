@@ -224,20 +224,19 @@ public class Main extends Application {
             ButtonType button = alertUser("You've lost", "Sorry but you were killed by a monster.", Alert.AlertType.WARNING).orElse(ButtonType.CANCEL);
             if (button == ButtonType.OK) {
                 map = MapLoader.loadMap(LEVEL.END.getMapLevel());
-                refresh();
+                return;
             }
         }
         if (map.getPlayer().getCell().getType() == CellType.QUIT) System.exit(1);
         else if (map.getPlayer().getCell().getType() == CellType.REPEAT) {
             level = LEVEL.START;
             map = MapLoader.loadMap(level.getMapLevel());
-            refresh();
         } else if (map.getPlayer().getCell().getType() == CellType.OPEN_DOOR) {
             if (map.getLevel().equals(LEVEL.MAP_4.getMapLevel())) {
                 ButtonType button = alertUser("You've won", "Congratulations! You've won the game!.", Alert.AlertType.INFORMATION).orElse(ButtonType.CANCEL);
                 if (button == ButtonType.OK) {
                     map = MapLoader.loadMap(LEVEL.END.getMapLevel());
-                    refresh();
+                    return;
                 }
             }
             map = MapLoader.loadMap(level.nextLevel().getMapLevel());

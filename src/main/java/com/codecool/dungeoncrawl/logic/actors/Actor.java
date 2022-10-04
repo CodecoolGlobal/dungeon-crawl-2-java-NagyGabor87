@@ -21,7 +21,6 @@ public abstract class Actor implements Drawable {
         return damage;
     }
 
-    public abstract void move(int dx, int dy);
 
     protected void setHealth(int health) {
         this.health = Math.max(health, 0);

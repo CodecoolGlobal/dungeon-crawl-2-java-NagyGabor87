@@ -1,7 +1,12 @@
 package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.Monster;
+import com.codecool.dungeoncrawl.logic.actors.MovableMonster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.actors.Skeleton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,25 +14,33 @@ import java.util.List;
 public class GameMap {
     private final int width;
     private final int height;
+
     private final Cell[][] cells;
     private List<Cell> torches;
 
     private Player player;
-    private int skeletonCount = 0;
+
+//    private int skeletonCount = 0;
+    private List<MovableMonster> movableMonsters;
+
     private String level;
 
     public int getSkeletonCount() {
+        int skeletonCount = 0;
+        for (Monster monster: movableMonsters) {
+            if(monster instanceof  Skeleton){
+                skeletonCount += 1;
+            }
+        }
         return skeletonCount;
     }
 
-    public void setSkeletonCount(int newCount) {
-        this.skeletonCount = newCount;
-    }
 
     public GameMap(int width, int height, CellType defaultCellType, String level) {
         this.width = width;
         this.height = height;
         this.level = level;
+        movableMonsters = new ArrayList<>();
         cells = new Cell[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -87,6 +100,7 @@ public class GameMap {
         return height;
     }
 
+
     public void addInventory() {
         Cell currentTile = getPlayer().getCell();
         if (currentTile.getItem() != null) {
@@ -94,5 +108,16 @@ public class GameMap {
             currentTile.setType(CellType.FLOOR);
             currentTile.setItem(null);
         }
+    }
+
+    public List<MovableMonster> getMovableMonsters() {
+        return movableMonsters;
+    }
+    public void addMonsterToMovableMonsters(MovableMonster monster){
+            movableMonsters.add(monster);
+    }
+
+    public void removeMonsterFromMovableMonsters(MovableMonster monster){
+        movableMonsters.remove(monster);
     }
 }

@@ -4,6 +4,7 @@ import com.codecool.dungeoncrawl.dao.GameDatabaseManager;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.actors.MovableMonster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Monster;
@@ -21,6 +22,7 @@ import javafx.stage.Stage;
 
 import javax.sound.sampled.*;
 import java.io.File;
+import java.util.List;
 import java.util.Optional;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -73,7 +75,7 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
-//        scene.setOnKeyReleased(this::onKeyReleased);
+        scene.setOnKeyReleased(this::onKeyReleased);
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
@@ -266,17 +268,11 @@ public class Main extends Application {
     }
 
     private void moveMonsters() {
-        for (int x = 0; x < map.getWidth(); x++) {
-            for (int y = 0; y < map.getHeight(); y++) {
-                Cell cell = map.getCell(x, y);
-                if (cell.getActor() instanceof Monster) {
-                    if (cell.getActor() instanceof Monster) {
-                        int newX = ((Monster) cell.getActor()).generateNextStepX();
-                        int newY = ((Monster) cell.getActor()).generateNextStepY();
-                        cell.getActor().move(newX, newY);
-                    }
-                }
-            }
+        List<MovableMonster> movingMonsters = map.getMovableMonsters();
+        for (MovableMonster movingMonster : movingMonsters) {
+            int newX = movingMonster.generateNextStepX();
+            int newY = movingMonster.generateNextStepY();
+            movingMonster.move(newX,newY);
         }
     }
 

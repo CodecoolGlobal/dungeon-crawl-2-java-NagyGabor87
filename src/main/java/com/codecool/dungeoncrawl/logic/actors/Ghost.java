@@ -4,7 +4,7 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.util.RandomGenerator;
 
-public class Ghost extends Monster {
+public class Ghost extends MovableMonster {
 
     private int waitThisManyRoundsBeforeMove = 2;
 

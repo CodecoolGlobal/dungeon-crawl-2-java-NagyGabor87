@@ -43,8 +43,7 @@ public class MapLoader {
                             break;
                         case 's':
                             cell.setType(CellType.FLOOR);
-                            new Skeleton(cell);
-                            map.setSkeletonCount(map.getSkeletonCount() + 1);
+                            map.addMonsterToMovableMonsters(new Skeleton(cell));
                             break;
                         case 'K':
                             cell.setType(CellType.SWORD);
@@ -69,7 +68,7 @@ public class MapLoader {
                             break;
                         case 'g':
                             cell.setType(CellType.FLOOR);
-                            new Ghost(cell);
+                            map.addMonsterToMovableMonsters(new Ghost(cell));
                             break;
                         case 'b':
                             cell.setType(CellType.FLOOR);

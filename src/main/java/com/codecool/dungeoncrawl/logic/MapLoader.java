@@ -117,6 +117,7 @@ public class MapLoader {
                             break;
                         case 't':
                             cell.setType(CellType.TORCH_A);
+                            map.addTorch(cell);
                             break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
@@ -124,7 +125,6 @@ public class MapLoader {
                 }
             }
         }
-        map.fetchTorches();
         return map;
     }
 }

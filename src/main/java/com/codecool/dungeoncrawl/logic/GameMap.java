@@ -37,16 +37,8 @@ public class GameMap {
         this.torches = new ArrayList<>();
     }
 
-    public void fetchTorches() {
-        List<Cell> torches = new ArrayList<>();
-        for (Cell[] cellRow : cells) {
-            for (Cell cell : cellRow) {
-                if (cell.getType() == CellType.TORCH_A) {
-                    torches.add(cell);
-                }
-            }
-        }
-        this.torches = torches;
+    public void addTorch(Cell torch){
+        torches.add(torch);
     }
 
     public List<Cell> getTorches() {

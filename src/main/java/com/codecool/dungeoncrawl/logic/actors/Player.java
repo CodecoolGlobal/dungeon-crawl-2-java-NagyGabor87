@@ -8,6 +8,7 @@ import com.codecool.dungeoncrawl.logic.items.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 public class Player extends Actor implements Movable {
     private static final int MAX_HEALTH = 150;
@@ -205,5 +206,13 @@ public class Player extends Actor implements Movable {
     public void resetAlive() {
         // reset health after death to be able to move in the menu map.
         this.isAlive = true;
+    }
+
+    public String getInventory() {
+        StringJoiner joiner = new StringJoiner(",");
+        for (Item item: inventory) {
+            joiner.add(item.getTileName());
+        }
+        return joiner.toString();
     }
 }

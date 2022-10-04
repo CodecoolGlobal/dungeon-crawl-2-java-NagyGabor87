@@ -3,10 +3,14 @@ package com.codecool.dungeoncrawl.logic;
 import com.codecool.dungeoncrawl.logic.actors.Monster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameMap {
     private final int width;
     private final int height;
     private final Cell[][] cells;
+    private List<Cell> torches;
 
     private Player player;
     private int skeletonCount = 0;
@@ -30,6 +34,23 @@ public class GameMap {
                 cells[x][y] = new Cell(this, x, y, defaultCellType);
             }
         }
+        this.torches = new ArrayList<>();
+    }
+
+    public void fetchTorches() {
+        List<Cell> torches = new ArrayList<>();
+        for (Cell[] cellRow : cells) {
+            for (Cell cell : cellRow) {
+                if (cell.getType() == CellType.TORCH_A) {
+                    torches.add(cell);
+                }
+            }
+        }
+        this.torches = torches;
+    }
+
+    public List<Cell> getTorches() {
+        return torches;
     }
 
     public String getLevel() {

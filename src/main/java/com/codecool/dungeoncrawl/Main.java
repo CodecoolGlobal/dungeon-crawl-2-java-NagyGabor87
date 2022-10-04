@@ -168,13 +168,14 @@ public class Main extends Application {
     }
 
     private void animateTorchFlame() {
-        for (Cell[] cellArray : map.getCells()) {
-            for (Cell cell : cellArray) {
-                if (cell.getType() == CellType.TORCH_A) {
-                    cell.setType(CellType.TORCH_B);
-                } else if (cell.getType() == CellType.TORCH_B) {
-                    cell.setType(CellType.TORCH_A);
-                }
+        for (Cell torch: map.getTorches()) {
+            switch (torch.getType()) {
+                case TORCH_A:
+                    torch.setType(CellType.TORCH_B);
+                    break;
+                case TORCH_B:
+                    torch.setType(CellType.TORCH_A);
+                    break;
             }
         }
     }

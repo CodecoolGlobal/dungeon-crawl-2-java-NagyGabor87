@@ -17,7 +17,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -28,17 +27,14 @@ import java.util.Optional;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
-import java.sql.SQLException;import javafx.scene.control.Label;
+import java.sql.SQLException;
 
 public class Main extends Application {
-    LEVEL level = LEVEL.START;
-    GameMap map = MapLoader.loadMap(level.getMapLevel());
+    LEVEL level = LEVEL.MENU;
+    GameMap map = MapLoader.loadMap(level.getMapLevel(), null);
     GridPane ui = new GridPane();
 
 
@@ -58,11 +54,11 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage){
         setupDbManager();
-        GridPane ui = new GridPane();
-        ui.setPrefWidth(200);
-        ui.setPadding(new Insets(10));
+//        GridPane ui = new GridPane();
+//        ui.setPrefWidth(200);
+//        ui.setPadding(new Insets(10));
 
 
         ui.setPrefWidth(200);
@@ -127,18 +123,18 @@ public class Main extends Application {
                 break;
             case SPACE:
                 map.addInventory();
-                refresh();
+//                refresh();
                 break;
             case I:
                 clearInventoryText();
                 String inventory = map.getPlayer().inventoryToString();
                 ui.add(new Label("Inventory:"), 0, 1);
                 ui.add(new Label(inventory), 1, 1);
-                refresh();
+//                refresh();
                 break;
             case ESCAPE:
                 clearInventoryText();
-                refresh();
+//                refresh();
                 break;
             case S:
                 Player player = map.getPlayer();
@@ -169,7 +165,21 @@ public class Main extends Application {
         moveMonsters();
         removeDisappearingWall();
         drawMap();
+        animateTorchFlame();
         stepNextLevel();
+    }
+
+    private void animateTorchFlame() {
+        for (Cell torch: map.getTorches()) {
+            switch (torch.getType()) {
+                case TORCH_A:
+                    torch.setType(CellType.TORCH_B);
+                    break;
+                case TORCH_B:
+                    torch.setType(CellType.TORCH_A);
+                    break;
+            }
+        }
     }
 
     private void drawMap() {
@@ -225,23 +235,25 @@ public class Main extends Application {
         if (!map.getPlayer().isAlive()) {
             ButtonType button = alertUser("You've lost", "Sorry but you were killed by a monster.", Alert.AlertType.WARNING).orElse(ButtonType.CANCEL);
             if (button == ButtonType.OK) {
-                map = MapLoader.loadMap(LEVEL.END.getMapLevel());
+                map.getPlayer().resetAlive();
+                map = MapLoader.loadMap(LEVEL.MENU.getMapLevel(), map.getPlayer());
                 return;
             }
         }
         if (map.getPlayer().getCell().getType() == CellType.QUIT) System.exit(1);
-        else if (map.getPlayer().getCell().getType() == CellType.REPEAT) {
-            level = LEVEL.START;
-            map = MapLoader.loadMap(level.getMapLevel());
+        else if (map.getPlayer().getCell().getType() == CellType.PLAY) {
+            level = LEVEL.MAP_1;
+            map = MapLoader.loadMap(level.getMapLevel(), null);
+            refresh();
         } else if (map.getPlayer().getCell().getType() == CellType.OPEN_DOOR) {
             if (map.getLevel().equals(LEVEL.MAP_4.getMapLevel())) {
                 ButtonType button = alertUser("You've won", "Congratulations! You've won the game!.", Alert.AlertType.INFORMATION).orElse(ButtonType.CANCEL);
                 if (button == ButtonType.OK) {
-                    map = MapLoader.loadMap(LEVEL.END.getMapLevel());
+                    map = MapLoader.loadMap(LEVEL.MENU.getMapLevel(), map.getPlayer());
                     return;
                 }
             }
-            map = MapLoader.loadMap(level.nextLevel().getMapLevel());
+            map = MapLoader.loadMap(level.nextLevel().getMapLevel(), map.getPlayer());
             level = level.nextLevel();
         }
     }

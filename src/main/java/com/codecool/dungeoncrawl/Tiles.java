@@ -40,12 +40,21 @@ public class Tiles {
         tileMap.put("ghost", new Tile(26, 6));
         tileMap.put("bat", new Tile(26, 8));
         tileMap.put("quit", new Tile(22,31));
+        tileMap.put("letter_U", new Tile(26,31));
+        tileMap.put("letter_I", new Tile(27,30));
+        tileMap.put("letter_T", new Tile(25,31));
         tileMap.put("repeat", new Tile(23,31));
+        tileMap.put("play", new Tile(21,31));
+        tileMap.put("letter_L", new Tile(30,30));
+        tileMap.put("letter_A", new Tile(19,30));
+        tileMap.put("letter_Y", new Tile(30,31));
         tileMap.put("potion", new Tile(25,23));
         tileMap.put("strongest_potion", new Tile(26,23));
         tileMap.put("potion_seller", new Tile(29,3));
         tileMap.put("spiderweb", new Tile(2,15));
-        tileMap.put("torch", new Tile(3,15));
+        tileMap.put("torch_a", new Tile(3,15));
+        tileMap.put("torch_b", new Tile(4,15));
+        tileMap.put("arrow", new Tile(22,21));
     }
 
     public static void drawTile(GraphicsContext context, Drawable d, int x, int y) {

@@ -9,7 +9,8 @@ public enum CellType {
     DISAPPEARING_WALL("disappearing_wall"),
     SWORD("sword"),
     SPIDERWEB("spiderweb"),
-    TORCH("torch"),
+    TORCH_A("torch_a"),
+    TORCH_B("torch_b"),
     HELMET("helmet"),
     KEY("key"),
     CLOSED_DOOR("closed_door"),
@@ -25,7 +26,15 @@ public enum CellType {
     STRONGEST_POTION("strongest_potion"),
     POTION_SELLER ("potion_seller"),
     QUIT("quit"),
-    REPEAT("repeat");
+    U("letter_U"),
+    I("letter_I"),
+    T("letter_T"),
+    REPEAT("repeat"),
+    PLAY("play"),
+    L("letter_L"),
+    A("letter_A"),
+    Y("letter_Y"),
+    ARROW("arrow");
 
 
     private final String tileName;

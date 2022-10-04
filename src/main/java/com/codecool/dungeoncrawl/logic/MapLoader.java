@@ -4,10 +4,11 @@ import com.codecool.dungeoncrawl.logic.actors.*;
 import com.codecool.dungeoncrawl.logic.items.*;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Scanner;
 
 public class MapLoader {
-    public static GameMap loadMap(String level) {
+    public static GameMap loadMap(String level, Player player) {
         InputStream is = MapLoader.class.getResourceAsStream(level);
         Scanner scanner = new Scanner(is);
         int width = scanner.nextInt();
@@ -52,13 +53,18 @@ public class MapLoader {
                             cell.setType(CellType.HELMET);
                             new Helmet(cell);
                             break;
-                        case 'Y':
+                        case 'y':
                             cell.setType(CellType.KEY);
                             new Key(cell);
                             break;
                         case '@':
                             cell.setType(CellType.FLOOR);
-                            map.setPlayer(new Player(cell));
+                            if (player != null) {
+                                player.setCell(cell);
+                                map.setPlayer(player);
+                            } else {
+                                map.setPlayer(new Player(cell));
+                            }
                             break;
                         case 'g':
                             cell.setType(CellType.FLOOR);
@@ -71,21 +77,45 @@ public class MapLoader {
                         case 'Q':
                             cell.setType(CellType.QUIT);
                             break;
+                        case 'U':
+                            cell.setType(CellType.U);
+                            break;
+                        case 'I':
+                            cell.setType(CellType.I);
+                            break;
+                        case 'T':
+                            cell.setType(CellType.T);
+                            break;
                         case 'R':
                             cell.setType(CellType.REPEAT);
+                            break;
+                        case 'P':
+                            cell.setType(CellType.PLAY);
+                            break;
+                        case 'L':
+                            cell.setType(CellType.L);
+                            break;
+                        case 'A':
+                            cell.setType(CellType.A);
+                            break;
+                        case 'Y':
+                            cell.setType(CellType.Y);
+                            break;
+                        case 'a':
+                            cell.setType(CellType.ARROW);
                             break;
                         case 'p':
                             cell.setType(CellType.POTION);
                             new Potion(cell);
                             break;
-                        case 'P':
+                        case 'S':
                             cell.setType(CellType.POTION_SELLER);
                             new PotionSeller(cell);
                         case 'w':
                             cell.setType(CellType.SPIDERWEB);
                             break;
                         case 't':
-                            cell.setType(CellType.TORCH);
+                            cell.setType(CellType.TORCH_A);
                             break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
@@ -93,7 +123,7 @@ public class MapLoader {
                 }
             }
         }
+        map.fetchTorches();
         return map;
     }
-
 }

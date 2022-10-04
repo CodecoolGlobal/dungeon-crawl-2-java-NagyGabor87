@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends Actor implements Movable {
+    private static final int MAX_HEALTH = 150;
+
 
     private final List<Item> inventory;
     private int armor;
@@ -138,7 +140,7 @@ public class Player extends Actor implements Movable {
             this.damage += attackWeapon.getDamage();
         } else if(item instanceof Potion) {
             Potion potion = (Potion) item;
-            this.health += potion.getHealing();
+            this.health = Math.min(this.health + potion.getHealing(), MAX_HEALTH);
         }
     }
 
@@ -194,5 +196,14 @@ public class Player extends Actor implements Movable {
     public String getName() {
         // TODO:implement getname
         return "Implement me";
+    }
+
+    public void setCell(Cell cell) {
+        this.cell = cell;
+    }
+
+    public void resetAlive() {
+        // reset health after death to be able to move in the menu map.
+        this.isAlive = true;
     }
 }

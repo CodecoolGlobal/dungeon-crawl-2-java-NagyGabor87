@@ -30,9 +30,10 @@ public enum CellType {
     I("letter_I"),
     T("letter_T"),
     REPEAT("repeat"),
-    E("letter_E"),
-    P("letter_P"),
+    PLAY("play"),
+    L("letter_L"),
     A("letter_A"),
+    Y("letter_Y"),
     ARROW("arrow");
 
 

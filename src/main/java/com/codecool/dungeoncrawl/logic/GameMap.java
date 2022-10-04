@@ -116,8 +116,10 @@ public class GameMap {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        for (Cell[] row : cells){
-            for (Cell cell : row){
+
+        for (int column = 0; column < height; column++){
+            for (int row = 0; row < width; row++){
+                Cell cell = cells[row][column];
                 if (cell.getActor() != null){
                     builder.append(cell.getActor().getTileCharacter());
                 } else if (cell.getItem() != null){
@@ -129,5 +131,19 @@ public class GameMap {
             builder.append("\n");
         }
         return builder.toString();
+
+//        for (Cell[] row : cells){
+//            for (Cell cell : row){
+//                if (cell.getActor() != null){
+//                    builder.append(cell.getActor().getTileCharacter());
+//                } else if (cell.getItem() != null){
+//                    builder.append(cell.getItem().getTileCharacter());
+//                } else {
+//                    builder.append(cell.getType().getCharacter());
+//                }
+//            }
+//            builder.append("\n");
+//        }
+//        return builder.toString();
     }
 }

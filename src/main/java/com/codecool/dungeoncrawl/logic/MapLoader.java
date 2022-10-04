@@ -54,7 +54,7 @@ public class MapLoader {
                             cell.setType(CellType.HELMET);
                             new Helmet(cell);
                             break;
-                        case 'Y':
+                        case 'y':
                             cell.setType(CellType.KEY);
                             new Key(cell);
                             break;
@@ -90,14 +90,17 @@ public class MapLoader {
                         case 'R':
                             cell.setType(CellType.REPEAT);
                             break;
-                        case 'E':
-                            cell.setType(CellType.E);
-                            break;
                         case 'P':
-                            cell.setType(CellType.P);
+                            cell.setType(CellType.PLAY);
+                            break;
+                        case 'L':
+                            cell.setType(CellType.L);
                             break;
                         case 'A':
                             cell.setType(CellType.A);
+                            break;
+                        case 'Y':
+                            cell.setType(CellType.Y);
                             break;
                         case 'a':
                             cell.setType(CellType.ARROW);

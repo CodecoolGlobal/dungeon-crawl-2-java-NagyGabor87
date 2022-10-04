@@ -31,7 +31,7 @@ import javafx.scene.layout.GridPane;
 import java.sql.SQLException;
 
 public class Main extends Application {
-    LEVEL level = LEVEL.START;
+    LEVEL level = LEVEL.MENU;
     GameMap map = MapLoader.loadMap(level.getMapLevel(), null);
     GridPane ui = new GridPane();
 
@@ -234,19 +234,20 @@ public class Main extends Application {
             ButtonType button = alertUser("You've lost", "Sorry but you were killed by a monster.", Alert.AlertType.WARNING).orElse(ButtonType.CANCEL);
             if (button == ButtonType.OK) {
                 map.getPlayer().resetAlive();
-                map = MapLoader.loadMap(LEVEL.END.getMapLevel(), map.getPlayer());
+                map = MapLoader.loadMap(LEVEL.MENU.getMapLevel(), map.getPlayer());
                 return;
             }
         }
         if (map.getPlayer().getCell().getType() == CellType.QUIT) System.exit(1);
-        else if (map.getPlayer().getCell().getType() == CellType.REPEAT) {
-            level = LEVEL.START;
+        else if (map.getPlayer().getCell().getType() == CellType.PLAY) {
+            level = LEVEL.MAP_1;
             map = MapLoader.loadMap(level.getMapLevel(), null);
+            refresh();
         } else if (map.getPlayer().getCell().getType() == CellType.OPEN_DOOR) {
             if (map.getLevel().equals(LEVEL.MAP_4.getMapLevel())) {
                 ButtonType button = alertUser("You've won", "Congratulations! You've won the game!.", Alert.AlertType.INFORMATION).orElse(ButtonType.CANCEL);
                 if (button == ButtonType.OK) {
-                    map = MapLoader.loadMap(LEVEL.END.getMapLevel(), map.getPlayer());
+                    map = MapLoader.loadMap(LEVEL.MENU.getMapLevel(), map.getPlayer());
                     return;
                 }
             }

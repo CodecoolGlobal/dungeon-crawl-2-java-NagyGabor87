@@ -2,14 +2,11 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
-import com.codecool.dungeoncrawl.logic.Move;
 import com.codecool.dungeoncrawl.logic.Sound;
 import com.codecool.dungeoncrawl.logic.util.RandomGenerator;
 
-import java.util.Random;
 
-
-public class Skeleton extends Monster implements Move {
+public class Skeleton extends MovableMonster  {
     
     private final int percentOfChanceToMakeSound;
 

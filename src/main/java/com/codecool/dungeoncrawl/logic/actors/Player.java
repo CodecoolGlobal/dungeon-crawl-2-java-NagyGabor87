@@ -2,14 +2,14 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
-import com.codecool.dungeoncrawl.logic.Move;
+import com.codecool.dungeoncrawl.logic.Movable;
 import com.codecool.dungeoncrawl.logic.Sound;
 import com.codecool.dungeoncrawl.logic.items.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player extends Actor implements Move {
+public class Player extends Actor implements Movable {
 
     private final List<Item> inventory;
     private int armor;
@@ -122,7 +122,7 @@ public class Player extends Actor implements Move {
         nextCell.getActor().setHealth(nextCell.getActor().getHealth() - getDamage());
         if (nextCell.getActor().getHealth() <= 0) {
             if(nextCell.getActor() instanceof Skeleton){
-                nextCell.getGameMap().removeMonsterFromMovableMonsters((Monster) nextCell.getActor());
+                nextCell.getGameMap().removeMonsterFromMovableMonsters((MovableMonster) nextCell.getActor());
             }
             nextCell.removeActor();
             makeSound(Sound.DEATH.getFilePath());

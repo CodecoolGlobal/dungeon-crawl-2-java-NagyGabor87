@@ -21,12 +21,6 @@ public class PotionSeller extends Actor {
         }
     }
 
-
-    @Override
-    public void move(int dx, int dy) {
-        //Potion Seller does not move
-    }
-
     @Override
     public String getTileName() {
         return CellType.POTION_SELLER.getTileName();

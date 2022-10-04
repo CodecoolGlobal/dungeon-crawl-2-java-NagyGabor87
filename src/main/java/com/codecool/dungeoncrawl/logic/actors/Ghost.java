@@ -2,10 +2,9 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
-import com.codecool.dungeoncrawl.logic.Move;
 import com.codecool.dungeoncrawl.logic.util.RandomGenerator;
 
-public class Ghost extends Monster implements Move {
+public class Ghost extends MovableMonster {
 
     private int waitThisManyRoundsBeforeMove = 2;
 

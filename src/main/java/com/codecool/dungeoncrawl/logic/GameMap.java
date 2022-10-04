@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.Monster;
+import com.codecool.dungeoncrawl.logic.actors.MovableMonster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 
@@ -10,12 +11,13 @@ import java.util.List;
 public class GameMap {
     private final int width;
     private final int height;
+
     private final Cell[][] cells;
 
     private Player player;
-//    private int skeletonCount = 0;
 
-    private List<Monster> movableMonsters;
+//    private int skeletonCount = 0;
+    private List<MovableMonster> movableMonsters;
 
     private String level;
 
@@ -77,6 +79,7 @@ public class GameMap {
         return height;
     }
 
+
     public void addInventory() {
         Cell currentTile = getPlayer().getCell();
         if (currentTile.getItem() != null) {
@@ -85,11 +88,15 @@ public class GameMap {
             currentTile.setItem(null);
         }
     }
-    public void addMonsterToMovableMonsters(Monster monster){
-        movableMonsters.add(monster);
+
+    public List<MovableMonster> getMovableMonsters() {
+        return movableMonsters;
+    }
+    public void addMonsterToMovableMonsters(MovableMonster monster){
+            movableMonsters.add(monster);
     }
 
-    public void removeMonsterFromMovableMonsters(Monster monster){
+    public void removeMonsterFromMovableMonsters(MovableMonster monster){
         movableMonsters.remove(monster);
     }
 }

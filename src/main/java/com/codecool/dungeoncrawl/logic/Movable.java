@@ -1,6 +1,6 @@
 package com.codecool.dungeoncrawl.logic;
 
-public interface Move {
+public interface Movable {
 
     void move(int dx, int dy);
 }

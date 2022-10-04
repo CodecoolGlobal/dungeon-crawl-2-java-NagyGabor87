@@ -122,8 +122,7 @@ public class Main extends Application {
                 clearInventoryText();
                 break;
             case S:
-                Player player = map.getPlayer();
-                dbManager.savePlayer(player);
+                dbManager.saveState(map);
                 break;
 
         }

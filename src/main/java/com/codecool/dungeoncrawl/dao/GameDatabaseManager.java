@@ -2,12 +2,18 @@ package com.codecool.dungeoncrawl.dao;
 
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.model.PlayerModel;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
 public class GameDatabaseManager {
+    private Dotenv dotenv;
+    public GameDatabaseManager() {
+        dotenv = Dotenv.load();
+    }
+
     private PlayerDao playerDao;
 
     public void setup() throws SQLException {
@@ -22,9 +28,9 @@ public class GameDatabaseManager {
 
     private DataSource connect() throws SQLException {
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
-        String dbName = "test";
-        String user = "test";
-        String password = "test";
+        String dbName = dotenv.get("MY_PSQL_DBNAME");
+        String user = dotenv.get("MY_PSQL_USER");
+        String password = dotenv.get("MY_PSQL_PASSWORD");
 
         dataSource.setDatabaseName(dbName);
         dataSource.setUser(user);

@@ -263,6 +263,7 @@ public class Main extends Application {
         dbManager = new GameDatabaseManager();
         try {
             dbManager.setup();
+            dbManager.savePlayer(map.getPlayer());
         } catch (SQLException e) {
             System.out.println("Cannot connect to database");
         }

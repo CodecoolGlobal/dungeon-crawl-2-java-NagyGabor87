@@ -26,14 +26,9 @@ public class GameDatabaseManager {
         gameStateDao = new GameStateDaoJdbc(dataSource);
     }
 
-    private void savePlayer(Player player) {
-        PlayerModel model = new PlayerModel(player);
-        playerDao.add(model);
-    }
-
     public void saveState(GameMap map) {
         PlayerModel playerModel = new PlayerModel(map.getPlayer());
-        savePlayer(map.getPlayer());
+        playerDao.add(playerModel);
 
         Date date = new java.sql.Date(System.currentTimeMillis());
         String currentMap = map.toString();

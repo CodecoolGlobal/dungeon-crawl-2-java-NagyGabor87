@@ -18,6 +18,12 @@ public class GameStateDaoJdbc implements GameStateDao {
     @Override
     public void add(GameState state) {
 
+        // TODO work in progress
+        int player_id = state.getPlayer().getId();
+        String map = state.getCurrentMap();
+        Date date = state.getSavedAt();
+        int state_id;
+
     }
 
     @Override

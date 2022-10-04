@@ -86,9 +86,6 @@ public class MapLoader {
                         case 'T':
                             cell.setType(CellType.T);
                             break;
-                        case 'R':
-                            cell.setType(CellType.REPEAT);
-                            break;
                         case 'P':
                             cell.setType(CellType.PLAY);
                             break;
@@ -117,6 +114,14 @@ public class MapLoader {
                         case 't':
                             cell.setType(CellType.TORCH_A);
                             map.addTorch(cell);
+                            break;
+                        case 'r':
+                            cell.setType(CellType.TORCH_B);
+                            map.addTorch(cell);
+                            break;
+                        case 'o':
+                            cell.setType(CellType.STRONGEST_POTION);
+                            new StrongestPotion(cell);
                             break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");

@@ -4,6 +4,7 @@ import com.codecool.dungeoncrawl.logic.Drawable;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,7 +44,6 @@ public class Tiles {
         tileMap.put("letter_U", new Tile(26,31));
         tileMap.put("letter_I", new Tile(27,30));
         tileMap.put("letter_T", new Tile(25,31));
-        tileMap.put("repeat", new Tile(23,31));
         tileMap.put("play", new Tile(21,31));
         tileMap.put("letter_L", new Tile(30,30));
         tileMap.put("letter_A", new Tile(19,30));

@@ -18,4 +18,9 @@ public class Potion extends Item{
     public String getTileName() {
         return CellType.POTION.getTileName();
     }
+
+    @Override
+    public char getTileCharacter() {
+        return CellType.POTION.getCharacter();
+    }
 }

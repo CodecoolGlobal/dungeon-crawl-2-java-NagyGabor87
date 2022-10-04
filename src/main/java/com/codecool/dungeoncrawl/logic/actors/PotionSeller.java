@@ -25,4 +25,8 @@ public class PotionSeller extends Actor {
     public String getTileName() {
         return CellType.POTION_SELLER.getTileName();
     }
+    @Override
+    public char getTileCharacter() {
+        return CellType.POTION_SELLER.getCharacter();
+    }
 }

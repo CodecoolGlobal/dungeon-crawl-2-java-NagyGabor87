@@ -162,6 +162,7 @@ public class Main extends Application {
     }
 
     private void refresh() {
+        System.out.println(map.toString()); // todo remove
         moveMonsters();
         removeDisappearingWall();
         drawMap();

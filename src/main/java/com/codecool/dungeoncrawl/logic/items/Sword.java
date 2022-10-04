@@ -14,4 +14,9 @@ public class Sword extends AttackWeapon {
     public String getTileName() {
         return CellType.SWORD.getTileName();
     }
+
+    @Override
+    public char getTileCharacter() {
+        return CellType.SWORD.getCharacter();
+    }
 }

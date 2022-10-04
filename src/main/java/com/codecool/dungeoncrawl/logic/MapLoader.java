@@ -4,6 +4,7 @@ import com.codecool.dungeoncrawl.logic.actors.*;
 import com.codecool.dungeoncrawl.logic.items.*;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Scanner;
 
 public class MapLoader {
@@ -120,7 +121,7 @@ public class MapLoader {
                 }
             }
         }
+        map.fetchTorches();
         return map;
     }
-
 }

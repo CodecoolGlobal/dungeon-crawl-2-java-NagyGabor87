@@ -17,4 +17,9 @@ public class StrongestPotion extends Potion {
     public String getTileName() {
         return CellType.STRONGEST_POTION.getTileName();
     }
+
+    @Override
+    public char getTileCharacter() {
+        return CellType.STRONGEST_POTION.getCharacter();
+    }
 }

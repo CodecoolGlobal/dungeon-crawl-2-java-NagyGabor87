@@ -5,8 +5,7 @@ import com.codecool.dungeoncrawl.logic.actors.MovableMonster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,5 +111,23 @@ public class GameMap {
 
     public void removeMonsterFromMovableMonsters(MovableMonster monster){
         movableMonsters.remove(monster);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for (Cell[] row : cells){
+            for (Cell cell : row){
+                if (cell.getActor() != null){
+                    builder.append(cell.getActor().getTileCharacter());
+                } else if (cell.getItem() != null){
+                    builder.append(cell.getItem().getTileCharacter());
+                } else {
+                    builder.append(cell.getType().getCharacter());
+                }
+            }
+            builder.append("\n");
+        }
+        return builder.toString();
     }
 }

@@ -20,6 +20,11 @@ public class Ghost extends MovableMonster {
     }
 
     @Override
+    public char getTileCharacter() {
+        return CellType.GHOST.getCharacter();
+    }
+
+    @Override
     public int generateNextStepX() {
         int ghostX = this.getX();
         int playerX = cell.getGameMap().getPlayer().getX();

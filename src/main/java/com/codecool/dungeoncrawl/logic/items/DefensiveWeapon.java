@@ -12,9 +12,4 @@ public abstract class DefensiveWeapon extends Item {
     public int getArmor() {
         return armor;
     }
-
-    @Override
-    public String getTileName() {
-        return null;
-    }
 }

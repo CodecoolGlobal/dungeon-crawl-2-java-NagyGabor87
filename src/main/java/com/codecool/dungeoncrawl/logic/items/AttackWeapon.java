@@ -12,9 +12,4 @@ public abstract class AttackWeapon extends Item {
     public int getDamage() {
         return damage;
     }
-
-    @Override
-    public String getTileName() {
-        return null;
-    }
 }

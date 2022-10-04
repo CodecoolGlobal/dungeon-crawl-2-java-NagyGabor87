@@ -52,6 +52,11 @@ public class Cell implements Drawable {
         return type.getTileName();
     }
 
+    @Override
+    public char getTileCharacter() {
+        return type.getCharacter();
+    }
+
     public int getX() {
         return x;
     }

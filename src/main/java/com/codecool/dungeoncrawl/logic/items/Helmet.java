@@ -17,5 +17,10 @@ public class Helmet extends DefensiveWeapon {
         return CellType.HELMET.getTileName();
     }
 
+    @Override
+    public char getTileCharacter() {
+        return CellType.HELMET.getCharacter();
+    }
+
 
 }

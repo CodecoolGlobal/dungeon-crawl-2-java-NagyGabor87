@@ -68,6 +68,11 @@ public class Player extends Actor implements Movable {
         return tileName;
     }
 
+    @Override
+    public char getTileCharacter() {
+        return CellType.PLAYER.getCharacter();
+    }
+
     private void setTileName(String tileName) {
         this.tileName = tileName;
     }

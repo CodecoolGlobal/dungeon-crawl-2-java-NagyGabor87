@@ -14,4 +14,9 @@ public class Key extends Item {
     public String getTileName() {
         return CellType.KEY.getTileName();
     }
+
+    @Override
+    public char getTileCharacter() {
+        return CellType.KEY.getCharacter();
+    }
 }

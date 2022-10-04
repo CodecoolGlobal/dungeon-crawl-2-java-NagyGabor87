@@ -24,6 +24,12 @@ public class Skeleton extends MovableMonster  {
         }
         return CellType.SKELETON.getTileName();
     }
+
+    @Override
+    public char getTileCharacter() {
+        return CellType.SKELETON.getCharacter();
+    }
+
     @Override
     public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);

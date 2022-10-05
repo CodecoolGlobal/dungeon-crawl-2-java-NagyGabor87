@@ -7,7 +7,7 @@ import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.MovableMonster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.*;
-import com.codecool.dungeoncrawl.logic.actors.Monster;
+import com.codecool.dungeoncrawl.logic.util.PopupFeedback;
 import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.PlayerModel;
 import javafx.application.Application;
@@ -141,7 +141,7 @@ public class Main extends Application {
         // if not -> save the state
         if (playerID == null || playerID == 0) {
             dbManager.saveState(map);
-            feedbackSave(map.getPlayer().getName());
+            PopupFeedback.feedbackSave(map.getPlayer().getName());
             return;
         }
 
@@ -150,16 +150,16 @@ public class Main extends Application {
         // if not, -> save the state
         if (stateId == null || stateId == 0) {
             dbManager.saveState(map);
-            feedbackSave(map.getPlayer().getName());
+            PopupFeedback.feedbackSave(map.getPlayer().getName());
             return;
         }
 
         // if present -> popup window to override?
-        boolean override = isOverrideSavedGame();
+        boolean override = PopupFeedback.isOverrideSavedGame();
         // override -> update state with player i
         if (override) {
             dbManager.updateState(stateId, map);
-            feedbackSave(map.getPlayer().getName());
+            PopupFeedback.feedbackSave(map.getPlayer().getName());
         }
         // no override -> just exit
     }
@@ -167,7 +167,7 @@ public class Main extends Application {
     private void loadGame() {
         Integer playerId = map.getPlayer().getId();
         if (playerId == null || playerId == 0) {
-            feedBackLoad(map.getPlayer().getName());
+            PopupFeedback.feedBackFailedLoad(map.getPlayer().getName());
             return;
         }
 
@@ -180,40 +180,13 @@ public class Main extends Application {
         // create game state model from raw data
         GameState gameState = dbManager.getGameStateByPlayerId(playerId);
 
-        // create game state object from model
-        GameMap newMap = null;
-
         // fill up new map with maploader
-        newMap = MapLoader.loadMap(gameState, newPlayer);
+        GameMap newMap = MapLoader.loadMap(gameState, newPlayer);
 
 
         newPlayer.getCell().setGameMap(newMap);
         map = newMap;
-    }
-
-    private void feedBackLoad(String playerName) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Game can't load");
-        alert.setHeaderText("Your game can't load");
-        alert.setContentText(playerName + " you don't have any loaded games");
-        alert.showAndWait();
-    }
-
-    private void feedbackSave(String playerName) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Game is saved");
-        alert.setHeaderText("Your game is saved");
-        alert.setContentText(playerName + " your game is saved successfully!");
-        alert.showAndWait();
-    }
-
-    private boolean isOverrideSavedGame() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Override saved game?");
-        alert.setHeaderText("Override saved game?");
-        alert.setContentText("You already have a saved game. Do you want to override it?");
-        Optional<ButtonType> result = alert.showAndWait();
-        return result.get() == ButtonType.OK;
+        PopupFeedback.feedBackSuccessfulLoad(map.getPlayer().getName());
     }
 
     private void removeDisappearingWall() {
@@ -275,7 +248,7 @@ public class Main extends Application {
             ButtonType button = alertUser("You've lost", "Sorry but you were killed by a monster.", Alert.AlertType.WARNING).orElse(ButtonType.CANCEL);
             if (button == ButtonType.OK) {
                 map.getPlayer().resetAlive();
-                map = MapLoader.loadMap(LEVEL.MENU.getMapLevel(), map.getPlayer());
+                map = MapLoader.loadMap(LEVEL.MENU.getMapLevel(), null);
                 return;
             }
         }
@@ -288,7 +261,7 @@ public class Main extends Application {
             if (map.getLevel().equals(LEVEL.MAP_4.getMapLevel())) {
                 ButtonType button = alertUser("You've won", "Congratulations! You've won the game!.", Alert.AlertType.INFORMATION).orElse(ButtonType.CANCEL);
                 if (button == ButtonType.OK) {
-                    map = MapLoader.loadMap(LEVEL.MENU.getMapLevel(), map.getPlayer());
+                    map = MapLoader.loadMap(LEVEL.MENU.getMapLevel(), null);
                     return;
                 }
             }

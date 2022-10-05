@@ -129,7 +129,7 @@ public class Player extends Actor implements Movable {
         setHealth(getHealth() - monsterAttack);
         nextCell.getActor().setHealth(nextCell.getActor().getHealth() - getDamage());
         if (nextCell.getActor().getHealth() <= 0) {
-            if(nextCell.getActor() instanceof Skeleton){
+            if(nextCell.getActor() instanceof MovableMonster){
                 nextCell.getGameMap().removeMonsterFromMovableMonsters((MovableMonster) nextCell.getActor());
             }
             nextCell.removeActor();

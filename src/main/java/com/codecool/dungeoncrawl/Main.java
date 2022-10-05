@@ -8,6 +8,7 @@ import com.codecool.dungeoncrawl.logic.actors.MovableMonster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Monster;
+import com.codecool.dungeoncrawl.model.PlayerModel;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -126,6 +127,9 @@ public class Main extends Application {
             case S:
                 saveGame();
                 break;
+            case L:
+                loadGame();
+                break;
 
         }
     }
@@ -157,6 +161,40 @@ public class Main extends Application {
             feedbackSave(map.getPlayer().getName());
         }
         // no override -> just exit
+    }
+
+    private void loadGame() {
+        Integer playerId = map.getPlayer().getId();
+        if (playerId == null || playerId == 0) {
+            feedBackLoad(map.getPlayer().getName());
+            return;
+        }
+
+        // player id exists
+        // fetch raw player data by player id
+        PlayerModel playerModel = dbManager.getPlayerByID(playerId);
+
+        // fetch raw state data by player id
+
+        // create player model from raw data
+        // create player object from player model
+        Player newPlayer = new Player(playerModel);
+
+        // create game state model from raw data
+        // create game state object from model
+
+        // rewrite this.map with the created object
+
+
+
+    }
+
+    private void feedBackLoad(String playerName) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game can't load");
+        alert.setHeaderText("Your game can't load");
+        alert.setContentText(playerName + " you don't have any loaded games");
+        alert.showAndWait();
     }
 
     private void feedbackSave(String playerName) {

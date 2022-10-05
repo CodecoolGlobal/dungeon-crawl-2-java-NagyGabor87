@@ -27,6 +27,13 @@ public class Cell implements Drawable {
         this.type = type;
     }
 
+    public Cell (int x, int y) {
+        this.x = x;
+        this.y = y;
+        this.gameMap = null; // TODO overwite it later!!
+        this.type = null;  // TODO overwite it later!!
+    }
+
     public CellType getType() {
         return type;
     }

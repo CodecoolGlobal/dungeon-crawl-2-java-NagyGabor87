@@ -26,12 +26,6 @@ public class GameDatabaseManager {
         gameStateDao = new GameStateDaoJdbc(dataSource);
     }
 
-    // TODO just for testing, delete later
-    public void savePlayer(Player player) {
-        PlayerModel model = new PlayerModel(player);
-        playerDao.add(model);
-    }
-
     public void saveState(GameMap map) {
         PlayerModel playerModel = new PlayerModel(map.getPlayer());
         playerDao.add(playerModel);
@@ -40,7 +34,6 @@ public class GameDatabaseManager {
         String currentMap = map.toString();
         GameState state = new GameState(currentMap, date, playerModel);
         gameStateDao.add(state);
-        // TODO implement add method in GameStateDao
     }
 
     private DataSource connect() throws SQLException {
@@ -58,5 +51,14 @@ public class GameDatabaseManager {
         System.out.println("Connection ok.");
 
         return dataSource;
+    }
+
+    public Integer getPlayerId(Player player) {
+        PlayerModel playerModel = new PlayerModel(player);
+        return playerDao.getPlayerIdByName(playerModel);
+    }
+
+    public Integer getGameState(int playerID) {
+        return gameStateDao.getGameStateIdByPlayerID(playerID);
     }
 }

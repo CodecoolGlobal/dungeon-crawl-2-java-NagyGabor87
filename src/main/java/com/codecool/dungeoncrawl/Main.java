@@ -124,11 +124,45 @@ public class Main extends Application {
                 clearInventoryText();
                 break;
             case S:
-//                dbManager.savePlayer(map.getPlayer());
-                dbManager.saveState(map);
+                saveGame();
+//                dbManager.saveState(map);
                 break;
 
         }
+    }
+
+    private void saveGame() {
+        // get all players -> check if player has already saved, get the player id
+        Integer playerID = dbManager.getPlayerId(map.getPlayer());
+        // if not -> save the state
+        if (playerID == null) {
+            dbManager.saveState(map);
+        }
+
+        // if player present -> check if there is a state with player id
+        Integer stateId = dbManager.getGameState(playerID);
+        // if not, -> save the state
+        if (stateId == null) {
+            dbManager.saveState(map);
+        }
+
+        // if present -> popup window to override?
+        boolean override = isOverrideSavedGame();
+        // no override -> just exit
+        // override -> update state with player i
+        if (override) {
+            dbManager.updateState(stateId, map);
+        }
+
+    }
+
+    private boolean isOverrideSavedGame() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Override saved game?");
+        alert.setHeaderText("Override saved game?");
+        alert.setContentText("You already have a saved game. Do you want to override it?");
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.get() == ButtonType.OK;
     }
 
     private void removeDisappearingWall() {

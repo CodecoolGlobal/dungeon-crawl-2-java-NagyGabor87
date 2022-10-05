@@ -187,6 +187,7 @@ public class Main extends Application {
 
         newPlayer.getCell().setGameMap(newMap);
         map = newMap;
+        drawMap();
         PopupFeedback.feedBackSuccessfulLoad(map.getPlayer().getName());
     }
 

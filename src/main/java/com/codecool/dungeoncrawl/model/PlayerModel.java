@@ -8,6 +8,7 @@ public class PlayerModel extends BaseModel {
     private int x;
     private int y;
     private String inventory;
+    private Integer id;
 
     public PlayerModel(String playerName, int x, int y, String inventory) {
         this.playerName = playerName;
@@ -23,6 +24,7 @@ public class PlayerModel extends BaseModel {
 
         this.hp = player.getHealth();
         this.inventory = player.getInventory();
+        this.id = player.getId();
     }
 
     public String getPlayerName() {
@@ -63,5 +65,15 @@ public class PlayerModel extends BaseModel {
 
     public void addToInventory(String inventory) {
         this.inventory = inventory;
+    }
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(int id) {
+        this.id = id;
     }
 }

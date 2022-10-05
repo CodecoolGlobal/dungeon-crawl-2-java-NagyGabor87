@@ -125,7 +125,6 @@ public class Main extends Application {
                 break;
             case S:
                 saveGame();
-//                dbManager.saveState(map);
                 break;
 
         }
@@ -135,25 +134,37 @@ public class Main extends Application {
         // get all players -> check if player has already saved, get the player id
         Integer playerID = dbManager.getPlayerId(map.getPlayer());
         // if not -> save the state
-        if (playerID == null) {
+        if (playerID == null || playerID == 0) {
             dbManager.saveState(map);
+            feedbackSave(map.getPlayer().getName());
+            return;
         }
 
         // if player present -> check if there is a state with player id
         Integer stateId = dbManager.getGameState(playerID);
         // if not, -> save the state
-        if (stateId == null) {
+        if (stateId == null || stateId == 0) {
             dbManager.saveState(map);
+            feedbackSave(map.getPlayer().getName());
+            return;
         }
 
         // if present -> popup window to override?
         boolean override = isOverrideSavedGame();
-        // no override -> just exit
         // override -> update state with player i
         if (override) {
             dbManager.updateState(stateId, map);
+            feedbackSave(map.getPlayer().getName());
         }
+        // no override -> just exit
+    }
 
+    private void feedbackSave(String playerName) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game is saved");
+        alert.setHeaderText("Your game is saved");
+        alert.setContentText(playerName + " your game is saved successfully!");
+        alert.showAndWait();
     }
 
     private boolean isOverrideSavedGame() {
@@ -231,7 +242,7 @@ public class Main extends Application {
         if (map.getPlayer().getCell().getType() == CellType.QUIT) System.exit(1);
         else if (map.getPlayer().getCell().getType() == CellType.PLAY) {
             level = LEVEL.MAP_1;
-            map = MapLoader.loadMap(level.getMapLevel(), null);
+            map = MapLoader.loadMap(level.getMapLevel(), map.getPlayer());
             refresh();
         } else if (map.getPlayer().getCell().getType() == CellType.OPEN_DOOR) {
             if (map.getLevel().equals(LEVEL.MAP_4.getMapLevel())) {

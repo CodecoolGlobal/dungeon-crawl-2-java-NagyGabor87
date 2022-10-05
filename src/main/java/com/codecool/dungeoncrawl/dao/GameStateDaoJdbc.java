@@ -18,11 +18,12 @@ public class GameStateDaoJdbc implements GameStateDao {
     @Override
     public void add(GameState state) {
         try (Connection conn = dataSource.getConnection()) {
-            String sql = "INSERT INTO game_state (current_map, saved_at, player_id) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO game_state (current_map, saved_at, player_id, map_level) VALUES (?, ?, ?, ?)";
             PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, state.getCurrentMap());
             statement.setDate(2, state.getSavedAt());
             statement.setInt(3, state.getPlayer().getId());
+            statement.setString(4, state.getMapLevel());
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
             resultSet.next();
@@ -34,7 +35,18 @@ public class GameStateDaoJdbc implements GameStateDao {
 
     @Override
     public void update(GameState state) {
-
+        try (Connection conn = dataSource.getConnection()) {
+            String sql = "UPDATE game_state SET current_map = ?, saved_at = ?, player_id = ?, map_level = ? WHERE id = ?";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, state.getCurrentMap());
+            statement.setDate(2, state.getSavedAt());
+            statement.setInt(3, state.getPlayer().getId());
+            statement.setString(4, state.getMapLevel());
+            statement.setInt(5, state.getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

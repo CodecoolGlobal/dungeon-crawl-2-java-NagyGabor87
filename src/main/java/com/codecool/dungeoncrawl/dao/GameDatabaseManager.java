@@ -29,10 +29,11 @@ public class GameDatabaseManager {
     public void saveState(GameMap map) {
         PlayerModel playerModel = new PlayerModel(map.getPlayer());
         playerDao.add(playerModel);
+        map.getPlayer().setId(playerModel.getId());
 
         Date date = new java.sql.Date(System.currentTimeMillis());
         String currentMap = map.toString();
-        GameState state = new GameState(currentMap, date, playerModel);
+        GameState state = new GameState(currentMap, date, playerModel, map.getLevel());
         gameStateDao.add(state);
     }
 
@@ -60,5 +61,14 @@ public class GameDatabaseManager {
 
     public Integer getGameState(int playerID) {
         return gameStateDao.getGameStateIdByPlayerID(playerID);
+    }
+
+    public void updateState(Integer stateId, GameMap map) {
+        PlayerModel playerModel = new PlayerModel(map.getPlayer());
+        Date date = new java.sql.Date(System.currentTimeMillis());
+        String currentMap = map.toString();
+        GameState gameState = new GameState(currentMap, date, playerModel, map.getLevel());
+        gameState.setId(stateId);
+        gameStateDao.update(gameState);
     }
 }

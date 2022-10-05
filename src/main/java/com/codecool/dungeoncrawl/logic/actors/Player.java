@@ -35,12 +35,12 @@ public class Player extends Actor implements Movable {
         super(new Cell(playerModel.getX(), playerModel.getY()));
         this.playerName = playerModel.getPlayerName();
         this.id = playerModel.getId();
-        createInventory(playerModel.getInventory());
         this.tileName = CellType.PLAYER.getTileName();
         this.health = playerModel.getHp();
+        this.inventory = createInventory(playerModel.getInventory());
     }
 
-    private void createInventory(String inventoryFromDb) {
+    private List<Item> createInventory(String inventoryFromDb) {
         inventory = new ArrayList<>();
         String[] items = inventoryFromDb.split(",");
         for (String item : items) {
@@ -49,14 +49,18 @@ public class Player extends Actor implements Movable {
                     switch (cellType){
                         case SWORD:
                             addItemToInventory(new Sword(new Cell(0,0)));
+                            break;
                         case KEY:
                             addItemToInventory(new Key(new Cell(0,0)));
+                            break;
                         case HELMET:
                             addItemToInventory(new Helmet(new Cell(0,0)));
+                            break;
                     }
                 }
             }
         }
+        return inventory;
     }
 
     @Override

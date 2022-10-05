@@ -122,7 +122,7 @@ public class Main extends Application {
                 ui.add(new Label("Inventory:"), 0, 1);
                 ui.add(new Label(inventory), 1, 1);
                 break;
-            case ESCAPE:
+            case TAB:
                 clearInventoryText();
                 break;
             case S:
@@ -171,27 +171,24 @@ public class Main extends Application {
             return;
         }
 
-        // player id exists
-        // fetch raw player data by player id
+        // player id exists, fetch raw player data by player id
         PlayerModel playerModel = dbManager.getPlayerByID(playerId);
 
-        // fetch raw state data by player id
-
-        // create player model from raw data
         // create player object from player model
         Player newPlayer = new Player(playerModel);
 
         // create game state model from raw data
         GameState gameState = dbManager.getGameStateByPlayerId(playerId);
+
         // create game state object from model
         GameMap newMap = null;
-        newMap = new GameMap(gameState, newPlayer, newMap);
+
+        // fill up new map with maploader
+        newMap = MapLoader.loadMap(gameState, newPlayer);
+
+
         newPlayer.getCell().setGameMap(newMap);
         map = newMap;
-        // rewrite this.map with the created object
-
-
-
     }
 
     private void feedBackLoad(String playerName) {

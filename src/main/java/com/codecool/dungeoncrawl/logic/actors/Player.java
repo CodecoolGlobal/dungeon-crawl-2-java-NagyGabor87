@@ -19,6 +19,7 @@ public class Player extends Actor implements Movable {
     private String tileName;
     private String playerName;
     private boolean isAlive = true;
+    private int id;
 
     public Player(Cell cell) {
         super(cell);
@@ -64,6 +65,14 @@ public class Player extends Actor implements Movable {
     private static boolean isNoCollision(Cell nextCell) {
         return nextCell.getType() == CellType.WALL ||
                 nextCell.getType() == CellType.DISAPPEARING_WALL;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTileName() {

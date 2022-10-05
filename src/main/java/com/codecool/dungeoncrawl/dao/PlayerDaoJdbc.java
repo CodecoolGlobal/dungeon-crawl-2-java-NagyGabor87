@@ -17,14 +17,13 @@ public class PlayerDaoJdbc implements PlayerDao {
     @Override
     public void add(PlayerModel player) {
         try (Connection conn = dataSource.getConnection()) {
-            String sql = "INSERT INTO player (player_name, hp, x, y, inventory, damage) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO player (player_name, hp, x, y, inventory) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, player.getPlayerName());
             statement.setInt(2, player.getHp());
             statement.setInt(3, player.getX());
             statement.setInt(4, player.getY());
             statement.setString(5, player.getInventory());
-            statement.setInt(6, player.getDamage());
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
             resultSet.next();
@@ -37,15 +36,14 @@ public class PlayerDaoJdbc implements PlayerDao {
     @Override
     public void update(PlayerModel player) {
         try (Connection conn = dataSource.getConnection()) {
-            String sql = "UPDATE player SET player_name = ?, hp = ?, x = ?, y = ?, inventory = ?, damage = ? WHERE id = ?";
+            String sql = "UPDATE player SET player_name = ?, hp = ?, x = ?, y = ?, inventory = ? WHERE id = ?";
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, player.getPlayerName());
             statement.setInt(2, player.getHp());
             statement.setInt(3, player.getX());
             statement.setInt(4, player.getY());
             statement.setString(5, player.getInventory());
-            statement.setInt(6, player.getDamage());
-            statement.setInt(7, player.getId());
+            statement.setInt(6, player.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -56,7 +54,7 @@ public class PlayerDaoJdbc implements PlayerDao {
     public PlayerModel get(int id) {
         PlayerModel player;
         try (Connection conn = dataSource.getConnection()) {
-            String sql = "SELECT id, player_name, hp, x, y, inventory, damage FROM player WHERE id = ?";
+            String sql = "SELECT id, player_name, hp, x, y, inventory FROM player WHERE id = ?";
             PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
@@ -70,12 +68,8 @@ public class PlayerDaoJdbc implements PlayerDao {
             int x = resultSet.getInt(4);
             int y = resultSet.getInt(5);
             String inventory = resultSet.getString(6);
-            int damage = resultSet.getInt(7);
 
-            player = new PlayerModel(player_name, x, y, inventory, damage, hp, player_id);
-//            player.setId(player_id);
-//            player.setHp(hp);
-
+            player = new PlayerModel(player_name, x, y, inventory, hp, player_id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -85,7 +79,7 @@ public class PlayerDaoJdbc implements PlayerDao {
     @Override
     public List<PlayerModel> getAll() {
         try (Connection conn = dataSource.getConnection()) {
-            String sql = "SELECT id, player_name, hp, x, y, inventory, damage FROM player";
+            String sql = "SELECT id, player_name, hp, x, y, inventory FROM player";
             ResultSet resultSet = conn.createStatement().executeQuery(sql);
             List<PlayerModel> players = new ArrayList<>();
             while (resultSet.next()) {
@@ -95,8 +89,7 @@ public class PlayerDaoJdbc implements PlayerDao {
                 int x = resultSet.getInt(4);
                 int y = resultSet.getInt(5);
                 String inventory = resultSet.getString(6);
-                int damage = resultSet.getInt(7);
-                PlayerModel player = new PlayerModel(playerName, x, y, inventory, damage, hp, id);
+                PlayerModel player = new PlayerModel(playerName, x, y, inventory, hp, id);
                 players.add(player);
             }
             return players;

@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.StringJoiner;
 
 public class Player extends Actor implements Movable {
+    private static final int DEFAULT_HEALTH = 50;
+    private static final int DEFAULT_DAMAGE = 5;
+    private static final int DEFAULT_ARMOR = 5;
     private static final int MAX_HEALTH = 150;
 
 
@@ -25,9 +28,9 @@ public class Player extends Actor implements Movable {
     public Player(Cell cell) {
         super(cell);
         this.inventory = new ArrayList<>();
-        this.health = 50;
-        this.damage = 5;
-        this.armor = 5;
+        this.health = DEFAULT_HEALTH;
+        this.damage = DEFAULT_DAMAGE;
+        this.armor = DEFAULT_ARMOR;
         this.tileName = CellType.PLAYER.getTileName();
     }
 
@@ -38,6 +41,8 @@ public class Player extends Actor implements Movable {
         this.tileName = CellType.PLAYER.getTileName();
         this.health = playerModel.getHp();
         this.inventory = createInventory(playerModel.getInventory());
+        this.damage = DEFAULT_DAMAGE;
+        this.armor = DEFAULT_ARMOR;
     }
 
     private List<Item> createInventory(String inventoryFromDb) {
@@ -250,9 +255,11 @@ public class Player extends Actor implements Movable {
         this.cell = cell;
     }
 
-    public void resetAlive() {
-        // reset health after death to be able to move in the menu map.
-        this.isAlive = true;
+    public Player resetPlayer() {
+        Player resetPlayer = new Player(this.cell);
+        resetPlayer.setName(this.playerName);
+        resetPlayer.setId(this.getId());
+        return resetPlayer;
     }
 
     public String getInventory() {

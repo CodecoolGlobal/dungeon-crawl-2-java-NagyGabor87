@@ -74,7 +74,7 @@ public class Main extends Application {
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
         makeBackgroundMusic(Sound.MUSIC.getFilePath());
-        map.getPlayer().setName(getPlayerName());
+        map.getPlayer().setName(PopupFeedback.getPlayerName());
     }
 
     private void onKeyReleased(KeyEvent keyEvent) {
@@ -245,12 +245,14 @@ public class Main extends Application {
         healthLabel.setText("" + map.getPlayer().getHealth());
     }
 
+    // TODO this method is really messy, should refactor it to smaller ones
     private void stepNextLevel() {
         if (!map.getPlayer().isAlive()) {
             ButtonType button = alertUser("You've lost", "Sorry but you were killed by a monster.", Alert.AlertType.WARNING).orElse(ButtonType.CANCEL);
             if (button == ButtonType.OK) {
-                map.getPlayer().resetAlive();
-                map = MapLoader.loadMap(LEVEL.MENU.getMapLevel(), null);
+                Player resetPlayer = map.getPlayer().resetPlayer();
+                map = MapLoader.loadMap(LEVEL.MENU.getMapLevel(), resetPlayer);
+                refresh();
                 return;
             }
         }
@@ -263,7 +265,9 @@ public class Main extends Application {
             if (map.getLevel().equals(LEVEL.MAP_4.getMapLevel())) {
                 ButtonType button = alertUser("You've won", "Congratulations! You've won the game!.", Alert.AlertType.INFORMATION).orElse(ButtonType.CANCEL);
                 if (button == ButtonType.OK) {
-                    map = MapLoader.loadMap(LEVEL.MENU.getMapLevel(), null);
+                    Player resetPlayer = map.getPlayer().resetPlayer();
+                    map = MapLoader.loadMap(LEVEL.MENU.getMapLevel(), resetPlayer);
+                    refresh();
                     return;
                 }
             }
@@ -313,22 +317,5 @@ public class Main extends Application {
         alert.setTitle(title);
         alert.setContentText(message);
         return alert.showAndWait();
-    }
-
-
-    private String getPlayerName() {
-        String playerName = null;
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Player name");
-        dialog.setHeaderText("Player name");
-        dialog.setContentText("Please enter your name:");
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()){
-            playerName = result.get();
-        }
-        if (playerName == null || playerName.length() == 0) {
-            playerName = getPlayerName();
-        }
-        return playerName;
     }
 }

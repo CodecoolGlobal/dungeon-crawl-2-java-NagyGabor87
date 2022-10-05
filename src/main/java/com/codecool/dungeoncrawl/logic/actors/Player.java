@@ -17,6 +17,7 @@ public class Player extends Actor implements Movable {
     private final List<Item> inventory;
     private int armor;
     private String tileName;
+    private String playerName;
     private boolean isAlive = true;
 
     public Player(Cell cell) {
@@ -200,8 +201,7 @@ public class Player extends Actor implements Movable {
     }
 
     public String getName() {
-        // TODO:implement getname
-        return "Implement me";
+        return playerName;
     }
 
     public void setCell(Cell cell) {
@@ -219,5 +219,9 @@ public class Player extends Actor implements Movable {
             joiner.add(item.getTileName());
         }
         return joiner.toString();
+    }
+
+    public void setName(String playerName) {
+        this.playerName = playerName;
     }
 }

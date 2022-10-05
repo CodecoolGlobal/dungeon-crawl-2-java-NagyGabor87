@@ -16,6 +16,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -71,6 +72,7 @@ public class Main extends Application {
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
         makeBackgroundMusic(Sound.MUSIC.getFilePath());
+        map.getPlayer().setName(getPlayerName());
     }
 
     private void onKeyReleased(KeyEvent keyEvent) {
@@ -122,6 +124,7 @@ public class Main extends Application {
                 clearInventoryText();
                 break;
             case S:
+//                dbManager.savePlayer(map.getPlayer());
                 dbManager.saveState(map);
                 break;
 
@@ -250,5 +253,22 @@ public class Main extends Application {
         alert.setTitle(title);
         alert.setContentText(message);
         return alert.showAndWait();
+    }
+
+
+    private String getPlayerName() {
+        String playerName = null;
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Player name");
+        dialog.setHeaderText("Player name");
+        dialog.setContentText("Please enter your name:");
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            playerName = result.get();
+        }
+        if (playerName == null || playerName.length() == 0) {
+            playerName = getPlayerName();
+        }
+        return playerName;
     }
 }

@@ -26,6 +26,12 @@ public class GameDatabaseManager {
         gameStateDao = new GameStateDaoJdbc(dataSource);
     }
 
+    // TODO just for testing, delete later
+    public void savePlayer(Player player) {
+        PlayerModel model = new PlayerModel(player);
+        playerDao.add(model);
+    }
+
     public void saveState(GameMap map) {
         PlayerModel playerModel = new PlayerModel(map.getPlayer());
         playerDao.add(playerModel);

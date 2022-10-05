@@ -115,6 +115,7 @@ public class Main extends Application {
                 break;
             case SPACE:
                 map.addInventory();
+                drawMap();
                 break;
             case I:
                 clearInventoryText();

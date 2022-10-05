@@ -2,10 +2,26 @@ package com.codecool.dungeoncrawl.logic.util;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextInputDialog;
 
 import java.util.Optional;
 
 public class PopupFeedback {
+    public static String getPlayerName() {
+        String playerName = null;
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Player name");
+        dialog.setHeaderText("Player name");
+        dialog.setContentText("Please enter your name:");
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            playerName = result.get();
+        }
+        if (playerName == null || playerName.length() == 0) {
+            playerName = getPlayerName();
+        }
+        return playerName;
+    }
     public static void feedBackSuccessfulLoad(String playerName) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Game loaded");

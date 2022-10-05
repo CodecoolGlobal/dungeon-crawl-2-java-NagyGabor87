@@ -14,8 +14,7 @@ CREATE TABLE public.player (
     hp integer NOT NULL,
     x integer NOT NULL,
     y integer NOT NULL,
-    inventory text NOT NULL,
-    damage integer NOT NULL
+    inventory text NOT NULL
 );
 
 ALTER TABLE ONLY public.game_state

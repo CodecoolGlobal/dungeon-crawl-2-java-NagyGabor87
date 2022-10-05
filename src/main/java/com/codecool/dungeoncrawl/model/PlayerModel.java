@@ -8,15 +8,13 @@ public class PlayerModel extends BaseModel {
     private int x;
     private int y;
     private String inventory;
-    private int damage;
     private Integer id;
 
-    public PlayerModel(String playerName, int x, int y, String inventory, int damage, int hp, Integer id) {
+    public PlayerModel(String playerName, int x, int y, String inventory, int hp, Integer id) {
         this.playerName = playerName;
         this.x = x;
         this.y = y;
         this.inventory = inventory;
-        this.damage = damage;
         this.hp = hp;
         this.id = id;
     }
@@ -25,11 +23,9 @@ public class PlayerModel extends BaseModel {
         this.playerName = player.getName();
         this.x = player.getX();
         this.y = player.getY();
-
-        this.hp = player.getHealth();
         this.inventory = player.getInventory();
+        this.hp = player.getHealth();
         this.id = player.getId();
-        this.damage = player.getDamage();
     }
 
     public String getPlayerName() {
@@ -80,13 +76,5 @@ public class PlayerModel extends BaseModel {
     @Override
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getDamage() {
-        return damage;
-    }
-
-    public void setDamage(int damage) {
-        this.damage = damage;
     }
 }

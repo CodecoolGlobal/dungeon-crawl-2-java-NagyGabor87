@@ -5,6 +5,7 @@ import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Movable;
 import com.codecool.dungeoncrawl.logic.Sound;
 import com.codecool.dungeoncrawl.logic.items.*;
+import com.codecool.dungeoncrawl.model.PlayerModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ public class Player extends Actor implements Movable {
     private static final int MAX_HEALTH = 150;
 
 
-    private final List<Item> inventory;
+    private List<Item> inventory;
     private int armor;
     private String tileName;
     private String playerName;
@@ -28,6 +29,38 @@ public class Player extends Actor implements Movable {
         this.damage = 5;
         this.armor = 5;
         this.tileName = CellType.PLAYER.getTileName();
+    }
+
+    public Player(PlayerModel playerModel){
+        super(new Cell(playerModel.getX(), playerModel.getY()));
+        this.playerName = playerModel.getPlayerName();
+        this.id = playerModel.getId();
+        this.tileName = CellType.PLAYER.getTileName();
+        this.health = playerModel.getHp();
+        this.inventory = createInventory(playerModel.getInventory());
+    }
+
+    private List<Item> createInventory(String inventoryFromDb) {
+        inventory = new ArrayList<>();
+        String[] items = inventoryFromDb.split(",");
+        for (String item : items) {
+            for (CellType cellType : CellType.values()){
+                if (cellType.getTileName().equals(item)) {
+                    switch (cellType){
+                        case SWORD:
+                            addItemToInventory(new Sword(new Cell(0,0)));
+                            break;
+                        case KEY:
+                            addItemToInventory(new Key(new Cell(0,0)));
+                            break;
+                        case HELMET:
+                            addItemToInventory(new Helmet(new Cell(0,0)));
+                            break;
+                    }
+                }
+            }
+        }
+        return inventory;
     }
 
     @Override

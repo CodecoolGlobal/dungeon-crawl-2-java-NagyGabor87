@@ -25,7 +25,6 @@ public class MapLoader {
                 if (x < line.length()) {
                     Cell cell = map.getCell(x, y);
                     char targetChar = line.charAt(x);
-
                     fillCell(player, map, targetChar, cell);
                 }
             }
@@ -95,6 +94,7 @@ public class MapLoader {
                 if (player != null) {
                     player.setCell(cell);
                     map.setPlayer(player);
+                    cell.setActor(player);
                 } else {
                     map.setPlayer(new Player(cell));
                 }

@@ -314,7 +314,6 @@ public class Main extends Application {
         PlayerModel playerModel = new PlayerModel(map.getPlayer());
         Date date = new java.sql.Date(System.currentTimeMillis());
         String currentMap = map.toString();
-        System.out.println(new Gson().toJson("proba").getClass());
         GameState state = new GameState(currentMap, date, playerModel, map.getLevel());
         return state.toString();
     }

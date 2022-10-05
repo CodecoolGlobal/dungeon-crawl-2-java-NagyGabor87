@@ -8,6 +8,9 @@ import com.codecool.dungeoncrawl.logic.actors.MovableMonster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Monster;
+import com.codecool.dungeoncrawl.model.GameState;
+import com.codecool.dungeoncrawl.model.PlayerModel;
+import com.google.gson.Gson;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -23,6 +26,8 @@ import javafx.stage.Stage;
 
 import javax.sound.sampled.*;
 import java.io.File;
+import java.io.FileWriter;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import javafx.scene.input.KeyCode;
@@ -125,6 +130,11 @@ public class Main extends Application {
                 break;
             case S:
                 saveGame();
+                break;
+            case F:
+                String folder = "/home/home/Projects/Javaoop/4het/dungeon-crawl-2-java-NagyGabor87/src/main/resources/exported_games";
+                String name = "Test";
+                writeJsonFile(name, folder);
                 break;
 
         }
@@ -298,6 +308,31 @@ public class Main extends Application {
         alert.setTitle(title);
         alert.setContentText(message);
         return alert.showAndWait();
+    }
+
+    public String getCurrentGameState() { //TODO getCurrentGameState similar to savestate in GameDBManager
+        PlayerModel playerModel = new PlayerModel(map.getPlayer());
+        Date date = new java.sql.Date(System.currentTimeMillis());
+        String currentMap = map.toString();
+        System.out.println(new Gson().toJson("proba").getClass());
+        GameState state = new GameState(currentMap, date, playerModel, map.getLevel());
+        return state.toString();
+    }
+
+
+
+    public void writeJsonFile(String filename, String folder) {
+        StringBuilder string = new StringBuilder();
+        string.append(folder).append("/").append(filename).append(".json");
+        String absolutePath = string.toString();
+        File newFile = new File(absolutePath);
+
+        try (FileWriter file = new FileWriter(newFile)) {
+            String jsonString = new Gson().toJson(getCurrentGameState());
+            file.write(jsonString);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

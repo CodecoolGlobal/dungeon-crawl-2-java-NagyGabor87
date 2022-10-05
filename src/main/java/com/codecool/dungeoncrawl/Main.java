@@ -8,6 +8,7 @@ import com.codecool.dungeoncrawl.logic.actors.MovableMonster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Monster;
+import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.PlayerModel;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -181,8 +182,12 @@ public class Main extends Application {
         Player newPlayer = new Player(playerModel);
 
         // create game state model from raw data
+        GameState gameState = dbManager.getGameStateByPlayerId(playerId);
         // create game state object from model
-
+        GameMap newMap = null;
+        newMap = new GameMap(gameState, newPlayer, newMap);
+        newPlayer.getCell().setGameMap(newMap);
+        map = newMap;
         // rewrite this.map with the created object
 
 

@@ -37,6 +37,7 @@ public class Player extends Actor implements Movable {
         this.id = playerModel.getId();
         createInventory(playerModel.getInventory());
         this.tileName = CellType.PLAYER.getTileName();
+        this.health = playerModel.getHp();
     }
 
     private void createInventory(String inventoryFromDb) {

@@ -19,6 +19,12 @@ public class GameState extends BaseModel {
         this.mapLevel = mapLevel;
     }
 
+    public GameState(String currentMap, String mapLevel) {
+        super();
+        this.currentMap = currentMap;
+        this.mapLevel = mapLevel;
+    }
+
     public Date getSavedAt() {
         return savedAt;
     }

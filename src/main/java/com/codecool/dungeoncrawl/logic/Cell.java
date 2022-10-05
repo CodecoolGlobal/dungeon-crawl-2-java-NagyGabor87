@@ -6,7 +6,7 @@ import com.codecool.dungeoncrawl.logic.items.Item;
 public class Cell implements Drawable {
     private CellType type;
     private Actor actor;
-    private final GameMap gameMap;
+    private GameMap gameMap;
     private Item item;
 
     public Item getItem() {
@@ -30,7 +30,6 @@ public class Cell implements Drawable {
     public Cell (int x, int y) {
         this.x = x;
         this.y = y;
-        this.gameMap = null; // TODO overwite it later!!
         this.type = null;  // TODO overwite it later!!
     }
 
@@ -72,9 +71,14 @@ public class Cell implements Drawable {
         return y;
     }
 
+    public void setGameMap(GameMap gameMap) {
+        this.gameMap = gameMap;
+    }
+
     public GameMap getGameMap() {
         return gameMap;
     }
+
     public void removeActor() {
         this.actor = null;
     }

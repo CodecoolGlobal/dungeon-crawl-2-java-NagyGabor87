@@ -54,4 +54,13 @@ public class PopupFeedback {
         Optional<ButtonType> result = alert.showAndWait();
         return result.get() == ButtonType.OK;
     }
+
+    public static void cantLoadFile() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("IMPORT ERROR!");
+        alert.setHeaderText("Unfortunately the given file is in wrong format.");
+        alert.setContentText("Please try another one!");
+        alert.showAndWait();
+
+    }
 }

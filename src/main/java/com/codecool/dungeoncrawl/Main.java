@@ -201,15 +201,19 @@ public class Main extends Application {
         PopupFeedback.feedBackSuccessfulLoad(map.getPlayer().getName());
     }
 
-    private void loadGameFromJson() { // todo combine with loadGame method
-        GameState currentGameState = fileLoad();
-        PlayerModel currentPlayerModel = currentGameState.getPlayer();
-        Player newPlayer = new Player(currentPlayerModel);
-        GameMap newMap = MapLoader.loadMap(currentGameState, newPlayer);
-        newPlayer.getCell().setGameMap(newMap);
-        map = newMap;
-        drawMap();
-        PopupFeedback.feedBackSuccessfulLoad(map.getPlayer().getName());
+    private void loadGameFromJson()  { // todo combine with loadGame method
+        try {
+            GameState currentGameState = fileLoad();
+            PlayerModel currentPlayerModel = currentGameState.getPlayer();
+            Player newPlayer = new Player(currentPlayerModel);
+            GameMap newMap = MapLoader.loadMap(currentGameState, newPlayer);
+            newPlayer.getCell().setGameMap(newMap);
+            map = newMap;
+            drawMap();
+            PopupFeedback.feedBackSuccessfulLoad(map.getPlayer().getName());
+        } catch (NullPointerException e) {
+            PopupFeedback.cantLoadFile();
+        }
     }
 
     private void removeDisappearingWall() {
@@ -350,8 +354,9 @@ public class Main extends Application {
     }
 
     public void fileSave(Stage primaryStage) {
-        primaryStage.setTitle("Save your JSON file");
-        final FileChooser fileChooser = new FileChooser();
+        primaryStage.setTitle("Make your JSON file here!");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialFileName("filename.json");
         File file = fileChooser.showSaveDialog(primaryStage); //todo title is not visible
         if (file != null) {
             writeJsonFile(file);
@@ -363,18 +368,18 @@ public class Main extends Application {
         loadStage.setTitle("Choose file to load");
         final FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(loadStage);
-        try{
-            Scanner scanner = new Scanner(file);
-            String jsonString = "";
-            while(scanner.hasNextLine()){
-                jsonString = scanner.nextLine();
+            try {
+                Scanner scanner = new Scanner(file);
+                String jsonString = "";
+                while (scanner.hasNextLine()) {
+                    jsonString = scanner.nextLine();
+                }
+                scanner.close();
+                GameState loadedGameState = new Gson().fromJson(jsonString, GameState.class);
+                return loadedGameState;
+            } catch (Exception e) {
+                System.out.println("something went wrong");
             }
-            scanner.close();
-            GameState loadedGameState = new Gson().fromJson(jsonString, GameState.class);
-            return loadedGameState;
-        } catch (Exception e){
-            System.out.println("sth went wrong");
-        }
         return null;
     }
 

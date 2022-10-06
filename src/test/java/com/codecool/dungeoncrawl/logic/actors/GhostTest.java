@@ -1,9 +1,6 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
-import com.codecool.dungeoncrawl.logic.Cell;
-import com.codecool.dungeoncrawl.logic.GameMap;
-import com.codecool.dungeoncrawl.logic.Level;
-import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Ghost;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import org.junit.jupiter.api.Test;
@@ -48,7 +45,7 @@ public class GhostTest {
     @Test
     void generateNextStepYWithBiggerPlayerYTest() {
         cellOfGhost.setGameMap(testMap);
-        assertEquals(1, ghost.generateNextStepX());
+        assertEquals(1, ghost.generateNextStepY());
     }
 
     @Test
@@ -64,7 +61,7 @@ public class GhostTest {
         cellOfGhost = new Cell(20, 20);
         cellOfGhost.setGameMap(testMap);
         ghost = new Ghost(cellOfGhost);
-        assertEquals(-1, ghost.generateNextStepX());
+        assertEquals(-1, ghost.generateNextStepY());
     }
 
     @Test
@@ -80,7 +77,7 @@ public class GhostTest {
         cellOfGhost = new Cell(5, 16);
         cellOfGhost.setGameMap(testMap);
         ghost = new Ghost(cellOfGhost);
-        assertEquals(0, ghost.generateNextStepX());
+        assertEquals(-1, ghost.generateNextStepY());
     }
 
     @Test
@@ -103,5 +100,37 @@ public class GhostTest {
         assertEquals(0, ghost.getCell().getY());
     }
 
+    @Test
+    void testMoveToNextCell_WaitOneRound() {
+        GameMap map = new GameMap(3, 3, CellType.FLOOR, "map");
+        Cell startCell = map.getCell(0,0);
+        Ghost ghost1 = new Ghost(startCell);
+        startCell.setActor(ghost1);
+        ghost1.move(1,1);
+        assertNotEquals(ghost1, map.getCell(1,1).getActor());
+    }
 
+    @Test
+    void testMoveToNextCell_WaitTwoRounds() {
+        GameMap map = new GameMap(3, 3, CellType.FLOOR, "map");
+        Cell startCell = map.getCell(0,0);
+        Ghost ghost1 = new Ghost(startCell);
+        startCell.setActor(ghost1);
+        for (int i = 0; i < 2; i++) {
+            ghost1.move(1,1);
+        }
+        assertNotEquals(ghost1, map.getCell(1,1).getActor());
+    }
+
+    @Test
+    void testMoveToNextCell_WaitThreeRounds() {
+        GameMap map = new GameMap(3, 3, CellType.FLOOR, "map");
+        Cell startCell = map.getCell(0,0);
+        Ghost ghost1 = new Ghost(startCell);
+        startCell.setActor(ghost1);
+        for (int i = 0; i < 3; i++) {
+            ghost1.move(1,1);
+        }
+        assertEquals(ghost1, map.getCell(1,1).getActor());
+    }
 }

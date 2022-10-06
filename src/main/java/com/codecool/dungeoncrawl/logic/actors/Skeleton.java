@@ -63,7 +63,6 @@ public class Skeleton extends MovableMonster  {
         return RandomGenerator.generateRandomStep();
     }
 
-    @Override
     protected void makeNoise() {
         if (RandomGenerator.generateNumberBetween100And1() <= percentOfChanceToMakeSound) {
             makeSound(Sound.SKELETON_SOUND.getFilePath());

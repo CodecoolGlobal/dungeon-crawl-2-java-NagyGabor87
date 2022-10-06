@@ -8,9 +8,6 @@ public abstract class Monster extends Actor {
         super(cell);
     }
 
-
-    protected abstract void makeNoise();
-
     public abstract int generateNextStepX();
     public abstract int generateNextStepY();
 }

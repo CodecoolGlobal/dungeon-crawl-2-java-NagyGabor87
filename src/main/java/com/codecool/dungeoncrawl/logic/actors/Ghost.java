@@ -63,11 +63,6 @@ public class Ghost extends MovableMonster {
         }
     }
 
-    @Override
-    protected void makeNoise() {
-        // Doesn't make noise
-    }
-
     private int moveTowardsPlayer(int difference){
         if (difference > 0) {
             return 1;
@@ -77,5 +72,4 @@ public class Ghost extends MovableMonster {
             return 0;
         }
     }
-
 }

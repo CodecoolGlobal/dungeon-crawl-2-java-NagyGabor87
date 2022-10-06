@@ -24,7 +24,9 @@ import javafx.stage.Stage;
 
 import javax.sound.sampled.*;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.nio.file.Files;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +37,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
 import java.sql.SQLException;
+import java.util.Scanner;
 
 public class Main extends Application {
     Level level = Level.MENU;
@@ -137,7 +140,9 @@ public class Main extends Application {
             case L:
                 loadGame();
                 break;
-
+            case G:
+                loadGameFromJson();
+                break;
         }
     }
 
@@ -190,6 +195,17 @@ public class Main extends Application {
         GameMap newMap = MapLoader.loadMap(gameState, newPlayer);
 
 
+        newPlayer.getCell().setGameMap(newMap);
+        map = newMap;
+        drawMap();
+        PopupFeedback.feedBackSuccessfulLoad(map.getPlayer().getName());
+    }
+
+    private void loadGameFromJson() { // todo combine with loadGame method
+        GameState currentGameState = fileLoad();
+        PlayerModel currentPlayerModel = currentGameState.getPlayer();
+        Player newPlayer = new Player(currentPlayerModel);
+        GameMap newMap = MapLoader.loadMap(currentGameState, newPlayer);
         newPlayer.getCell().setGameMap(newMap);
         map = newMap;
         drawMap();
@@ -336,15 +352,34 @@ public class Main extends Application {
     public void fileSave(Stage primaryStage) {
         primaryStage.setTitle("Save your JSON file");
         final FileChooser fileChooser = new FileChooser();
-        File file = fileChooser.showSaveDialog(primaryStage);
+        File file = fileChooser.showSaveDialog(primaryStage); //todo title is not visible
         if (file != null) {
             writeJsonFile(file);
         }
     }
 
+    public GameState fileLoad(){
+        Stage loadStage = new Stage();
+        loadStage.setTitle("Choose file to load");
+        final FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(loadStage);
+        try{
+            Scanner scanner = new Scanner(file);
+            String jsonString = "";
+            while(scanner.hasNextLine()){
+                jsonString = scanner.nextLine();
+            }
+            scanner.close();
+            GameState loadedGameState = new Gson().fromJson(jsonString, GameState.class);
+            return loadedGameState;
+        } catch (Exception e){
+            System.out.println("sth went wrong");
+        }
+        return null;
+    }
+
     public void writeJsonFile(File file) {
         try (FileWriter filewriter = new FileWriter(file)) {
-//            String jsonString = new Gson().toJson(getCurrentGameState());
             filewriter.write(getCurrentGameState());
         } catch (Exception e) {
             e.printStackTrace();

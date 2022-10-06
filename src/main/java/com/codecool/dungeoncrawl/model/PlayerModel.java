@@ -8,7 +8,6 @@ public class PlayerModel extends BaseModel {
     private int x;
     private int y;
     private String inventory;
-
     private Integer playerId;
 
     public PlayerModel(String playerName, int x, int y, String inventory, int hp, Integer id) {

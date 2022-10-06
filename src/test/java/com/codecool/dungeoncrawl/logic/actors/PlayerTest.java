@@ -1,25 +1,34 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
-import com.codecool.dungeoncrawl.logic.Cell;
-import com.codecool.dungeoncrawl.logic.GameMap;
-import com.codecool.dungeoncrawl.logic.Level;
-import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.Helmet;
 import com.codecool.dungeoncrawl.logic.items.Key;
+import com.codecool.dungeoncrawl.logic.items.Potion;
 import com.codecool.dungeoncrawl.logic.items.Sword;
 import com.codecool.dungeoncrawl.model.PlayerModel;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTest {
-    Cell cellOfPlayer1 = new Cell(0, 0);
-    GameMap testMap = MapLoader.loadMap(Level.MAP_1.getMapLevel(), null);
-    Player player1 = new Player(cellOfPlayer1);
-    PlayerModel playerModel = new PlayerModel("player2", 10, 10, "sword,key,helmet", 50, 2);
-    Player player2 = new Player(playerModel);
-    Cell cellOfPlayer2 = player2.getCell();
+    Cell cellOfPlayer1;
+    GameMap testMap;
+    Player player1;
+    PlayerModel playerModel;
+    Player player2;
+    Cell cellOfPlayer2;
+
+    @BeforeEach
+    public void init() {
+        cellOfPlayer1 = new Cell(0, 0);
+        testMap = MapLoader.loadMap(Level.MAP_1.getMapLevel(), null);
+        player1 = new Player(cellOfPlayer1);
+        playerModel = new PlayerModel("player2", 10, 10, "sword,key,helmet", 50, 2);
+        player2 = new Player(playerModel);
+        cellOfPlayer2 = player2.getCell();
+    }
 
     @Test
     void getTileNameValidTileNameTest() {
@@ -212,4 +221,106 @@ public class PlayerTest {
         assertEquals(20, player2.getId());
     }
 
+    @Test
+    void testOpenAClosedDoor() {
+        GameMap map = new GameMap(3,3, CellType.FLOOR, "level");
+        map.getCell(1,1).setType(CellType.CLOSED_DOOR);
+        Player player = new Player(map.getCell(0,1));
+        player.addItemToInventory(new Key(new Cell(0,0)), true);
+        map.getCell(0,1).setActor(player);
+        player.move(1,0);
+        assertEquals(CellType.OPEN_DOOR, map.getCell(1,1).getType());
+        assertEquals(0, player.getInventory().length());
+    }
+
+    @Test
+    void testTryOpenClosedDoorWithoutKey() {
+        GameMap map = new GameMap(3,3, CellType.FLOOR, "level");
+        map.getCell(1,1).setType(CellType.CLOSED_DOOR);
+        Player player = new Player(map.getCell(0,1));
+        map.getCell(0,1).setActor(player);
+        player.move(1,0);
+        assertEquals(CellType.CLOSED_DOOR, map.getCell(1,1).getType());
+        assertEquals(0, player.getInventory().length());
+    }
+
+    @Test
+    void testAddPotionToInventory() {
+        player1.addItemToInventory(new Potion(cellOfPlayer2), true);
+        assertEquals(75, player1.getHealth());
+    }
+
+    @Test
+    void testKillAndRemoveMovableMonster() {
+        GameMap map = new GameMap(3,3, CellType.FLOOR, "level");
+        Player player = new Player(map.getCell(0,1));
+        map.getCell(0,1).setActor(player);
+        Skeleton skeleton = new Skeleton(map.getCell(0,2));
+        skeleton.setHealth(1);
+        map.addMonsterToMovableMonsters(skeleton);
+        map.getCell(0,2).setActor(skeleton);
+        player.move(0,1);
+        assertEquals(0, map.getMovableMonsters().size());
+    }
+
+    @Test
+    void testChangePlayerGraphicsToHelmet() {
+        Player player = new Player(new Cell(0,0));
+        player.addItemToInventory(new Helmet(new Cell(1,1)), true);
+        assertEquals(CellType.PLAYER_HELMET.getTileName(), player.getTileName());
+    }
+
+    @Test
+    void testChangePlayerGraphicsToSword() {
+        Player player = new Player(new Cell(0,0));
+        player.addItemToInventory(new Sword(new Cell(1,1)), true);
+        assertEquals(CellType.PLAYER_SWORD.getTileName(), player.getTileName());
+    }
+
+    @Test
+    void testChangePlayerGraphicsToHelmetAndSword() {
+        Player player = new Player(new Cell(0,0));
+        player.addItemToInventory(new Helmet(new Cell(1,1)), true);
+        player.addItemToInventory(new Sword(new Cell(1,1)), true);
+        assertEquals(CellType.PLAYER_SWORD_AND_HELMET.getTileName(), player.getTileName());
+    }
+
+    @Test
+    void testIsPlayerAlive() {
+        Player player = new Player(new Cell(0,0));
+        assertTrue(player.isAlive());
+    }
+
+    @Test
+    void testIsPlayerNotAlive() {
+        Player player = new Player(new Cell(0,0));
+        player.setHealth(0);
+        assertFalse(player.isAlive());
+    }
+
+    @Test
+    void testSetName() {
+        Player player = new Player(new Cell(0,0));
+        String testName = "test_name";
+        player.setName(testName);
+        assertEquals(testName, player.getName());
+    }
+
+    @Test
+    void isPlayerOnQuitCell() {
+        Cell cell = new Cell(0,0);
+        Player player = new Player(cell);
+        cell.setActor(player);
+        cell.setType(CellType.QUIT);
+        assertTrue(player.isPlayerOnQuitCell());
+    }
+
+    @Test
+    void isPlayerOnPlayCell() {
+        Cell cell = new Cell(0,0);
+        Player player = new Player(cell);
+        cell.setActor(player);
+        cell.setType(CellType.PLAY);
+        assertTrue(player.isPlayerOnPlayCell());
+    }
 }

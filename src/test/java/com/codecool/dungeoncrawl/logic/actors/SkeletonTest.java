@@ -6,15 +6,23 @@ import com.codecool.dungeoncrawl.logic.Level;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Ghost;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SkeletonTest {
-    Cell cellOfSkeleton = new Cell(0, 0);
-    GameMap testMap = MapLoader.loadMap(Level.MAP_1.getMapLevel(), null);
-    Skeleton skeleton = new Skeleton(cellOfSkeleton);
+    Cell cellOfSkeleton;
+    GameMap testMap;
+    Skeleton skeleton;
+
+    @BeforeEach
+    public void init() {
+        cellOfSkeleton = new Cell(0, 0);
+        testMap = MapLoader.loadMap(Level.MAP_1.getMapLevel(), null);
+        skeleton = new Skeleton(cellOfSkeleton);
+    }
 
     @Test
     void getTileNameValidTileNameTest() {
@@ -49,7 +57,7 @@ public class SkeletonTest {
     @Test
     void generateNextStepYNotBiggerThanOne() {
         cellOfSkeleton.setGameMap(testMap);
-        assertNotEquals(2, skeleton.generateNextStepX());
+        assertNotEquals(2, skeleton.generateNextStepY());
     }
 
 
@@ -73,5 +81,9 @@ public class SkeletonTest {
         assertEquals(0, skeleton.getCell().getY());
     }
 
-    //TODO isNextCellOccupied !!!!
+    @Test
+    void testGetTileNameForDeadSkeleton() {
+        skeleton.setHealth(0);
+        assertEquals("floor", skeleton.getTileName());
+    }
 }

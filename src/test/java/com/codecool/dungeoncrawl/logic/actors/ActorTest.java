@@ -1,15 +1,23 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
+import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
+import com.codecool.dungeoncrawl.logic.Sound;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ActorTest {
-    GameMap gameMap = new GameMap(3, 3, CellType.FLOOR, "map");
+    GameMap gameMap;
+
+    @BeforeEach
+    public void init() {
+        gameMap = new GameMap(3, 3, CellType.FLOOR, "map");
+    }
 
     @Test
     void moveUpdatesCells() {
@@ -18,7 +26,7 @@ class ActorTest {
 
         assertEquals(2, player.getX());
         assertEquals(1, player.getY());
-        assertEquals(null, gameMap.getCell(1, 1).getActor());
+        assertNull(gameMap.getCell(1, 1).getActor());
         assertEquals(player, gameMap.getCell(2, 1).getActor());
     }
 
@@ -52,5 +60,12 @@ class ActorTest {
         assertEquals(2, skeleton.getX());
         assertEquals(1, skeleton.getY());
         assertEquals(skeleton, gameMap.getCell(2, 1).getActor());
+    }
+
+    @Test
+    void testMakeSoundInValidFilePath() {
+        String badFilepath = "invalid_filepath";
+        Actor skeleton = new Skeleton(new Cell(0,0));
+        assertDoesNotThrow( () -> skeleton.makeSound(badFilepath));
     }
 }

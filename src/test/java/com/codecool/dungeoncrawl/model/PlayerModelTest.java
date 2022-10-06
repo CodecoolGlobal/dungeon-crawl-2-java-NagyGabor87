@@ -1,4 +1,4 @@
-package com.codecool.dungencrawl.model;
+package com.codecool.dungeoncrawl.model;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.model.PlayerModel;

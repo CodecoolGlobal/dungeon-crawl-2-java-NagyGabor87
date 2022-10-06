@@ -7,14 +7,11 @@ import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.MovableMonster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.*;
-import com.codecool.dungeoncrawl.logic.actors.Monster;
 import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.PlayerModel;
 import com.google.gson.Gson;
 import com.codecool.dungeoncrawl.logic.util.PopupFeedback;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -40,7 +37,7 @@ import javafx.scene.layout.GridPane;
 import java.sql.SQLException;
 
 public class Main extends Application {
-    LEVEL level = LEVEL.MENU;
+    Level level = Level.MENU;
     GameMap map = MapLoader.loadMap(level.getMapLevel(), null);
     GridPane ui = new GridPane();
 
@@ -259,22 +256,22 @@ public class Main extends Application {
             ButtonType button = alertUser("You've lost", "Sorry but you were killed by a monster.", Alert.AlertType.WARNING).orElse(ButtonType.CANCEL);
             if (button == ButtonType.OK) {
                 map.getPlayer().resetPlayer();
-                map = MapLoader.loadMap(LEVEL.MENU.getMapLevel(), map.getPlayer());
+                map = MapLoader.loadMap(Level.MENU.getMapLevel(), map.getPlayer());
                 refresh();
                 return;
             }
         }
         if (map.getPlayer().getCell().getType() == CellType.QUIT) System.exit(1);
         else if (map.getPlayer().getCell().getType() == CellType.PLAY) {
-            level = LEVEL.MAP_1;
+            level = Level.MAP_1;
             map = MapLoader.loadMap(level.getMapLevel(), map.getPlayer());
             refresh();
         } else if (map.getPlayer().getCell().getType() == CellType.OPEN_DOOR) {
-            if (map.getLevel().equals(LEVEL.MAP_4.getMapLevel())) {
+            if (map.getLevel().equals(Level.MAP_4.getMapLevel())) {
                 ButtonType button = alertUser("You've won", "Congratulations! You've won the game!.", Alert.AlertType.INFORMATION).orElse(ButtonType.CANCEL);
                 if (button == ButtonType.OK) {
                     map.getPlayer().resetPlayer();
-                    map = MapLoader.loadMap(LEVEL.MENU.getMapLevel(), map.getPlayer());
+                    map = MapLoader.loadMap(Level.MENU.getMapLevel(), map.getPlayer());
                     refresh();
                     return;
                 }

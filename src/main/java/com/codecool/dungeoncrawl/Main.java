@@ -387,20 +387,4 @@ public class Main extends Application {
     }
 
 
-    private String getPlayerName() {
-        String playerName = null;
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Player name");
-        dialog.setHeaderText("Player name");
-        dialog.setContentText("Please enter your name:");
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()){
-            playerName = result.get();
-        }
-        if (playerName == null || playerName.length() == 0) {
-            playerName = getPlayerName();
-        }
-        return playerName;
-    }
-
 }

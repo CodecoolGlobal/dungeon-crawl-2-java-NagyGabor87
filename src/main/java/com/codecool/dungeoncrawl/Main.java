@@ -275,7 +275,7 @@ public class Main extends Application {
             exitGame();
         } else if (player.isPlayerOnPlayCell()) {
             startTheFirstLevel(player);
-        } else if (player.isOnOpenDoor()) {
+        } else if (player.isPlayerOnOpenDoor()) {
             if (map.isThisTheLastLevel()) {
                 playerHasWon(player);
             }

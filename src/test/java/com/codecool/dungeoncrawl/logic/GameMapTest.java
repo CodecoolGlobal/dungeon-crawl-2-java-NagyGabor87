@@ -1,14 +1,10 @@
 package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.*;
-import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.items.Sword;
 import com.codecool.dungeoncrawl.model.GameState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -115,9 +111,9 @@ class GameMapTest {
     @Test
     void testToString() {
         Cell cell1 = map.getCell(0,0);
-        Sword sword = new Sword(cell1);
+        new Sword(cell1);
         Cell cell2 = map.getCell(0,1);
-        Skeleton skeleton = new Skeleton(cell2);
+        new Skeleton(cell2);
         assertEquals("K..\ns..\n...\n", map.toString());
     }
 
@@ -125,7 +121,7 @@ class GameMapTest {
     void testParseMap() {
         String incomingInventoryData = "sword\nkey\nhelmet";
         String[] expectedInventoryArray = {"sword", "key", "helmet"};
-        assertTrue(Arrays.equals(expectedInventoryArray, map.parseMap(incomingInventoryData)));
+        assertArrayEquals(expectedInventoryArray, map.parseMap(incomingInventoryData));
     }
 
     @Test
@@ -158,5 +154,17 @@ class GameMapTest {
         Player player = new Player(new Cell(0,0));
         GameMap newGameMap = new GameMap(gameState, player, map);
         assertEquals(player, newGameMap.getPlayer());
+    }
+
+    @Test
+    void testIsThisTheLastMap_True(){
+        GameMap newMap = new GameMap(3,3, CellType.FLOOR, Level.MAP_4.getMapLevel());
+        assertTrue(newMap.isThisTheLastLevel());
+    }
+
+    @Test
+    void testIsThisTheLastMap_False(){
+        GameMap newMap = new GameMap(3,3, CellType.FLOOR, Level.MAP_1.getMapLevel());
+        assertFalse(newMap.isThisTheLastLevel());
     }
 }

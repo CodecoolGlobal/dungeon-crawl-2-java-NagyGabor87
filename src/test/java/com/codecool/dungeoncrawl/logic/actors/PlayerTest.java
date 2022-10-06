@@ -1,7 +1,6 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.*;
-import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.Helmet;
 import com.codecool.dungeoncrawl.logic.items.Key;
 import com.codecool.dungeoncrawl.logic.items.Potion;
@@ -322,5 +321,14 @@ public class PlayerTest {
         cell.setActor(player);
         cell.setType(CellType.PLAY);
         assertTrue(player.isPlayerOnPlayCell());
+    }
+
+    @Test
+    void isPlayerOnOpenDoor() {
+        Cell cell = new Cell(0,0);
+        Player player = new Player(cell);
+        cell.setActor(player);
+        cell.setType(CellType.OPEN_DOOR);
+        assertTrue(player.isPlayerOnOpenDoor());
     }
 }

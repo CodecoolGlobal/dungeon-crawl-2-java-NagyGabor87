@@ -281,8 +281,9 @@ public class Main extends Application {
                 return;
             }
         }
-        if (map.getPlayer().getCell().getType() == CellType.QUIT) System.exit(1);
-        else if (map.getPlayer().getCell().getType() == CellType.PLAY) {
+        if (map.getPlayer().isPlayerOnQuitCell()) {
+            System.exit(1);
+        } else if (map.getPlayer().isPlayerOnPlayCell()) {
             level = Level.MAP_1;
             map = MapLoader.loadMap(level.getMapLevel(), map.getPlayer());
             refresh();
@@ -390,6 +391,4 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
-
-
 }

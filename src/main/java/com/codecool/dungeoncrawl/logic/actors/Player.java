@@ -279,4 +279,12 @@ public class Player extends Actor implements Movable {
     public void setName(String playerName) {
         this.playerName = playerName;
     }
+
+    public boolean isPlayerOnQuitCell() {
+        return getCell().getType() == CellType.QUIT;
+    }
+
+    public boolean isPlayerOnPlayCell() {
+        return getCell().getType() == CellType.PLAY;
+    }
 }

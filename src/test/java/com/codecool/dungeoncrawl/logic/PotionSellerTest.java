@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PotionSellerTest {
     Cell cellOfPotionSeller = new Cell(3, 12);
-    GameMap testMap = MapLoader.loadMap(LEVEL.MAP_1.getMapLevel(), null);
+    GameMap testMap = MapLoader.loadMap(Level.MAP_1.getMapLevel(), null);
     PotionSeller potionSeller = new PotionSeller(cellOfPotionSeller);
 
     @Test

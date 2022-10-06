@@ -27,7 +27,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.sql.Date;
 import java.util.List;
-import java.util.Optional;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -268,35 +267,48 @@ public class Main extends Application {
         healthLabel.setText("" + map.getPlayer().getHealth());
     }
 
-    // TODO this method is really messy, should refactor it to smaller ones
     private void stepNextLevel() {
-        if (!map.getPlayer().isAlive()) {
-            ButtonType button = alertUser("You've lost", "Sorry but you were killed by a monster.", Alert.AlertType.WARNING).orElse(ButtonType.CANCEL);
-            if (button == ButtonType.OK) {
-                map.getPlayer().resetPlayer();
-                map = MapLoader.loadMap(Level.MENU.getMapLevel(), map.getPlayer());
-                refresh();
-                return;
+        Player player = map.getPlayer();
+        if (!player.isAlive()) {
+            playerIsDead(player);
+        } else if (player.isPlayerOnQuitCell()) {
+            exitGame();
+        } else if (player.isPlayerOnPlayCell()) {
+            startTheFirstLevel(player);
+        } else if (player.isOnOpenDoor()) {
+            if (map.isThisTheLastLevel()) {
+                playerHasWon(player);
             }
-        }
-        if (map.getPlayer().isPlayerOnQuitCell()) {
-            System.exit(1);
-        } else if (map.getPlayer().isPlayerOnPlayCell()) {
-            level = Level.MAP_1;
-            map = MapLoader.loadMap(level.getMapLevel(), map.getPlayer());
-            refresh();
-        } else if (map.getPlayer().getCell().getType() == CellType.OPEN_DOOR) {
-            if (map.getLevel().equals(Level.MAP_4.getMapLevel())) {
-                ButtonType button = alertUser("You've won", "Congratulations! You've won the game!.", Alert.AlertType.INFORMATION).orElse(ButtonType.CANCEL);
-                if (button == ButtonType.OK) {
-                    map.getPlayer().resetPlayer();
-                    map = MapLoader.loadMap(Level.MENU.getMapLevel(), map.getPlayer());
-                    refresh();
-                    return;
-                }
-            }
-            map = MapLoader.loadMap(level.nextLevel().getMapLevel(), map.getPlayer());
+            map = MapLoader.loadMap(level.nextLevel().getMapLevel(), player);
             level = level.nextLevel();
+        }
+    }
+
+    private void playerIsDead(Player player) {
+        ButtonType button = PopupFeedback.playerLost();
+        if (button == ButtonType.OK) {
+            player.resetPlayer();
+            map = MapLoader.loadMap(Level.MENU.getMapLevel(), player);
+            refresh();
+        }
+    }
+
+    private void exitGame() {
+        System.exit(1);
+    }
+
+    private void startTheFirstLevel(Player player) {
+        level = Level.MAP_1;
+        map = MapLoader.loadMap(level.getMapLevel(), player);
+        refresh();
+    }
+
+    private void playerHasWon(Player player) {
+        ButtonType button = PopupFeedback.playerWon();
+        if (button == ButtonType.OK) {
+            player.resetPlayer();
+            map = MapLoader.loadMap(Level.MENU.getMapLevel(), player);
+            refresh();
         }
     }
 
@@ -334,13 +346,6 @@ public class Main extends Application {
         } catch (Exception exc) {
             exc.printStackTrace(System.out);
         }
-    }
-
-    public Optional<ButtonType> alertUser(String title, String message, Alert.AlertType alertType) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        return alert.showAndWait();
     }
     
     private String getCurrentGameState() { //TODO getCurrentGameState similar to savestate in GameDBManager

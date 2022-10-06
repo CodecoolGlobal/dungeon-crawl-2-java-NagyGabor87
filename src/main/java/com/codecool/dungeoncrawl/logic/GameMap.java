@@ -149,4 +149,8 @@ public class GameMap {
         }
         return builder.toString();
     }
+
+    public boolean isThisTheLastLevel() {
+        return level.equals(Level.MAP_4.getMapLevel());
+    }
 }

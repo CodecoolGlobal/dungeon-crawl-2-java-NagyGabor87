@@ -63,4 +63,25 @@ public class PopupFeedback {
         alert.showAndWait();
 
     }
+
+    public static ButtonType playerLost() {
+        return alertUser("You've lost",
+                "Sorry but you were killed by a monster.",
+                Alert.AlertType.WARNING)
+                .orElse(ButtonType.CANCEL);
+    }
+
+    public static Optional<ButtonType> alertUser(String title, String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        return alert.showAndWait();
+    }
+
+    public static ButtonType playerWon() {
+        return alertUser("You've won",
+                "Congratulations! You've won the game!.",
+                Alert.AlertType.INFORMATION)
+                .orElse(ButtonType.CANCEL);
+    }
 }

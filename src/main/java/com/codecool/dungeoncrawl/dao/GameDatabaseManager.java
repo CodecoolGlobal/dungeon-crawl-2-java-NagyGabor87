@@ -10,6 +10,7 @@ import org.postgresql.ds.PGSimpleDataSource;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.sql.Date;
+import java.time.LocalDate;
 
 public class GameDatabaseManager {
     private Dotenv dotenv;
@@ -31,7 +32,7 @@ public class GameDatabaseManager {
         playerDao.add(playerModel);
         map.getPlayer().setId(playerModel.getId());
 
-        Date date = new java.sql.Date(System.currentTimeMillis());
+        Date date = Date.valueOf(LocalDate.now());
         String currentMap = map.toString();
         GameState state = new GameState(currentMap, date, playerModel, map.getLevel());
         gameStateDao.add(state);
@@ -65,7 +66,7 @@ public class GameDatabaseManager {
 
     public void updateState(Integer stateId, GameMap map) {
         PlayerModel playerModel = new PlayerModel(map.getPlayer());
-        Date date = new java.sql.Date(System.currentTimeMillis());
+        Date date = Date.valueOf(LocalDate.now());
         String currentMap = map.toString();
         GameState gameState = new GameState(currentMap, date, playerModel, map.getLevel());
         gameState.setId(stateId);

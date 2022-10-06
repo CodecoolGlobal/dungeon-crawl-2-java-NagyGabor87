@@ -114,7 +114,7 @@ public class Main extends Application {
                 refresh();
                 break;
             case SPACE:
-                map.addInventory();
+                map.addInventory(false);
                 drawMap();
                 break;
             case I:
@@ -250,8 +250,8 @@ public class Main extends Application {
         if (!map.getPlayer().isAlive()) {
             ButtonType button = alertUser("You've lost", "Sorry but you were killed by a monster.", Alert.AlertType.WARNING).orElse(ButtonType.CANCEL);
             if (button == ButtonType.OK) {
-                Player resetPlayer = map.getPlayer().resetPlayer();
-                map = MapLoader.loadMap(LEVEL.MENU.getMapLevel(), resetPlayer);
+                map.getPlayer().resetPlayer();
+                map = MapLoader.loadMap(LEVEL.MENU.getMapLevel(), map.getPlayer());
                 refresh();
                 return;
             }
@@ -265,8 +265,8 @@ public class Main extends Application {
             if (map.getLevel().equals(LEVEL.MAP_4.getMapLevel())) {
                 ButtonType button = alertUser("You've won", "Congratulations! You've won the game!.", Alert.AlertType.INFORMATION).orElse(ButtonType.CANCEL);
                 if (button == ButtonType.OK) {
-                    Player resetPlayer = map.getPlayer().resetPlayer();
-                    map = MapLoader.loadMap(LEVEL.MENU.getMapLevel(), resetPlayer);
+                    map.getPlayer().resetPlayer();
+                    map = MapLoader.loadMap(LEVEL.MENU.getMapLevel(), map.getPlayer());
                     refresh();
                     return;
                 }

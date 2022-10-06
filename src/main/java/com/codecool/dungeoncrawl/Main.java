@@ -12,16 +12,16 @@ import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.PlayerModel;
 import com.google.gson.Gson;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import javax.sound.sampled.*;
@@ -78,6 +78,7 @@ public class Main extends Application {
         primaryStage.show();
         makeBackgroundMusic(Sound.MUSIC.getFilePath());
         map.getPlayer().setName(getPlayerName());
+        fileSave(primaryStage);
     }
 
     private void onKeyReleased(KeyEvent keyEvent) {
@@ -132,9 +133,8 @@ public class Main extends Application {
                 saveGame();
                 break;
             case F:
-                String folder = "/home/home/Projects/Javaoop/4het/dungeon-crawl-2-java-NagyGabor87/src/main/resources/exported_games";
-                String name = "Test";
-                writeJsonFile(name, folder);
+                Stage stage = new Stage();
+                fileSave(stage);
                 break;
 
         }
@@ -318,17 +318,19 @@ public class Main extends Application {
         return state.toString();
     }
 
+    public void fileSave(Stage primaryStage) {
+        primaryStage.setTitle("Save your JSON file");
+        final FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showSaveDialog(primaryStage);
+        if (file != null) {
+            writeJsonFile(file);
+        }
+    }
 
-
-    public void writeJsonFile(String filename, String folder) {
-        StringBuilder string = new StringBuilder();
-        string.append(folder).append("/").append(filename).append(".json");
-        String absolutePath = string.toString();
-        File newFile = new File(absolutePath);
-
-        try (FileWriter file = new FileWriter(newFile)) {
+    public void writeJsonFile(File file) {
+        try (FileWriter filewriter = new FileWriter(file)) {
             String jsonString = new Gson().toJson(getCurrentGameState());
-            file.write(jsonString);
+            filewriter.write(jsonString);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,5 +1,9 @@
-package com.codecool.dungeoncrawl.logic;
+package com.codecool.dungeoncrawl.logic.actors;
 
+import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.GameMap;
+import com.codecool.dungeoncrawl.logic.Level;
+import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Ghost;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import org.junit.jupiter.api.Test;
@@ -8,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GhostTest {
     Cell cellOfGhost = new Cell(0, 0);
-    GameMap testMap = MapLoader.loadMap(LEVEL.MAP_1.getMapLevel(), null);
+    GameMap testMap = MapLoader.loadMap(Level.MAP_1.getMapLevel(), null);
     Ghost ghost = new Ghost(cellOfGhost);
 
     @Test

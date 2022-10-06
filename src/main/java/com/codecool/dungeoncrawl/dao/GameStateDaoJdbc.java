@@ -85,8 +85,7 @@ public class GameStateDaoJdbc implements GameStateDao {
             }
             String currentMap = resultSet.getString(1);
             String mapLevel = resultSet.getString(2);
-            GameState newGameState = new GameState(currentMap, mapLevel);
-            return newGameState;
+            return new GameState(currentMap, mapLevel);
         } catch (SQLException e){
             throw new RuntimeException(e);
         }

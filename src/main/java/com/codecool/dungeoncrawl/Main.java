@@ -10,7 +10,7 @@ import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.PlayerModel;
 import com.google.gson.Gson;
-import com.codecool.dungeoncrawl.logic.util.PopupFeedback;
+import com.codecool.dungeoncrawl.view.PopupFeedback;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -24,9 +24,7 @@ import javafx.stage.Stage;
 
 import javax.sound.sampled.*;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
-import java.nio.file.Files;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
@@ -345,7 +343,7 @@ public class Main extends Application {
         return alert.showAndWait();
     }
     
-    public String getCurrentGameState() { //TODO getCurrentGameState similar to savestate in GameDBManager
+    private String getCurrentGameState() { //TODO getCurrentGameState similar to savestate in GameDBManager
         Player  player = map.getPlayer();
         PlayerModel playerModel = new PlayerModel(player);
         Date date = new java.sql.Date(System.currentTimeMillis());
@@ -354,7 +352,7 @@ public class Main extends Application {
         return new Gson().toJson(state);
     }
 
-    public void fileSave(Stage primaryStage) {
+    private void fileSave(Stage primaryStage) {
         primaryStage.setTitle("Make your JSON file here!");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialFileName("filename.json");
@@ -364,7 +362,7 @@ public class Main extends Application {
         }
     }
 
-    public GameState fileLoad(){
+    private GameState fileLoad(){
         Stage loadStage = new Stage();
         loadStage.setTitle("Choose file to load");
         final FileChooser fileChooser = new FileChooser();
@@ -376,15 +374,14 @@ public class Main extends Application {
                     jsonString = scanner.nextLine();
                 }
                 scanner.close();
-                GameState loadedGameState = new Gson().fromJson(jsonString, GameState.class);
-                return loadedGameState;
+                return new Gson().fromJson(jsonString, GameState.class);
             } catch (Exception e) {
                 System.out.println("something went wrong");
             }
         return null;
     }
 
-    public void writeJsonFile(File file) {
+    private void writeJsonFile(File file) {
         try (FileWriter filewriter = new FileWriter(file)) {
             filewriter.write(getCurrentGameState());
         } catch (Exception e) {

@@ -7,7 +7,7 @@ import java.util.List;
 public class GameState extends BaseModel {
     private Date savedAt;
     private String currentMap;
-    private List<String> discoveredMaps = new ArrayList<>();
+    private final List<String> discoveredMaps = new ArrayList<>();
     private PlayerModel player;
     private String mapLevel;
     private int stateId;

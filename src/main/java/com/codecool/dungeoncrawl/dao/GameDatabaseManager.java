@@ -13,7 +13,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 
 public class GameDatabaseManager {
-    private Dotenv dotenv;
+    private final Dotenv dotenv;
     public GameDatabaseManager() {
         dotenv = Dotenv.load();
     }

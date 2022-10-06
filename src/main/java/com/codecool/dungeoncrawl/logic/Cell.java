@@ -30,7 +30,7 @@ public class Cell implements Drawable {
     public Cell (int x, int y) {
         this.x = x;
         this.y = y;
-        this.type = null;  // TODO overwite it later!!
+        this.type = null;
     }
 
     public CellType getType() {

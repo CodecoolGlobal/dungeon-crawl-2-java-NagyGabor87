@@ -7,24 +7,28 @@ import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.MovableMonster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.*;
-import com.codecool.dungeoncrawl.logic.util.PopupFeedback;
+import com.codecool.dungeoncrawl.logic.actors.Monster;
 import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.PlayerModel;
+import com.google.gson.Gson;
+import com.codecool.dungeoncrawl.logic.util.PopupFeedback;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import javax.sound.sampled.*;
 import java.io.File;
+import java.io.FileWriter;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import javafx.scene.input.KeyCode;
@@ -129,6 +133,9 @@ public class Main extends Application {
             case S:
                 saveGame();
                 break;
+            case F:
+                Stage stage = new Stage();
+                fileSave(stage);
             case L:
                 loadGame();
                 break;
@@ -318,4 +325,48 @@ public class Main extends Application {
         alert.setContentText(message);
         return alert.showAndWait();
     }
+    
+    public String getCurrentGameState() { //TODO getCurrentGameState similar to savestate in GameDBManager
+        PlayerModel playerModel = new PlayerModel(map.getPlayer());
+        Date date = new java.sql.Date(System.currentTimeMillis());
+        String currentMap = map.toString();
+        GameState state = new GameState(currentMap, date, playerModel, map.getLevel());
+        return state.toString();
+    }
+
+    public void fileSave(Stage primaryStage) {
+        primaryStage.setTitle("Save your JSON file");
+        final FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showSaveDialog(primaryStage);
+        if (file != null) {
+            writeJsonFile(file);
+        }
+    }
+
+    public void writeJsonFile(File file) {
+        try (FileWriter filewriter = new FileWriter(file)) {
+            String jsonString = new Gson().toJson(getCurrentGameState());
+            filewriter.write(jsonString);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private String getPlayerName() {
+        String playerName = null;
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Player name");
+        dialog.setHeaderText("Player name");
+        dialog.setContentText("Please enter your name:");
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            playerName = result.get();
+        }
+        if (playerName == null || playerName.length() == 0) {
+            playerName = getPlayerName();
+        }
+        return playerName;
+    }
+
 }

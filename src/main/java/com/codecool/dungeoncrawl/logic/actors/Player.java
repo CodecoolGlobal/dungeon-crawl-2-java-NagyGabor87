@@ -5,16 +5,20 @@ import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Movable;
 import com.codecool.dungeoncrawl.logic.Sound;
 import com.codecool.dungeoncrawl.logic.items.*;
+import com.codecool.dungeoncrawl.model.PlayerModel;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
 public class Player extends Actor implements Movable {
+    private static final int DEFAULT_HEALTH = 50;
+    private static final int DEFAULT_DAMAGE = 5;
+    private static final int DEFAULT_ARMOR = 5;
     private static final int MAX_HEALTH = 150;
 
 
-    private final List<Item> inventory;
+    private List<Item> inventory;
     private int armor;
     private String tileName;
     private String playerName;
@@ -24,10 +28,44 @@ public class Player extends Actor implements Movable {
     public Player(Cell cell) {
         super(cell);
         this.inventory = new ArrayList<>();
-        this.health = 50;
-        this.damage = 5;
-        this.armor = 5;
+        this.health = DEFAULT_HEALTH;
+        this.damage = DEFAULT_DAMAGE;
+        this.armor = DEFAULT_ARMOR;
         this.tileName = CellType.PLAYER.getTileName();
+    }
+
+    public Player(PlayerModel playerModel){
+        super(new Cell(playerModel.getX(), playerModel.getY()));
+        this.playerName = playerModel.getPlayerName();
+        this.id = playerModel.getId();
+        this.tileName = CellType.PLAYER.getTileName();
+        this.health = playerModel.getHp();
+        this.inventory = createInventory(playerModel.getInventory());
+        this.damage = DEFAULT_DAMAGE;
+        this.armor = DEFAULT_ARMOR;
+    }
+
+    private List<Item> createInventory(String inventoryFromDb) {
+        inventory = new ArrayList<>();
+        String[] items = inventoryFromDb.split(",");
+        for (String item : items) {
+            for (CellType cellType : CellType.values()){
+                if (cellType.getTileName().equals(item)) {
+                    switch (cellType){
+                        case SWORD:
+                            addItemToInventory(new Sword(new Cell(0,0)), true);
+                            break;
+                        case KEY:
+                            addItemToInventory(new Key(new Cell(0,0)), true);
+                            break;
+                        case HELMET:
+                            addItemToInventory(new Helmet(new Cell(0,0)), true);
+                            break;
+                    }
+                }
+            }
+        }
+        return inventory;
     }
 
     @Override
@@ -113,14 +151,18 @@ public class Player extends Actor implements Movable {
         }
     }
 
-    public void addItemToInventory(Item item) {
+    public void addItemToInventory(Item item, boolean isLoading) {
         if (item instanceof Potion) {
             changePlayerStats(item);
-            makeSound(Sound.POTION.getFilePath());
+            if (!isLoading) {
+                makeSound(Sound.POTION.getFilePath());
+            }
         }
         else if (item != null){
             inventory.add(item);
-            makeSound(Sound.PICK_UP_ITEM.getFilePath());
+            if (!isLoading) {
+                makeSound(Sound.PICK_UP_ITEM.getFilePath());
+            }
             changePlayerGraphics();
             changePlayerStats(item);
         }
@@ -217,9 +259,13 @@ public class Player extends Actor implements Movable {
         this.cell = cell;
     }
 
-    public void resetAlive() {
-        // reset health after death to be able to move in the menu map.
+    public void resetPlayer() {
+        this.armor = DEFAULT_ARMOR;
+        this.damage = DEFAULT_DAMAGE;
+        this.health = DEFAULT_HEALTH;
         this.isAlive = true;
+        this.inventory = new ArrayList<>();
+        this.tileName = CellType.PLAYER.getTileName();
     }
 
     public String getInventory() {

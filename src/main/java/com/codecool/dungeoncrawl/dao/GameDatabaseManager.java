@@ -70,5 +70,14 @@ public class GameDatabaseManager {
         GameState gameState = new GameState(currentMap, date, playerModel, map.getLevel());
         gameState.setId(stateId);
         gameStateDao.update(gameState);
+        playerDao.update(playerModel);
+    }
+
+    public PlayerModel getPlayerByID(Integer playerId) {
+        return playerDao.get(playerId);
+    }
+
+    public GameState getGameStateByPlayerId(Integer playerId) {
+        return gameStateDao.getGameStateByPlayerID(playerId);
     }
 }

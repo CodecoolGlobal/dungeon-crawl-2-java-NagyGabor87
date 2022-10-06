@@ -69,10 +69,7 @@ public class PlayerDaoJdbc implements PlayerDao {
             int y = resultSet.getInt(5);
             String inventory = resultSet.getString(6);
 
-            player = new PlayerModel(player_name, x, y, inventory);
-            player.setId(player_id);
-            player.setHp(hp);
-
+            player = new PlayerModel(player_name, x, y, inventory, hp, player_id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -86,9 +83,13 @@ public class PlayerDaoJdbc implements PlayerDao {
             ResultSet resultSet = conn.createStatement().executeQuery(sql);
             List<PlayerModel> players = new ArrayList<>();
             while (resultSet.next()) {
-                PlayerModel player = new PlayerModel(resultSet.getString(2), resultSet.getInt(4), resultSet.getInt(4),resultSet.getString(6));
-                player.setId(resultSet.getInt(1));
-                player.setHp(resultSet.getInt(3));
+                Integer id = resultSet.getInt(1);
+                String playerName = resultSet.getString(2);
+                int hp = resultSet.getInt(3);
+                int x = resultSet.getInt(4);
+                int y = resultSet.getInt(5);
+                String inventory = resultSet.getString(6);
+                PlayerModel player = new PlayerModel(playerName, x, y, inventory, hp, id);
                 players.add(player);
             }
             return players;

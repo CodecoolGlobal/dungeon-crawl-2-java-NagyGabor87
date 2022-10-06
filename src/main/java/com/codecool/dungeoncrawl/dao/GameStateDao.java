@@ -11,4 +11,6 @@ public interface GameStateDao {
     List<GameState> getAll();
 
     Integer getGameStateIdByPlayerID(Integer playerId);
+
+    GameState getGameStateByPlayerID(Integer playerId);
 }

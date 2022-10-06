@@ -4,6 +4,8 @@ import com.codecool.dungeoncrawl.logic.actors.Monster;
 import com.codecool.dungeoncrawl.logic.actors.MovableMonster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
+import com.codecool.dungeoncrawl.model.GameState;
+import com.codecool.dungeoncrawl.model.PlayerModel;
 
 import java.util.*;
 
@@ -25,8 +27,8 @@ public class GameMap {
 
     public int getSkeletonCount() {
         int skeletonCount = 0;
-        for (Monster monster: movableMonsters) {
-            if(monster instanceof  Skeleton){
+        for (Monster monster : movableMonsters) {
+            if (monster instanceof Skeleton) {
                 skeletonCount += 1;
             }
         }
@@ -48,6 +50,24 @@ public class GameMap {
         this.torches = new ArrayList<>();
     }
 
+    public GameMap(GameState gameState, Player player, GameMap newMap) {
+        this.level = gameState.getMapLevel();
+        this.height = parseMap(gameState.getCurrentMap()).length;
+        this.width = parseMap(gameState.getCurrentMap())[0].length();
+        this.cells = new Cell[width][height];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                cells[x][y] = new Cell(newMap, x, y, CellType.EMPTY);
+            }
+        }
+        movableMonsters = new ArrayList<>();
+        this.torches = new ArrayList<>();
+        this.player = player;
+    }
+
+    public String[] parseMap(String string) {
+        return string.split("\n");
+    }
 
     public void addTorch(Cell cell) {
         this.torches.add(cell);
@@ -71,7 +91,7 @@ public class GameMap {
         return cell;
     }
 
-    public Cell[][] getCells(){
+    public Cell[][] getCells() {
         return cells;
     }
 
@@ -92,10 +112,10 @@ public class GameMap {
     }
 
 
-    public void addInventory() {
+    public void addInventory(boolean isLoading) {
         Cell currentTile = getPlayer().getCell();
         if (currentTile.getItem() != null) {
-            getPlayer().addItemToInventory(currentTile.getItem());
+            getPlayer().addItemToInventory(currentTile.getItem(), isLoading);
             currentTile.setType(CellType.FLOOR);
             currentTile.setItem(null);
         }
@@ -104,11 +124,12 @@ public class GameMap {
     public List<MovableMonster> getMovableMonsters() {
         return movableMonsters;
     }
-    public void addMonsterToMovableMonsters(MovableMonster monster){
-            movableMonsters.add(monster);
+
+    public void addMonsterToMovableMonsters(MovableMonster monster) {
+        movableMonsters.add(monster);
     }
 
-    public void removeMonsterFromMovableMonsters(MovableMonster monster){
+    public void removeMonsterFromMovableMonsters(MovableMonster monster) {
         movableMonsters.remove(monster);
     }
 
@@ -116,12 +137,12 @@ public class GameMap {
     public String toString() {
         StringBuilder builder = new StringBuilder();
 
-        for (int column = 0; column < height; column++){
-            for (int row = 0; row < width; row++){
+        for (int column = 0; column < height; column++) {
+            for (int row = 0; row < width; row++) {
                 Cell cell = cells[row][column];
-                if (cell.getActor() != null){
+                if (cell.getActor() != null) {
                     builder.append(cell.getActor().getTileCharacter());
-                } else if (cell.getItem() != null){
+                } else if (cell.getItem() != null) {
                     builder.append(cell.getItem().getTileCharacter());
                 } else {
                     builder.append(cell.getType().getCharacter());

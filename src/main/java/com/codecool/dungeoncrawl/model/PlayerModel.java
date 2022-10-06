@@ -10,20 +10,21 @@ public class PlayerModel extends BaseModel {
     private String inventory;
     private Integer id;
 
-    public PlayerModel(String playerName, int x, int y, String inventory) {
+    public PlayerModel(String playerName, int x, int y, String inventory, int hp, Integer id) {
         this.playerName = playerName;
         this.x = x;
         this.y = y;
         this.inventory = inventory;
+        this.hp = hp;
+        this.id = id;
     }
 
     public PlayerModel(Player player) {
         this.playerName = player.getName();
         this.x = player.getX();
         this.y = player.getY();
-
-        this.hp = player.getHealth();
         this.inventory = player.getInventory();
+        this.hp = player.getHealth();
         this.id = player.getId();
     }
 

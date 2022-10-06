@@ -11,6 +11,7 @@ import com.codecool.dungeoncrawl.logic.actors.Monster;
 import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.PlayerModel;
 import com.google.gson.Gson;
+import com.codecool.dungeoncrawl.logic.util.PopupFeedback;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -70,15 +71,14 @@ public class Main extends Application {
 
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
-        refresh();
+        drawMap();
         scene.setOnKeyPressed(this::onKeyPressed);
         scene.setOnKeyReleased(this::onKeyReleased);
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
         makeBackgroundMusic(Sound.MUSIC.getFilePath());
-        map.getPlayer().setName(getPlayerName());
-        fileSave(primaryStage);
+        map.getPlayer().setName(PopupFeedback.getPlayerName());
     }
 
     private void onKeyReleased(KeyEvent keyEvent) {
@@ -118,7 +118,8 @@ public class Main extends Application {
                 refresh();
                 break;
             case SPACE:
-                map.addInventory();
+                map.addInventory(false);
+                drawMap();
                 break;
             case I:
                 clearInventoryText();
@@ -126,7 +127,7 @@ public class Main extends Application {
                 ui.add(new Label("Inventory:"), 0, 1);
                 ui.add(new Label(inventory), 1, 1);
                 break;
-            case ESCAPE:
+            case TAB:
                 clearInventoryText();
                 break;
             case S:
@@ -135,6 +136,8 @@ public class Main extends Application {
             case F:
                 Stage stage = new Stage();
                 fileSave(stage);
+            case L:
+                loadGame();
                 break;
 
         }
@@ -146,7 +149,7 @@ public class Main extends Application {
         // if not -> save the state
         if (playerID == null || playerID == 0) {
             dbManager.saveState(map);
-            feedbackSave(map.getPlayer().getName());
+            PopupFeedback.feedbackSave(map.getPlayer().getName());
             return;
         }
 
@@ -155,35 +158,44 @@ public class Main extends Application {
         // if not, -> save the state
         if (stateId == null || stateId == 0) {
             dbManager.saveState(map);
-            feedbackSave(map.getPlayer().getName());
+            PopupFeedback.feedbackSave(map.getPlayer().getName());
             return;
         }
 
         // if present -> popup window to override?
-        boolean override = isOverrideSavedGame();
+        boolean override = PopupFeedback.isOverrideSavedGame();
         // override -> update state with player i
         if (override) {
             dbManager.updateState(stateId, map);
-            feedbackSave(map.getPlayer().getName());
+            PopupFeedback.feedbackSave(map.getPlayer().getName());
         }
         // no override -> just exit
     }
 
-    private void feedbackSave(String playerName) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Game is saved");
-        alert.setHeaderText("Your game is saved");
-        alert.setContentText(playerName + " your game is saved successfully!");
-        alert.showAndWait();
-    }
+    private void loadGame() {
+        Integer playerId = map.getPlayer().getId();
+        if (playerId == null || playerId == 0) {
+            PopupFeedback.feedBackFailedLoad(map.getPlayer().getName());
+            return;
+        }
 
-    private boolean isOverrideSavedGame() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Override saved game?");
-        alert.setHeaderText("Override saved game?");
-        alert.setContentText("You already have a saved game. Do you want to override it?");
-        Optional<ButtonType> result = alert.showAndWait();
-        return result.get() == ButtonType.OK;
+        // player id exists, fetch raw player data by player id
+        PlayerModel playerModel = dbManager.getPlayerByID(playerId);
+
+        // create player object from player model
+        Player newPlayer = new Player(playerModel);
+
+        // create game state model from raw data
+        GameState gameState = dbManager.getGameStateByPlayerId(playerId);
+
+        // fill up new map with maploader
+        GameMap newMap = MapLoader.loadMap(gameState, newPlayer);
+
+
+        newPlayer.getCell().setGameMap(newMap);
+        map = newMap;
+        drawMap();
+        PopupFeedback.feedBackSuccessfulLoad(map.getPlayer().getName());
     }
 
     private void removeDisappearingWall() {
@@ -240,12 +252,14 @@ public class Main extends Application {
         healthLabel.setText("" + map.getPlayer().getHealth());
     }
 
+    // TODO this method is really messy, should refactor it to smaller ones
     private void stepNextLevel() {
         if (!map.getPlayer().isAlive()) {
             ButtonType button = alertUser("You've lost", "Sorry but you were killed by a monster.", Alert.AlertType.WARNING).orElse(ButtonType.CANCEL);
             if (button == ButtonType.OK) {
-                map.getPlayer().resetAlive();
+                map.getPlayer().resetPlayer();
                 map = MapLoader.loadMap(LEVEL.MENU.getMapLevel(), map.getPlayer());
+                refresh();
                 return;
             }
         }
@@ -258,7 +272,9 @@ public class Main extends Application {
             if (map.getLevel().equals(LEVEL.MAP_4.getMapLevel())) {
                 ButtonType button = alertUser("You've won", "Congratulations! You've won the game!.", Alert.AlertType.INFORMATION).orElse(ButtonType.CANCEL);
                 if (button == ButtonType.OK) {
+                    map.getPlayer().resetPlayer();
                     map = MapLoader.loadMap(LEVEL.MENU.getMapLevel(), map.getPlayer());
+                    refresh();
                     return;
                 }
             }
@@ -309,7 +325,7 @@ public class Main extends Application {
         alert.setContentText(message);
         return alert.showAndWait();
     }
-
+    
     public String getCurrentGameState() { //TODO getCurrentGameState similar to savestate in GameDBManager
         PlayerModel playerModel = new PlayerModel(map.getPlayer());
         Date date = new java.sql.Date(System.currentTimeMillis());
@@ -352,4 +368,5 @@ public class Main extends Application {
         }
         return playerName;
     }
+
 }

@@ -23,7 +23,6 @@ public class Bat extends Monster {
         return CellType.BAT.getCharacter();
     }
 
-    // Bat is stationary
     @Override
     public int generateNextStepX() {
         return 0;

@@ -287,4 +287,8 @@ public class Player extends Actor implements Movable {
     public boolean isPlayerOnPlayCell() {
         return getCell().getType() == CellType.PLAY;
     }
+
+    public boolean isPlayerOnOpenDoor() {
+        return getCell().getType() == CellType.OPEN_DOOR;
+    }
 }

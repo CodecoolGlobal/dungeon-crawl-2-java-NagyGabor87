@@ -9,8 +9,8 @@ import java.util.Scanner;
 
 public class MapLoader {
     public static GameMap loadMap(String level, Player player) {
-        InputStream is = MapLoader.class.getResourceAsStream(level);
-        Scanner scanner = new Scanner(is);
+        InputStream inputStream = MapLoader.class.getResourceAsStream(level);
+        Scanner scanner = new Scanner(inputStream);
         int width = scanner.nextInt();
         int height = scanner.nextInt();
 

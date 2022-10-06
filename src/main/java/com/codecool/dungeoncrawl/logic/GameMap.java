@@ -5,9 +5,6 @@ import com.codecool.dungeoncrawl.logic.actors.MovableMonster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import com.codecool.dungeoncrawl.model.GameState;
-import com.codecool.dungeoncrawl.model.PlayerModel;
-
-import java.util.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +14,13 @@ public class GameMap {
     private final int height;
 
     private final Cell[][] cells;
-    private List<Cell> torches;
+    private final List<Cell> torches;
 
     private Player player;
 
-    private List<MovableMonster> movableMonsters;
+    private final List<MovableMonster> movableMonsters;
 
-    private String level;
+    private final String level;
 
     public int getSkeletonCount() {
         int skeletonCount = 0;
@@ -151,5 +148,9 @@ public class GameMap {
             builder.append("\n");
         }
         return builder.toString();
+    }
+
+    public boolean isThisTheLastLevel() {
+        return level.equals(Level.MAP_4.getMapLevel());
     }
 }

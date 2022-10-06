@@ -134,8 +134,9 @@ public class Main extends Application {
                 saveGame();
                 break;
             case F:
-                Stage stage = new Stage();
-                fileSave(stage);
+                Stage saveStage = new Stage();
+                fileSave(saveStage);
+                break;
             case L:
                 loadGame();
                 break;

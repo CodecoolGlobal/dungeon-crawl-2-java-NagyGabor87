@@ -53,13 +53,13 @@ public class Player extends Actor implements Movable {
                 if (cellType.getTileName().equals(item)) {
                     switch (cellType){
                         case SWORD:
-                            addItemToInventory(new Sword(new Cell(0,0)));
+                            addItemToInventory(new Sword(new Cell(0,0)), true);
                             break;
                         case KEY:
-                            addItemToInventory(new Key(new Cell(0,0)));
+                            addItemToInventory(new Key(new Cell(0,0)), true);
                             break;
                         case HELMET:
-                            addItemToInventory(new Helmet(new Cell(0,0)));
+                            addItemToInventory(new Helmet(new Cell(0,0)), true);
                             break;
                     }
                 }
@@ -151,14 +151,18 @@ public class Player extends Actor implements Movable {
         }
     }
 
-    public void addItemToInventory(Item item) {
+    public void addItemToInventory(Item item, boolean isLoading) {
         if (item instanceof Potion) {
             changePlayerStats(item);
-            makeSound(Sound.POTION.getFilePath());
+            if (!isLoading) {
+                makeSound(Sound.POTION.getFilePath());
+            }
         }
         else if (item != null){
             inventory.add(item);
-            makeSound(Sound.PICK_UP_ITEM.getFilePath());
+            if (!isLoading) {
+                makeSound(Sound.PICK_UP_ITEM.getFilePath());
+            }
             changePlayerGraphics();
             changePlayerStats(item);
         }
@@ -255,11 +259,13 @@ public class Player extends Actor implements Movable {
         this.cell = cell;
     }
 
-    public Player resetPlayer() {
-        Player resetPlayer = new Player(this.cell);
-        resetPlayer.setName(this.playerName);
-        resetPlayer.setId(this.getId());
-        return resetPlayer;
+    public void resetPlayer() {
+        this.armor = DEFAULT_ARMOR;
+        this.damage = DEFAULT_DAMAGE;
+        this.health = DEFAULT_HEALTH;
+        this.isAlive = true;
+        this.inventory = new ArrayList<>();
+        this.tileName = CellType.PLAYER.getTileName();
     }
 
     public String getInventory() {

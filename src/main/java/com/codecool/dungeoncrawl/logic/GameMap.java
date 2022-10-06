@@ -112,10 +112,10 @@ public class GameMap {
     }
 
 
-    public void addInventory() {
+    public void addInventory(boolean isLoading) {
         Cell currentTile = getPlayer().getCell();
         if (currentTile.getItem() != null) {
-            getPlayer().addItemToInventory(currentTile.getItem());
+            getPlayer().addItemToInventory(currentTile.getItem(), isLoading);
             currentTile.setType(CellType.FLOOR);
             currentTile.setItem(null);
         }

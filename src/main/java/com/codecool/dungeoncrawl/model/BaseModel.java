@@ -26,7 +26,6 @@ public class BaseModel {
                     sb.append(field.getName() + ":" + value + ",");
                 }
             } catch (IllegalAccessException e) {
-
             }
         }
         return sb.toString();

@@ -1,5 +1,9 @@
-package com.codecool.dungeoncrawl.logic;
+package com.codecool.dungeoncrawl.logic.actors;
 
+import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.GameMap;
+import com.codecool.dungeoncrawl.logic.Level;
+import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.Helmet;
 import com.codecool.dungeoncrawl.logic.items.Key;
@@ -11,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTest {
     Cell cellOfPlayer1 = new Cell(0, 0);
-    GameMap testMap = MapLoader.loadMap(LEVEL.MAP_1.getMapLevel(), null);
+    GameMap testMap = MapLoader.loadMap(Level.MAP_1.getMapLevel(), null);
     Player player1 = new Player(cellOfPlayer1);
     PlayerModel playerModel = new PlayerModel("player2", 10, 10, "sword,key,helmet", 50, 2);
     Player player2 = new Player(playerModel);

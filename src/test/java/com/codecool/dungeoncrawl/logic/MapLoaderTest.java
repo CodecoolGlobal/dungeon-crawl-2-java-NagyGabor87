@@ -202,8 +202,6 @@ class MapLoaderTest {
     @Test
     void testCreateMapFromTextWithInvalidCharacter() {
         Player player = new Player(new Cell(0,0));
-        assertThrows(RuntimeException.class, () -> {
-            GameMap newMap = MapLoader.loadMap(".......ű.......", player);
-        });
+        assertThrows(RuntimeException.class, () -> MapLoader.loadMap(".......ű.......", player));
     }
 }

@@ -10,7 +10,7 @@ public class GameState extends BaseModel {
     private List<String> discoveredMaps = new ArrayList<>();
     private PlayerModel player;
     private String mapLevel;
-    private int id;
+    private int stateId;
 
     public GameState(String currentMap, Date savedAt, PlayerModel player, String mapLevel) {
         this.currentMap = currentMap;
@@ -67,11 +67,11 @@ public class GameState extends BaseModel {
 
     @Override
     public int getId() {
-        return id;
+        return stateId;
     }
 
     @Override
     public void setId(int id) {
-        this.id = id;
+        this.stateId = id;
     }
 }

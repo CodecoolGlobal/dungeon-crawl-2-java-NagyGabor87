@@ -328,11 +328,13 @@ public class Main extends Application {
     }
     
     public String getCurrentGameState() { //TODO getCurrentGameState similar to savestate in GameDBManager
-        PlayerModel playerModel = new PlayerModel(map.getPlayer());
+        Player  player = map.getPlayer();
+        PlayerModel playerModel = new PlayerModel(player);
         Date date = new java.sql.Date(System.currentTimeMillis());
         String currentMap = map.toString();
         GameState state = new GameState(currentMap, date, playerModel, map.getLevel());
-        return state.toString();
+        System.out.println(new Gson().toJson(state));
+        return new Gson().toJson(state);
     }
 
     public void fileSave(Stage primaryStage) {
@@ -346,8 +348,8 @@ public class Main extends Application {
 
     public void writeJsonFile(File file) {
         try (FileWriter filewriter = new FileWriter(file)) {
-            String jsonString = new Gson().toJson(getCurrentGameState());
-            filewriter.write(jsonString);
+//            String jsonString = new Gson().toJson(getCurrentGameState());
+            filewriter.write(getCurrentGameState());
         } catch (Exception e) {
             e.printStackTrace();
         }

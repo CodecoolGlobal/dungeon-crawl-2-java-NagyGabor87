@@ -333,7 +333,6 @@ public class Main extends Application {
         Date date = new java.sql.Date(System.currentTimeMillis());
         String currentMap = map.toString();
         GameState state = new GameState(currentMap, date, playerModel, map.getLevel());
-        System.out.println(new Gson().toJson(state));
         return new Gson().toJson(state);
     }
 

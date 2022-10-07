@@ -43,7 +43,7 @@ class GameStateTest {
 
     @Test
     void testGameStateFromRawData() {
-        assertEquals("savedAt:2022-10-06,currentMap:...\n" +
+        assertEquals("savedAt:" + java.time.LocalDate.now() +",currentMap:...\n" +
                 "...\n" +
                 "...\n" +
                 ",discoveredMaps:[],player:hp:50,x:0,y:0,inventory:,playerId:0,,mapLevel:map,stateId:0,", gameState.toString());

@@ -10,7 +10,7 @@ import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.PlayerModel;
 import com.google.gson.Gson;
-import com.codecool.dungeoncrawl.logic.util.PopupFeedback;
+import com.codecool.dungeoncrawl.view.PopupFeedback;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -24,12 +24,9 @@ import javafx.stage.Stage;
 
 import javax.sound.sampled.*;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
-import java.nio.file.Files;
 import java.sql.Date;
 import java.util.List;
-import java.util.Optional;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -270,35 +267,48 @@ public class Main extends Application {
         healthLabel.setText("" + map.getPlayer().getHealth());
     }
 
-    // TODO this method is really messy, should refactor it to smaller ones
     private void stepNextLevel() {
-        if (!map.getPlayer().isAlive()) {
-            ButtonType button = alertUser("You've lost", "Sorry but you were killed by a monster.", Alert.AlertType.WARNING).orElse(ButtonType.CANCEL);
-            if (button == ButtonType.OK) {
-                map.getPlayer().resetPlayer();
-                map = MapLoader.loadMap(Level.MENU.getMapLevel(), map.getPlayer());
-                refresh();
-                return;
+        Player player = map.getPlayer();
+        if (!player.isAlive()) {
+            playerIsDead(player);
+        } else if (player.isPlayerOnQuitCell()) {
+            exitGame();
+        } else if (player.isPlayerOnPlayCell()) {
+            startTheFirstLevel(player);
+        } else if (player.isPlayerOnOpenDoor()) {
+            if (map.isThisTheLastLevel()) {
+                playerHasWon(player);
             }
-        }
-        if (map.getPlayer().isPlayerOnQuitCell()) {
-            System.exit(1);
-        } else if (map.getPlayer().isPlayerOnPlayCell()) {
-            level = Level.MAP_1;
-            map = MapLoader.loadMap(level.getMapLevel(), map.getPlayer());
-            refresh();
-        } else if (map.getPlayer().getCell().getType() == CellType.OPEN_DOOR) {
-            if (map.getLevel().equals(Level.MAP_4.getMapLevel())) {
-                ButtonType button = alertUser("You've won", "Congratulations! You've won the game!.", Alert.AlertType.INFORMATION).orElse(ButtonType.CANCEL);
-                if (button == ButtonType.OK) {
-                    map.getPlayer().resetPlayer();
-                    map = MapLoader.loadMap(Level.MENU.getMapLevel(), map.getPlayer());
-                    refresh();
-                    return;
-                }
-            }
-            map = MapLoader.loadMap(level.nextLevel().getMapLevel(), map.getPlayer());
+            map = MapLoader.loadMap(level.nextLevel().getMapLevel(), player);
             level = level.nextLevel();
+        }
+    }
+
+    private void playerIsDead(Player player) {
+        ButtonType button = PopupFeedback.playerLost();
+        if (button == ButtonType.OK) {
+            player.resetPlayer();
+            map = MapLoader.loadMap(Level.MENU.getMapLevel(), player);
+            refresh();
+        }
+    }
+
+    private void exitGame() {
+        System.exit(1);
+    }
+
+    private void startTheFirstLevel(Player player) {
+        level = Level.MAP_1;
+        map = MapLoader.loadMap(level.getMapLevel(), player);
+        refresh();
+    }
+
+    private void playerHasWon(Player player) {
+        ButtonType button = PopupFeedback.playerWon();
+        if (button == ButtonType.OK) {
+            player.resetPlayer();
+            map = MapLoader.loadMap(Level.MENU.getMapLevel(), player);
+            refresh();
         }
     }
 
@@ -337,15 +347,8 @@ public class Main extends Application {
             exc.printStackTrace(System.out);
         }
     }
-
-    public Optional<ButtonType> alertUser(String title, String message, Alert.AlertType alertType) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        return alert.showAndWait();
-    }
     
-    public String getCurrentGameState() { //TODO getCurrentGameState similar to savestate in GameDBManager
+    private String getCurrentGameState() { //TODO getCurrentGameState similar to savestate in GameDBManager
         Player  player = map.getPlayer();
         PlayerModel playerModel = new PlayerModel(player);
         Date date = new java.sql.Date(System.currentTimeMillis());
@@ -354,7 +357,7 @@ public class Main extends Application {
         return new Gson().toJson(state);
     }
 
-    public void fileSave(Stage primaryStage) {
+    private void fileSave(Stage primaryStage) {
         primaryStage.setTitle("Make your JSON file here!");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialFileName("filename.json");
@@ -364,7 +367,7 @@ public class Main extends Application {
         }
     }
 
-    public GameState fileLoad(){
+    private GameState fileLoad(){
         Stage loadStage = new Stage();
         loadStage.setTitle("Choose file to load");
         final FileChooser fileChooser = new FileChooser();
@@ -376,15 +379,14 @@ public class Main extends Application {
                     jsonString = scanner.nextLine();
                 }
                 scanner.close();
-                GameState loadedGameState = new Gson().fromJson(jsonString, GameState.class);
-                return loadedGameState;
+                return new Gson().fromJson(jsonString, GameState.class);
             } catch (Exception e) {
                 System.out.println("something went wrong");
             }
         return null;
     }
 
-    public void writeJsonFile(File file) {
+    private void writeJsonFile(File file) {
         try (FileWriter filewriter = new FileWriter(file)) {
             filewriter.write(getCurrentGameState());
         } catch (Exception e) {

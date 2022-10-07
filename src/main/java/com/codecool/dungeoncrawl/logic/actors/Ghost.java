@@ -64,12 +64,6 @@ public class Ghost extends MovableMonster {
     }
 
     private int moveTowardsPlayer(int difference){
-        if (difference > 0) {
-            return 1;
-        } else if (difference < 0) {
-            return -1;
-        } else {
-            return 0;
-        }
+        return Integer.compare(difference, 0);
     }
 }

@@ -1,7 +1,5 @@
 package com.codecool.dungeoncrawl.logic;
 
-import com.codecool.dungeoncrawl.logic.items.StrongestPotion;
-
 public enum CellType {
     EMPTY("empty", ' '),
     FLOOR("floor", '.'),

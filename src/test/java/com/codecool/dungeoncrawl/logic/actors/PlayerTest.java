@@ -250,6 +250,12 @@ public class PlayerTest {
     }
 
     @Test
+    void testAddNullToInventory() {
+        player1.addItemToInventory(null, true);
+        assertEquals(0, player1.getInventory().length());
+    }
+
+    @Test
     void testKillAndRemoveMovableMonster() {
         GameMap map = new GameMap(3,3, CellType.FLOOR, "level");
         Player player = new Player(map.getCell(0,1));

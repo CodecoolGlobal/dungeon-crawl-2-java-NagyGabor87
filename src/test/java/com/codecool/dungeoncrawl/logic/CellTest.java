@@ -43,6 +43,12 @@ class CellTest {
     }
 
     @Test
+    void testSetTypeToNull() {
+        cell.setType(null);
+        assertNull(cell.getType());
+    }
+
+    @Test
     void testGetActor() {
         Actor skeleton = new Skeleton(cell);
         assertEquals(skeleton, cell.getActor());
@@ -53,6 +59,12 @@ class CellTest {
         Actor skeleton = new Skeleton(new Cell(0,0));
         cell.setActor(skeleton);
         assertEquals(skeleton, cell.getActor());
+    }
+
+    @Test
+    void testSetActorToNull() {
+        cell.setActor(null);
+        assertNull(cell.getActor());
     }
 
     @Test
@@ -96,6 +108,12 @@ class CellTest {
     }
 
     @Test
+    void testSetGameMapToNull() {
+        cell.setGameMap(null);
+        assertNull(cell.getGameMap());
+    }
+
+    @Test
     void testGetItem() {
         Item sword = new Sword(cell);
         assertEquals(sword, cell.getItem());
@@ -106,5 +124,11 @@ class CellTest {
         Item sword = new Sword(new Cell(0,0));
         cell.setItem(sword);
         assertEquals(sword, cell.getItem());
+    }
+
+    @Test
+    void testSetItemToNull() {
+        cell.setItem(null);
+        assertNull(cell.getItem());
     }
 }

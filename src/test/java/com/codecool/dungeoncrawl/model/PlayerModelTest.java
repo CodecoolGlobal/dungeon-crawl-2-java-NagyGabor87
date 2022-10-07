@@ -1,7 +1,6 @@
 package com.codecool.dungeoncrawl.model;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.actors.Player;
-import com.codecool.dungeoncrawl.model.PlayerModel;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -95,6 +94,4 @@ public class PlayerModelTest {
         assertEquals(10, playerModel1.getId());
         assertEquals(15, playerModel2.getId());
     }
-
-
 }

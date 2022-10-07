@@ -60,6 +60,11 @@ public class GameDatabaseManager {
         return playerDao.getPlayerIdByName(playerModel);
     }
 
+    public Integer getPlayerIdFromName(Player player) {
+        PlayerModel playerModel = new PlayerModel(player);
+        return playerDao.getPlayerIdByName(playerModel);
+    }
+
     public Integer getGameState(int playerID) {
         return gameStateDao.getGameStateIdByPlayerID(playerID);
     }

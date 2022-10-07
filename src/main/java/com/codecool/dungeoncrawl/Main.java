@@ -175,8 +175,13 @@ public class Main extends Application {
     private void loadGame() {
         Integer playerId = map.getPlayer().getId();
         if (playerId == null || playerId == 0) {
-            PopupFeedback.feedBackFailedLoad(map.getPlayer().getName());
-            return;
+            Integer potentialId = dbManager.getPlayerIdFromName(map.getPlayer());
+            if (potentialId == null || potentialId == 0){
+                PopupFeedback.feedBackFailedLoad(map.getPlayer().getName());
+                return;
+            } else {
+                playerId = potentialId;
+            }
         }
 
         // player id exists, fetch raw player data by player id
